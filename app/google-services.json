@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "491316764315",
+    "project_id": "mutualtransferapp-2be66",
+    "storage_bucket": "mutualtransferapp-2be66.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491316764315:android:59c36fa56ea167509bf03e",
+        "android_client_info": {
+          "package_name": "com.shikshak.transfer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACJiu5wweZCYJoojm7S-PLSlojjSpQPeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
