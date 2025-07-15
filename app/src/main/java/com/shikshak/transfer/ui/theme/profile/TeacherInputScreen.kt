@@ -23,6 +23,7 @@ fun TeacherInputScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     onFormSubmitted: (Teacher) -> Unit
 ) {
+    // State for form fields
     var fullName by remember { mutableStateOf("") }
     var currentSchool by remember { mutableStateOf("") }
     var currentDistrict by remember { mutableStateOf("") }
@@ -33,6 +34,31 @@ fun TeacherInputScreen(
     var willingToMove by remember { mutableStateOf(false) }
     var contactPreference by remember { mutableStateOf(true) }
     var designation by remember { mutableStateOf("") }
+    
+    // Function to validate form
+    fun validateForm(): Boolean {
+        return fullName.isNotBlank() && 
+               currentSchool.isNotBlank() && 
+               currentDistrict.isNotBlank() && 
+               postLevel.isNotBlank() &&
+               designation.isNotBlank() &&
+               (if (postLevel == "Secondary" || postLevel == "Higher Secondary") subject.isNotBlank() else true) &&
+               preferredDistricts.isNotEmpty()
+    }
+    
+    // Function to get validation error message
+    fun getValidationError(): String {
+        return when {
+            fullName.isBlank() -> "Full name is required"
+            currentSchool.isBlank() -> "School name is required"
+            currentDistrict.isBlank() -> "Current district is required"
+            postLevel.isBlank() -> "Post level is required"
+            designation.isBlank() -> "Designation is required"
+            (postLevel == "Secondary" || postLevel == "Higher Secondary") && subject.isBlank() -> "Subject is required for Secondary and Higher Secondary"
+            preferredDistricts.isEmpty() -> "Please select at least one preferred district"
+            else -> ""
+        }
+    }
     
     // Dropdown options
     val districts = listOf(
@@ -53,11 +79,73 @@ fun TeacherInputScreen(
         "Higher Secondary" to true
     )
     
-    val subjects = listOf(
-        "Mathematics", "Science", "English", "Hindi", "Gujarati", 
-        "Social Studies", "Computer Science", "Physical Education",
-        "Arts", "Music", "Economics", "Commerce", "Accountancy"
+    // Subject lists for different post levels
+    val secondarySubjects = listOf(
+        "Hindi", "English", "Urdu", "Sanskrit", "Maithili",
+        "Mathematics", "Science", "Social Science",
+        "History", "Geography", "Civics", "Economics",
+        "Home Science", "Commerce", "Music", "Physical Education",
+        "Arts", "Computer Science / IT", "Arabic", "Persian"
     )
+    
+    val higherSecondarySubjects = listOf(
+        // Compulsory
+        "Hindi", "English", "Urdu",
+        
+        // Science
+        "Physics", "Chemistry", "Mathematics", "Biology", 
+        "Computer Science / IT", "Environmental Science",
+
+        // Commerce
+        "Accountancy", "Business Studies", "Economics", 
+        "Entrepreneurship", "Informatics Practices",
+
+        // Arts
+        "History", "Political Science", "Geography", "Psychology", 
+        "Sociology", "Philosophy", "Home Science", "Music", 
+        "Hindi Literature", "Urdu Literature", "Sanskrit", 
+        "Maithili", "Arabic", "Persian", "Painting / Fine Arts"
+    )
+    
+    // Function to get subjects based on post level
+    fun getSubjectsForPostLevel(level: String): List<String> {
+        return when (level) {
+            "Secondary" -> secondarySubjects
+            "Higher Secondary" -> higherSecondarySubjects
+            else -> emptyList()
+        }
+    }
+    
+    // Function to get designations based on post level
+    fun getDesignationsForPostLevel(level: String): List<String> {
+        return when (level) {
+            "Primary" -> listOf(
+                "Assistant Teacher (सहायक शिक्षक)",
+                "Head Teacher (प्रधानाध्यापक)",
+                "Physical Education Teacher (PET)"
+            )
+            "Upper Primary" -> listOf(
+                "Assistant Teacher (सहायक शिक्षक)",
+                "Head Teacher (प्रधानाध्यापक)",
+                "Physical Education Teacher (PET)",
+                "Art / Music Teacher"
+            )
+            "Secondary" -> listOf(
+                "Trained Graduate Teacher (TGT)",
+                "Head Teacher (प्रधानाध्यापक)",
+                "Physical Education Teacher (PET)",
+                "Art / Music Teacher"
+            )
+            "Higher Secondary" -> listOf(
+                "Post Graduate Teacher (PGT)",
+                "Lecturer (प्रवक्ता)",
+                "Head Teacher (प्रधानाध्यापक)",
+                "Physical Education Teacher (PET)",
+                "Art / Music Teacher"
+            )
+            else -> emptyList()
+        }
+    }
     
     val currentUser = FirebaseAuth.getInstance().currentUser
     val mobileNumber = currentUser?.phoneNumber ?: ""
@@ -205,11 +293,27 @@ fun TeacherInputScreen(
                     DropdownMenuItem(
                         text = { Text(level) },
                         onClick = {
+                            val previousPostLevel = postLevel
                             postLevel = level
                             postLevelExpanded = false
-                            // Clear subject if post level doesn't require it
+                            
+                            // Clear subject if post level doesn't require it or if subject is not valid for new level
                             if (!postLevels.find { it.first == level }?.second!!) {
                                 subject = ""
+                            } else if (previousPostLevel != level) {
+                                // Check if current subject is valid for new post level
+                                val validSubjects = getSubjectsForPostLevel(level)
+                                if (!validSubjects.contains(subject)) {
+                                    subject = ""
+                                }
+                            }
+                            
+                            // Clear designation if it's not valid for new post level
+                            if (previousPostLevel != level) {
+                                val validDesignations = getDesignationsForPostLevel(level)
+                                if (!validDesignations.contains(designation)) {
+                                    designation = ""
+                                }
                             }
                         }
                     )
@@ -241,7 +345,7 @@ fun TeacherInputScreen(
                     expanded = subjectExpanded,
                     onDismissRequest = { subjectExpanded = false }
                 ) {
-                    subjects.forEach { subjectName ->
+                    getSubjectsForPostLevel(postLevel).forEach { subjectName ->
                         DropdownMenuItem(
                             text = { Text(subjectName) },
                             onClick = {
@@ -255,14 +359,38 @@ fun TeacherInputScreen(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Designation
-        OutlinedTextField(
-            value = designation,
-            onValueChange = { designation = it },
-            label = { Text("👨‍🏫 Designation") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
+        // Designation Dropdown
+        var designationExpanded by remember { mutableStateOf(false) }
+        ExposedDropdownMenuBox(
+            expanded = designationExpanded,
+            onExpandedChange = { designationExpanded = it },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = designation,
+                onValueChange = { },
+                readOnly = true,
+                label = { Text("👨‍🏫 Designation") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = designationExpanded) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
+            )
+            ExposedDropdownMenu(
+                expanded = designationExpanded,
+                onDismissRequest = { designationExpanded = false }
+            ) {
+                getDesignationsForPostLevel(postLevel).forEach { designationName ->
+                    DropdownMenuItem(
+                        text = { Text(designationName) },
+                        onClick = {
+                            designation = designationName
+                            designationExpanded = false
+                        }
+                    )
+                }
+            }
+        }
         
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -355,42 +483,49 @@ fun TeacherInputScreen(
         
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Submit Button
-        Button(
-            onClick = {
-                if (validateForm(fullName, currentSchool, currentDistrict, postLevel)) {
-                    val teacher = Teacher(
-                        uid = currentUser?.uid ?: "",
-                        name = fullName,
-                        subject = subject,
-                        post = postLevel,
-                        district = currentDistrict,
-                        block = currentBlock,
-                        schoolName = currentSchool,
-                        preferredDistrict = preferredDistricts.firstOrNull() ?: "",
-                        preferredDistricts = preferredDistricts,
-                        designation = designation,
-                        contactPreference = contactPreference,
-                        willingToMove = willingToMove,
-                        contact = Contact(phone = mobileNumber),
-                        timestamp = System.currentTimeMillis()
+                    // Submit Button
+            Button(
+                onClick = {
+                    if (validateForm()) {
+                        val teacher = Teacher(
+                            uid = currentUser?.uid ?: "",
+                            name = fullName,
+                            subject = subject,
+                            post = postLevel,
+                            district = currentDistrict,
+                            block = currentBlock,
+                            schoolName = currentSchool,
+                            preferredDistrict = preferredDistricts.firstOrNull() ?: "",
+                            preferredDistricts = preferredDistricts,
+                            designation = designation,
+                            contactPreference = contactPreference,
+                            willingToMove = willingToMove,
+                            contact = Contact(phone = mobileNumber),
+                            timestamp = System.currentTimeMillis()
+                        )
+                        viewModel.saveTeacherProfile(teacher)
+                        onFormSubmitted(teacher)
+                    } else {
+                        // Show error message if form is invalid
+                        val errorMessage = getValidationError()
+                        if (errorMessage.isNotBlank()) {
+                            viewModel.showErrorDialog.value = true
+                            viewModel.errorMessage.value = errorMessage
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !viewModel.isLoading.value && validateForm()
+            ) {
+                if (viewModel.isLoading.value) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
-                    viewModel.saveTeacherProfile(teacher)
-                    onFormSubmitted(teacher)
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !viewModel.isLoading.value
-        ) {
-            if (viewModel.isLoading.value) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(20.dp),
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-                Spacer(modifier = Modifier.width(8.dp))
+                Text("✅ Submit Form")
             }
-            Text("✅ Submit Form")
-        }
     }
 
     // Show error dialog if there's an error
@@ -403,16 +538,4 @@ fun TeacherInputScreen(
             }
         )
     }
-}
-
-private fun validateForm(
-    fullName: String,
-    currentSchool: String,
-    currentDistrict: String,
-    postLevel: String
-): Boolean {
-    return fullName.isNotBlank() && 
-           currentSchool.isNotBlank() && 
-           currentDistrict.isNotBlank() && 
-           postLevel.isNotBlank()
 } 

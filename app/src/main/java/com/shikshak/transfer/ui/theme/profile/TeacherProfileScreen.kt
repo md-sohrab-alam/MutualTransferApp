@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.ui.platform.LocalContext as LocalContext1
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TeacherProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
@@ -35,6 +36,38 @@ fun TeacherProfileScreen(
     var subject by remember { mutableStateOf("") }
     var school by remember { mutableStateOf("") }
     var contactPreference by remember { mutableStateOf(true) }
+    var postLevel by remember { mutableStateOf("") }
+    
+    // Function to get designations based on post level
+    fun getDesignationsForPostLevel(level: String): List<String> {
+        return when (level) {
+            "Primary" -> listOf(
+                "Assistant Teacher (सहायक शिक्षक)",
+                "Head Teacher (प्रधानाध्यापक)",
+                "Physical Education Teacher (PET)"
+            )
+            "Upper Primary" -> listOf(
+                "Assistant Teacher (सहायक शिक्षक)",
+                "Head Teacher (प्रधानाध्यापक)",
+                "Physical Education Teacher (PET)",
+                "Art / Music Teacher"
+            )
+            "Secondary" -> listOf(
+                "Trained Graduate Teacher (TGT)",
+                "Head Teacher (प्रधानाध्यापक)",
+                "Physical Education Teacher (PET)",
+                "Art / Music Teacher"
+            )
+            "Higher Secondary" -> listOf(
+                "Post Graduate Teacher (PGT)",
+                "Lecturer (प्रवक्ता)",
+                "Head Teacher (प्रधानाध्यापक)",
+                "Physical Education Teacher (PET)",
+                "Art / Music Teacher"
+            )
+            else -> emptyList()
+        }
+    }
     
     // Load teacher data when component is created
     LaunchedEffect(Unit) {
@@ -91,13 +124,86 @@ fun TeacherProfileScreen(
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                OutlinedTextField(
-                    value = designation,
-                    onValueChange = { designation = it },
-                    label = { Text("👨‍🏫 Designation") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
+                // Post Level Dropdown
+                var postLevelExpanded by remember { mutableStateOf(false) }
+                ExposedDropdownMenuBox(
+                    expanded = postLevelExpanded,
+                    onExpandedChange = { postLevelExpanded = it },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OutlinedTextField(
+                        value = postLevel,
+                        onValueChange = { },
+                        readOnly = true,
+                        label = { Text("🎓 Post Level") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = postLevelExpanded) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor()
+                    )
+                    ExposedDropdownMenu(
+                        expanded = postLevelExpanded,
+                        onDismissRequest = { postLevelExpanded = false }
+                    ) {
+                        listOf("Primary", "Upper Primary", "Secondary", "Higher Secondary").forEach { level ->
+                            DropdownMenuItem(
+                                text = { Text(level) },
+                                onClick = {
+                                    val previousPostLevel = postLevel
+                                    postLevel = level
+                                    postLevelExpanded = false
+                                    
+                                    // Clear designation if it's not valid for new post level
+                                    if (previousPostLevel != level) {
+                                        val validDesignations = getDesignationsForPostLevel(level)
+                                        if (!validDesignations.contains(designation)) {
+                                            designation = ""
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                // Designation Dropdown (only if post level is selected)
+                if (postLevel.isNotEmpty()) {
+                    var designationExpanded by remember { mutableStateOf(false) }
+                    ExposedDropdownMenuBox(
+                        expanded = designationExpanded,
+                        onExpandedChange = { designationExpanded = it },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        OutlinedTextField(
+                            value = designation,
+                            onValueChange = { },
+                            readOnly = true,
+                            label = { Text("👨‍🏫 Designation") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = designationExpanded) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor()
+                        )
+                        ExposedDropdownMenu(
+                            expanded = designationExpanded,
+                            onDismissRequest = { designationExpanded = false }
+                        ) {
+                            getDesignationsForPostLevel(postLevel).forEach { designationName ->
+                                DropdownMenuItem(
+                                    text = { Text(designationName) },
+                                    onClick = {
+                                        designation = designationName
+                                        designationExpanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
