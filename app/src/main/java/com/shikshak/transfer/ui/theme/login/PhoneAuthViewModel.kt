@@ -65,6 +65,7 @@ class PhoneAuthViewModel @Inject constructor() : BaseViewModel() {
 
     fun verifyOtp(code: String) {
         Timber.i("verifyOtp: $code, verificationId: ${verificationId.value}")
+        updateLoadingState(true)
         val credential = PhoneAuthProvider.getCredential(verificationId.value, code)
         signInWithPhoneAuthCredential(credential)
     }
@@ -72,11 +73,14 @@ class PhoneAuthViewModel @Inject constructor() : BaseViewModel() {
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         FirebaseAuth.getInstance().signInWithCredential(credential)
             .addOnCompleteListener { task ->
+                updateLoadingState(false)
                 if (task.isSuccessful) {
                     Timber.tag("PhoneAuth").d("Sign-in successful")
                     _isOtpVerified.value = true
                 } else {
                     Timber.tag("PhoneAuth").e("Sign-in failed: ${task.exception?.message}")
+                    errorMessage.value = task.exception?.message ?: "Verification failed"
+                    showErrorDialog.value = true
                 }
             }
     }

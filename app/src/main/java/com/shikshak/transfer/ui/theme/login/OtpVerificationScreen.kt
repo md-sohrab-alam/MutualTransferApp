@@ -2,6 +2,7 @@ package com.shikshak.transfer.ui.theme.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +35,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.shikshak.transfer.ui.theme.navigation.Routes
-import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
+import com.shikshak.transfer.ui.theme.utils.CommonErrorDialog
+import com.shikshak.transfer.ui.theme.utils.FullScreenLoader
+import com.shikshak.transfer.ui.theme.utils.InlineError
 
 @Composable
 fun OtpVerificationScreen(
@@ -79,84 +82,74 @@ fun OtpVerificationScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Title
-        Text(
-            text = "OTP Verification",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Black,
-            textAlign = TextAlign.Center
-        )
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        // Subtitle
-        Text(
-            text = "Enter the 6-digit code sent to your phone",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal,
-            color = Color(0xFF666666),
-            textAlign = TextAlign.Center
-        )
-        
-        Spacer(modifier = Modifier.height(48.dp))
-        
-        // OTP Input Field
-        OutlinedTextField(
-            value = otpCode,
-            onValueChange = { onOtpChange(it) },
-            placeholder = { Text("Enter 6-digit OTP") },
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = if (isOtpValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE), // Light beige or light red
-                    shape = RoundedCornerShape(12.dp)
-                ),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = if (isOtpValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE),
-                focusedContainerColor = if (isOtpValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE),
-                unfocusedIndicatorColor = if (isOtpValid) Color.Transparent else Color(0xFFE57373),
-                focusedIndicatorColor = if (isOtpValid) Color.Transparent else Color(0xFFE57373),
-                unfocusedPlaceholderColor = Color(0xFF666666),
-                focusedPlaceholderColor = Color(0xFF666666),
-                unfocusedTextColor = Color.Black,
-                focusedTextColor = Color.Black
-            ),
-            shape = RoundedCornerShape(12.dp),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
-            ),
-            isError = !isOtpValid
-        )
-        
-        // Error message
-        if (!isOtpValid && otpError.isNotEmpty()) {
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Title
             Text(
-                text = otpError,
-                color = Color(0xFFE57373),
-                fontSize = 12.sp,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
-        
-        Spacer(modifier = Modifier.height(32.dp))
-        
-        // Verify OTP Button
-        if (viewModel.isLoading.value) {
-            CircularProgressIndicator(
+                text = "OTP Verification",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
                 color = Color.Black,
-                modifier = Modifier.size(24.dp)
+                textAlign = TextAlign.Center
             )
-        } else {
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            // Subtitle
+            Text(
+                text = "Enter the 6-digit code sent to your phone",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color(0xFF666666),
+                textAlign = TextAlign.Center
+            )
+            
+            Spacer(modifier = Modifier.height(48.dp))
+            
+            // OTP Input Field
+            OutlinedTextField(
+                value = otpCode,
+                onValueChange = { onOtpChange(it) },
+                placeholder = { Text("Enter 6-digit OTP") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = if (isOtpValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE), // Light beige or light red
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = if (isOtpValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE),
+                    focusedContainerColor = if (isOtpValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE),
+                    unfocusedIndicatorColor = if (isOtpValid) Color.Transparent else Color(0xFFE57373),
+                    focusedIndicatorColor = if (isOtpValid) Color.Transparent else Color(0xFFE57373),
+                    unfocusedPlaceholderColor = Color(0xFF666666),
+                    focusedPlaceholderColor = Color(0xFF666666),
+                    unfocusedTextColor = Color.Black,
+                    focusedTextColor = Color.Black
+                ),
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                isError = !isOtpValid
+            )
+            
+            // Error message using common component
+            if (!isOtpValid && otpError.isNotEmpty()) {
+                InlineError(message = otpError)
+            }
+            
+            Spacer(modifier = Modifier.height(32.dp))
+            
+            // Verify OTP Button
             Button(
                 onClick = {
                     if (validateOtp(otpCode)) {
@@ -174,7 +167,7 @@ fun OtpVerificationScreen(
                         Color(0xFFFFEB3B) else Color(0xFFCCCCCC) // Light yellow or gray
                 ),
                 shape = RoundedCornerShape(12.dp),
-                enabled = otpCode.length == 6 && isOtpValid
+                enabled = otpCode.length == 6 && isOtpValid && !viewModel.isLoading.value
             ) {
                 Text(
                     text = "Verify OTP",
@@ -183,39 +176,50 @@ fun OtpVerificationScreen(
                     color = if (otpCode.length == 6 && isOtpValid) Color.Black else Color(0xFF666666)
                 )
             }
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            // Resend OTP option
+            Text(
+                text = "Didn't receive OTP?",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color(0xFF666666),
+                textAlign = TextAlign.Center
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Text(
+                text = "You can request a new OTP after 30 seconds",
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color(0xFF999999),
+                textAlign = TextAlign.Center
+            )
         }
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        // Resend OTP option
-        Text(
-            text = "Didn't receive OTP?",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal,
-            color = Color(0xFF666666),
-            textAlign = TextAlign.Center
-        )
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        Text(
-            text = "You can request a new OTP after 30 seconds",
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Normal,
-            color = Color(0xFF999999),
-            textAlign = TextAlign.Center
-        )
+
+        // Full screen loader
+        if (viewModel.isLoading.value) {
+            FullScreenLoader(message = "Verifying OTP...")
+        }
     }
 
-    // Error Dialog
+    // Common Error Dialog
     viewModel.run {
         if (showErrorDialog.value && errorMessage.value != null) {
-            ErrorAlertDialog(
-                showDialog = showErrorDialog,
+            CommonErrorDialog(
+                showDialog = showErrorDialog.value,
+                title = "Verification Failed",
                 message = errorMessage.value!!,
                 onDismiss = {
                     showErrorDialog.value = false
                     errorMessage.value = null
+                },
+                onRetry = {
+                    if (validateOtp(otpCode)) {
+                        viewModel.verifyOtp(otpCode)
+                    }
                 }
             )
         }

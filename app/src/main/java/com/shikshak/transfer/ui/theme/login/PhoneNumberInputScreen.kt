@@ -3,6 +3,7 @@ package com.shikshak.transfer.ui.theme.login
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.shikshak.transfer.ui.theme.navigation.Routes
-import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
+import com.shikshak.transfer.ui.theme.utils.CommonErrorDialog
+import com.shikshak.transfer.ui.theme.utils.FullScreenLoader
+import com.shikshak.transfer.ui.theme.utils.InlineError
 
 @Composable
 fun PhoneNumberInputScreen(
@@ -84,133 +87,141 @@ fun PhoneNumberInputScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Title
-        Text(
-            text = "Teacher Transfer",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Black,
-            textAlign = TextAlign.Center
-        )
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        // Welcome Text
-        Text(
-            text = "Welcome",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            textAlign = TextAlign.Center
-        )
-        
-        Spacer(modifier = Modifier.height(48.dp))
-        
-        // Phone Number Input Field
-        OutlinedTextField(
-            value = phoneNumber,
-            onValueChange = { onPhoneNumberChange(it) },
-            placeholder = { Text("Enter your phone number") },
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = if (isPhoneValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE), // Light beige or light red
-                    shape = RoundedCornerShape(12.dp)
-                ),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = if (isPhoneValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE),
-                focusedContainerColor = if (isPhoneValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE),
-                unfocusedIndicatorColor = if (isPhoneValid) Color.Transparent else Color(0xFFE57373),
-                focusedIndicatorColor = if (isPhoneValid) Color.Transparent else Color(0xFFE57373),
-                unfocusedPlaceholderColor = Color(0xFF666666),
-                focusedPlaceholderColor = Color(0xFF666666),
-                unfocusedTextColor = Color.Black,
-                focusedTextColor = Color.Black
-            ),
-            shape = RoundedCornerShape(12.dp),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
-            ),
-            isError = !isPhoneValid
-        )
-        
-        // Error message
-        if (!isPhoneValid && phoneError.isNotEmpty()) {
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Title
             Text(
-                text = phoneError,
-                color = Color(0xFFE57373),
-                fontSize = 12.sp,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
-        
-        Spacer(modifier = Modifier.height(32.dp))
-        
-        // Send OTP Button
-        if (viewModel.isLoading.value) {
-            CircularProgressIndicator(
+                text = "Teacher Transfer",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
                 color = Color.Black,
-                modifier = Modifier.size(24.dp)
+                textAlign = TextAlign.Center
             )
-        } else {
-            Button(
-                onClick = {
-                    if (validatePhoneNumber(phoneNumber)) {
-                        isPhoneValid = true
-                        viewModel.sendOtp(phoneNumber, activity)
-                    } else {
-                        isPhoneValid = false
-                    }
-                },
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            // Welcome Text
+            Text(
+                text = "Welcome",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                textAlign = TextAlign.Center
+            )
+            
+            Spacer(modifier = Modifier.height(48.dp))
+            
+            // Phone Number Input Field
+            OutlinedTextField(
+                value = phoneNumber,
+                onValueChange = { onPhoneNumberChange(it) },
+                placeholder = { Text("Enter your phone number") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (phoneNumber.length == 10 && isPhoneValid) 
-                        Color(0xFFFFEB3B) else Color(0xFFCCCCCC) // Light yellow or gray
+                    .background(
+                        color = if (isPhoneValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE), // Light beige or light red
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = if (isPhoneValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE),
+                    focusedContainerColor = if (isPhoneValid) Color(0xFFF5F5DC) else Color(0xFFFFEBEE),
+                    unfocusedIndicatorColor = if (isPhoneValid) Color.Transparent else Color(0xFFE57373),
+                    focusedIndicatorColor = if (isPhoneValid) Color.Transparent else Color(0xFFE57373),
+                    unfocusedPlaceholderColor = Color(0xFF666666),
+                    focusedPlaceholderColor = Color(0xFF666666),
+                    unfocusedTextColor = Color.Black,
+                    focusedTextColor = Color.Black
                 ),
                 shape = RoundedCornerShape(12.dp),
-                enabled = phoneNumber.length == 10 && isPhoneValid
-            ) {
-                Text(
-                    text = "Send OTP",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = if (phoneNumber.length == 10 && isPhoneValid) Color.Black else Color(0xFF666666)
-                )
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                isError = !isPhoneValid
+            )
+            
+            // Error message using common component
+            if (!isPhoneValid && phoneError.isNotEmpty()) {
+                InlineError(message = phoneError)
             }
+            
+            Spacer(modifier = Modifier.height(32.dp))
+            
+            // Send OTP Button
+            if (viewModel.isLoading.value) {
+                CircularProgressIndicator(
+                    color = Color.Black,
+                    modifier = Modifier.size(24.dp)
+                )
+            } else {
+                Button(
+                    onClick = {
+                        if (validatePhoneNumber(phoneNumber)) {
+                            isPhoneValid = true
+                            viewModel.sendOtp(phoneNumber, activity)
+                        } else {
+                            isPhoneValid = false
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (phoneNumber.length == 10 && isPhoneValid) 
+                            Color(0xFFFFEB3B) else Color(0xFFCCCCCC) // Light yellow or gray
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    enabled = phoneNumber.length == 10 && isPhoneValid
+                ) {
+                    Text(
+                        text = "Send OTP",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (phoneNumber.length == 10 && isPhoneValid) Color.Black else Color(0xFF666666)
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(80.dp))
+            
+            // Footer Text
+            Text(
+                text = "Only Bihar government teachers can access this app",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black,
+                textAlign = TextAlign.Center
+            )
         }
-        
-        Spacer(modifier = Modifier.height(80.dp))
-        
-        // Footer Text
-        Text(
-            text = "Only Bihar government teachers can access this app",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal,
-            color = Color.Black,
-            textAlign = TextAlign.Center
-        )
+
+        // Full screen loader
+        if (viewModel.isLoading.value) {
+            FullScreenLoader(message = "Sending OTP...")
+        }
     }
 
-    // Error Dialog
+    // Common Error Dialog
     viewModel.run {
         if (showErrorDialog.value && errorMessage.value != null) {
-            ErrorAlertDialog(
-                showDialog = showErrorDialog,
+            CommonErrorDialog(
+                showDialog = showErrorDialog.value,
+                title = "OTP Send Failed",
                 message = errorMessage.value!!,
                 onDismiss = {
                     showErrorDialog.value = false
                     errorMessage.value = null
+                },
+                onRetry = {
+                    if (validatePhoneNumber(phoneNumber)) {
+                        viewModel.sendOtp(phoneNumber, activity)
+                    }
                 }
             )
         }
