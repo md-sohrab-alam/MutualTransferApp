@@ -25,7 +25,9 @@ import com.shikshak.transfer.ui.theme.login.PhoneAuthViewModel
 import com.shikshak.transfer.ui.theme.login.PhoneNumberInputScreen
 import com.shikshak.transfer.ui.theme.matchprofile.MatchListScreen
 import com.shikshak.transfer.ui.theme.profile.TeacherProfileScreen
+import com.shikshak.transfer.ui.theme.profile.TeacherInputScreen
 import com.shikshak.transfer.ui.theme.register.RegisterScreen
+import com.shikshak.transfer.ui.theme.splash.SplashScreen
 
 @Composable
 fun AppNavHost(
@@ -36,7 +38,7 @@ fun AppNavHost(
 
     // 👇 States to track loading teacher and decide destination
     var appReady by remember { mutableStateOf(false) }
-    var startDestination by remember { mutableStateOf(Routes.Auth) }
+    var startDestination by remember { mutableStateOf(Routes.Splash) }
 
     // ✅ Auto-login check: run once
     LaunchedEffect(Unit) {
@@ -69,8 +71,31 @@ fun AppNavHost(
         return
     }
 
+    NavHost(navController = navController, startDestination = Routes.Splash) {
+        composable(Routes.Splash) {
+            SplashScreen(
+                onSplashComplete = {
+                    // Navigate to the appropriate screen based on authentication state
+                    val user = FirebaseAuth.getInstance().currentUser
+                    if (user != null) {
+                        if (sharedViewModel.isProfileComplete()) {
+                            navController.navigate(Routes.MatchList) {
+                                popUpTo(Routes.Splash) { inclusive = true }
+                            }
+                        } else {
+                            navController.navigate(Routes.Profile) {
+                                popUpTo(Routes.Splash) { inclusive = true }
+                            }
+                        }
+                    } else {
+                        navController.navigate(Routes.Auth) {
+                            popUpTo(Routes.Splash) { inclusive = true }
+                        }
+                    }
+                }
+            )
+        }
 
-    NavHost(navController = navController, startDestination = startDestination) {
         navigation(startDestination = Routes.PhoneInput, Routes.Auth) {
             composable(Routes.PhoneInput) {
                 val parentEntry = remember(it) {
@@ -108,10 +133,26 @@ fun AppNavHost(
         }
 
         composable(Routes.Profile) {
-            TeacherProfileScreen(onProfileSaved = { teacher ->
-                sharedViewModel.setTeacher(teacher)
-                navController.navigate(Routes.MatchList)
-            })
+            TeacherProfileScreen(
+                onProfileSaved = { teacher ->
+                    sharedViewModel.setTeacher(teacher)
+                    navController.navigate(Routes.MatchList)
+                },
+                onNavigateToTeacherInput = {
+                    navController.navigate(Routes.TeacherInput)
+                }
+            )
+        }
+
+        composable(Routes.TeacherInput) {
+            TeacherInputScreen(
+                onFormSubmitted = { teacher ->
+                    sharedViewModel.setTeacher(teacher)
+                    navController.navigate(Routes.MatchList) {
+                        popUpTo(Routes.Profile) { inclusive = true }
+                    }
+                }
+            )
         }
 
         composable(Routes.MatchList) {

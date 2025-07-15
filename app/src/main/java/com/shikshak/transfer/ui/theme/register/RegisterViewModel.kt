@@ -1,6 +1,7 @@
 package com.shikshak.transfer.ui.theme.register
 
 import Teacher
+import Contact
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,14 +9,12 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.shikshak.transfer.ui.theme.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor() : ViewModel() {
-
-    var isLoading by mutableStateOf(false)
-    var errorMessage by mutableStateOf<String?>(null)
+class RegisterViewModel @Inject constructor() : BaseViewModel() {
 
     fun registerUser(
         name: String,
@@ -27,28 +26,35 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
         post: String,
         onSuccess: () -> Unit
     ) {
-        isLoading = true
+        updateLoadingState(true)
         val auth = FirebaseAuth.getInstance()
         val firestore = Firebase.firestore
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
                 val uid = result.user?.uid ?: return@addOnSuccessListener
-                val teacher = Teacher(uid, name, email, school, district, subject, post)
+                val teacher = Teacher(
+                    uid = uid,
+                    name = name,
+                    subject = subject,
+                    post = post,
+                    district = district,
+                    schoolName = school,
+                    contact = Contact(email = email)
+                )
                 firestore.collection("teachers").document(uid)
                     .set(teacher)
                     .addOnSuccessListener {
-                        isLoading = false
+                        updateLoadingState(false)
                         onSuccess()
                     }
-                    .addOnFailureListener {
-                        isLoading = false
-                        errorMessage = "Failed to save teacher info: ${it.message}"
+                    .addOnFailureListener { exception ->
+                        handleFirestoreError(exception)
                     }
             }
-            .addOnFailureListener {
-                isLoading = false
-                errorMessage = "Registration failed: ${it.message}"
+            .addOnFailureListener { exception ->
+                updateLoadingState(false)
+                showError("Registration failed: ${exception.message}")
             }
     }
 }

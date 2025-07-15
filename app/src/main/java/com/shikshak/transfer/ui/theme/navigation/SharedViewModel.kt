@@ -29,6 +29,7 @@ class SharedViewModel @Inject constructor() : ViewModel() {
                 onLoaded()
             }
             .addOnFailureListener { e ->
+                Timber.e(e, "Failed to load teacher profile")
                 onError(e.localizedMessage ?: "Failed to load profile")
             }
     }

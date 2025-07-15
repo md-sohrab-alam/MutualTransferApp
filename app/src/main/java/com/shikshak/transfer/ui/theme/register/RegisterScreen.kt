@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
 
 @Composable
 fun RegisterScreen(
@@ -76,7 +77,7 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (viewModel.isLoading) {
+        if (viewModel.isLoading.value) {
             CircularProgressIndicator()
         } else {
             Button(onClick = {
@@ -101,10 +102,16 @@ fun RegisterScreen(
                 Text("Already have an account? Login")
             }
         }
+    }
 
-        viewModel.errorMessage?.let {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(it, color = MaterialTheme.colorScheme.error)
-        }
+    // Show error dialog if there's an error
+    if (viewModel.showErrorDialog.value && viewModel.errorMessage.value != null) {
+        ErrorAlertDialog(
+            showDialog = viewModel.showErrorDialog,
+            message = viewModel.errorMessage.value!!,
+            onDismiss = {
+                viewModel.clearError()
+            }
+        )
     }
 }

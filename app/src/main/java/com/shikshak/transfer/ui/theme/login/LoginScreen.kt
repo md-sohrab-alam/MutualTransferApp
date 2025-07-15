@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.shikshak.transfer.ui.theme.navigation.Routes
+import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
 
 @Composable
 fun LoginScreen(navController: NavController,
@@ -49,16 +51,22 @@ fun LoginScreen(navController: NavController,
             visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            viewModel.login(email.value, password.value, onLoginSuccess = {
-                Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT).show()
-                onLoginSuccess()
-            }, onError = {
-                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-            })
-        }) {
-            Text("Login")
+        
+        if (viewModel.isLoading.value) {
+            CircularProgressIndicator()
+        } else {
+            Button(onClick = {
+                viewModel.login(email.value, password.value, onLoginSuccess = {
+                    Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT).show()
+                    onLoginSuccess()
+                }, onError = {
+                    // Error will be shown in dialog, no need to show Toast here
+                })
+            }) {
+                Text("Login")
+            }
         }
+        
         Spacer(modifier = Modifier.height(16.dp)) // Add some space
 
         // Register Button
@@ -68,5 +76,16 @@ fun LoginScreen(navController: NavController,
         ) {
             Text("New user? Register here")
         }
+    }
+
+    // Show error dialog if there's an error
+    if (viewModel.showErrorDialog.value && viewModel.errorMessage.value != null) {
+        ErrorAlertDialog(
+            showDialog = viewModel.showErrorDialog,
+            message = viewModel.errorMessage.value!!,
+            onDismiss = {
+                viewModel.clearError()
+            }
+        )
     }
 }
