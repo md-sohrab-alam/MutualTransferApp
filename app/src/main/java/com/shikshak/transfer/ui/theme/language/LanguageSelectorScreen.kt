@@ -13,9 +13,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.shikshak.transfer.R
 import com.shikshak.transfer.ui.theme.utils.LanguageUtils
+import com.shikshak.transfer.MutualTransferApp
 import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.activity.compose.LocalActivity
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,6 +26,7 @@ fun LanguageSelectorScreen(
     onLanguageSelected: () -> Unit
 ) {
     val context = LocalContext.current
+    val activity = LocalActivity.current
     var selectedLanguage by remember { mutableStateOf(LanguageUtils.getCurrentLanguage(context)) }
     
     Column(
@@ -79,6 +83,7 @@ fun LanguageSelectorScreen(
                 ),
                 onClick = {
                     selectedLanguage = language.code
+                    Timber.d("Language selected: ${language.code}")
                 }
             ) {
                 Row(
@@ -131,13 +136,22 @@ fun LanguageSelectorScreen(
         // Continue Button
         Button(
             onClick = {
+                Timber.d("Continue button clicked with language: $selectedLanguage")
+                
                 // Save language preference
                 val sharedPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
                 sharedPrefs.edit().putString("language_code", selectedLanguage).apply()
+                Timber.d("Language preference saved: $selectedLanguage")
                 
-                // Set the selected language
-                LanguageUtils.setLocale(context, selectedLanguage)
-                onLanguageSelected()
+                // Force complete app restart to ensure language change
+                activity?.let { act ->
+                    val intent = act.packageManager.getLaunchIntentForPackage(act.packageName)
+                    intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    act.startActivity(intent)
+                    act.finish()
+                }
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(

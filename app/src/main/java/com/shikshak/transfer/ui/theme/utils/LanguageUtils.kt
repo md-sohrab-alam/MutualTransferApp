@@ -24,6 +24,15 @@ object LanguageUtils {
     }
     
     fun getCurrentLanguage(context: Context): String {
+        // First try to get from shared preferences (user's choice)
+        val sharedPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPrefs.getString("language_code", null)
+        
+        if (savedLanguage != null) {
+            return savedLanguage
+        }
+        
+        // Fallback to system configuration
         val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             context.resources.configuration.locales[0]
         } else {

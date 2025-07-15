@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,6 +30,7 @@ import com.shikshak.transfer.ui.theme.profile.TeacherInputScreen
 import com.shikshak.transfer.ui.theme.register.RegisterScreen
 import com.shikshak.transfer.ui.theme.splash.SplashScreen
 import com.shikshak.transfer.ui.theme.language.LanguageSelectorScreen
+import android.content.Context
 
 @Composable
 fun AppNavHost(
@@ -36,10 +38,17 @@ fun AppNavHost(
 ) {
     val navController = rememberNavController()
     val activity = LocalActivity.current!!
+    val context = LocalContext.current
 
     // 👇 States to track loading teacher and decide destination
     var appReady by remember { mutableStateOf(false) }
     var startDestination by remember { mutableStateOf(Routes.Splash) }
+
+    // ✅ Check if language has been selected
+    fun hasLanguageBeenSelected(): Boolean {
+        val sharedPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        return sharedPrefs.contains("language_code")
+    }
 
     // ✅ Auto-login check: run once
     LaunchedEffect(Unit) {
@@ -72,7 +81,14 @@ fun AppNavHost(
         return
     }
 
-    NavHost(navController = navController, startDestination = Routes.LanguageSelector) {
+    // Determine the actual start destination based on language selection
+    val actualStartDestination = if (hasLanguageBeenSelected()) {
+        startDestination
+    } else {
+        Routes.LanguageSelector
+    }
+
+    NavHost(navController = navController, startDestination = actualStartDestination) {
         composable(Routes.LanguageSelector) {
             LanguageSelectorScreen(
                 onLanguageSelected = {

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MutualTransferApp</string>
     
@@ -12,12 +13,12 @@
     <string name="splash_footer">© 2024 म्यूचुअल ट्रांसफर बिहार</string>
     
     <!-- Login Screen -->
-    <string name="login_title">वापसी पर स्वागत है</string>
+    <string name="login_title">स्वागत है</string>
     <string name="login_subtitle">अपने खाते में साइन इन करें</string>
     <string name="phone_number_label">फोन नंबर</string>
     <string name="phone_number_hint">अपना फोन नंबर दर्ज करें</string>
     <string name="send_otp_button">OTP भेजें</string>
-    <string name="login_footer">जारी रखने पर, आप हमारी शर्तों &amp; शर्तों से सहमत होते हैं</string>
+    <string name="login_footer">जारी रखने पर, आप हमारी शर्तों और स्थितियों से सहमत होते हैं</string>
     <string name="phone_validation_error">कृपया एक वैध 10-अंकीय फोन नंबर दर्ज करें</string>
     <string name="phone_format_error">फोन नंबर 6, 7, 8, या 9 से शुरू होना चाहिए</string>
     
@@ -26,7 +27,7 @@
     <string name="otp_subtitle">अपने फोन पर भेजे गए 6-अंकीय कोड दर्ज करें</string>
     <string name="otp_hint">6-अंकीय OTP दर्ज करें</string>
     <string name="verify_otp_button">OTP सत्यापित करें</string>
-    <string name="resend_otp_text">कोड नहीं मिला? में पुनः भेजें</string>
+    <string name="resend_otp_text">कोड नहीं मिला? पुनः भेजें</string>
     <string name="otp_validation_error">कृपया एक वैध 6-अंकीय OTP दर्ज करें</string>
     <string name="otp_format_error">OTP में केवल अंक होने चाहिए</string>
     
@@ -50,7 +51,7 @@
     <string name="submit_form_button">फॉर्म जमा करें</string>
     <string name="selected_districts">चयनित जिले:</string>
     <string name="selected_blocks">चयनित ब्लॉक:</string>
-    <string name="select_districts_first">कृपया पहले पसंदीदा जिले चुनें ब्लॉक चुनने के लिए</string>
+    <string name="select_districts_first">कृपया पहले पसंदीदा जिले चुनें</string>
     
     <!-- Teacher Profile Screen -->
     <string name="teacher_profile_title">शिक्षक प्रोफाइल</string>

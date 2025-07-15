@@ -1,68 +1,71 @@
-package com.shikshak.transfer // Or your actual package name
+package com.shikshak.transfer
 
 import android.app.Application
+import android.content.Context
+import android.content.res.Configuration
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
+import java.util.*
 
 @HiltAndroidApp
 class MutualTransferApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-        // Initialize Timber
-        // Option 1: Simple setup (logs only in debug builds)
-
-        if (BuildConfig.DEBUG) { // BuildConfig.DEBUG is automatically generated
+        // Timber initialization for logging
+        if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        } else {
-            // For release builds, you might plant a tree that logs to your crash reporting tool
-            // Example for Firebase Crashlytics (make sure you have Crashlytics set up)
-            // Timber.plant(CrashlyticsTree())
-            // Or plant no tree if you don't want logs in release:
-            // Timber.plant(ReleaseTree()) // See ReleaseTree example below
+            Timber.d("Timber initialized in DEBUG mode")
         }
+        updateLocale()
+    }
 
-        // Option 2: More advanced setup with clickable logs (see notes below)
-        // if (BuildConfig.DEBUG) {
-        //     Timber.plant(object : Timber.DebugTree() {
-        //         override fun createStackElementTag(element: StackTraceElement): String? {
-        //             return String.format(
-        //                 "[(%s:%s)#%s]",
-        //                 element.fileName,
-        //                 element.lineNumber,
-        //                 element.methodName
-        //             )
-        //         }
-        //     })
-        // } else {
-        //     Timber.plant(CrashlyticsTree()) // Or your release tree
-        // }
+    override fun attachBaseContext(base: Context) {
+        val locale = getLocaleFromPreferences(base)
+        val context = updateLocale(base, locale)
+        super.attachBaseContext(context)
+    }
 
-        Timber.d("Timber initialized")
+    override fun getResources(): android.content.res.Resources {
+        val locale = getLocaleFromPreferences(this)
+        val config = Configuration(super.getResources().configuration)
+        config.setLocale(locale)
+        return createConfigurationContext(config).resources
+    }
+
+    private fun getLocaleFromPreferences(context: Context): Locale {
+        val sharedPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        val languageCode = sharedPrefs.getString("language_code", "en") ?: "en"
+        Timber.d("Loading locale from preferences: $languageCode")
+        return Locale(languageCode)
+    }
+
+    private fun updateLocale(context: Context, locale: Locale): Context {
+        Locale.setDefault(locale)
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+        return context.createConfigurationContext(config)
+    }
+
+    fun updateLocale() {
+        val locale = getLocaleFromPreferences(this)
+        Timber.d("Updating locale to: ${locale.language}")
+        Locale.setDefault(locale)
+        
+        // Use the modern approach for updating configuration
+        val config = Configuration(resources.configuration)
+        config.setLocale(locale)
+        
+        // Create a new context with the updated configuration
+        val newContext = createConfigurationContext(config)
+        
+        // Update the base context
+        try {
+            val baseContextField = Context::class.java.getDeclaredField("mBase")
+            baseContextField.isAccessible = true
+            baseContextField.set(this, newContext)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to update base context")
+        }
     }
 }
-
-// Optional: A custom tree for release builds that logs to Crashlytics
-// class CrashlyticsTree : Timber.Tree() {
-//     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-//         if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
-//             return // Don't send verbose, debug, or info logs to Crashlytics
-//         }
-//
-//         FirebaseCrashlytics.getInstance().log(message)
-//
-//         if (t != null) {
-//             if (priority == Log.ERROR || priority == Log.WARN) {
-//                 FirebaseCrashlytics.getInstance().recordException(t)
-//             }
-//         }
-//     }
-// }
-
-// Optional: A custom tree that does nothing for release builds
-// class ReleaseTree : Timber.Tree() {
-//    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-//        // Do nothing for release builds if you don't want any logs
-//    }
-// }
