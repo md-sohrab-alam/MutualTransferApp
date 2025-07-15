@@ -13,9 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
+import com.shikshak.transfer.ui.theme.data.Blocks
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,7 +34,7 @@ fun TeacherInputScreen(
     var postLevel by remember { mutableStateOf("") }
     var subject by remember { mutableStateOf("") }
     var preferredDistricts by remember { mutableStateOf(listOf<String>()) }
-    var willingToMove by remember { mutableStateOf(false) }
+    var preferredBlocks by remember { mutableStateOf(listOf<String>()) }
     var contactPreference by remember { mutableStateOf(true) }
     var designation by remember { mutableStateOf("") }
     
@@ -60,17 +63,23 @@ fun TeacherInputScreen(
         }
     }
     
-    // Dropdown options
+    // Dropdown options - Bihar Districts
     val districts = listOf(
-        "Ahmedabad", "Amreli", "Anand", "Aravalli", "Banaskantha", "Bharuch", 
-        "Bhavnagar", "Botad", "Chhota Udaipur", "Dahod", "Dang", "Devbhoomi Dwarka",
-        "Gandhinagar", "Gir Somnath", "Jamnagar", "Junagadh", "Kheda", "Kutch",
-        "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal",
-        "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar",
-        "Tapi", "Vadodara", "Valsad"
+        "Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur",
+        "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj",
+        "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj",
+        "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda",
+        "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur",
+        "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul",
+        "Vaishali", "West Champaran"
     )
     
-    val blocks = listOf("Block A", "Block B", "Block C", "Block D", "Block E")
+    // Get blocks based on selected district
+    val availableBlocks = if (currentDistrict.isNotBlank()) {
+        Blocks.getBlocksForDistrict(currentDistrict)
+    } else {
+        listOf("Please select a district first")
+    }
     
     val postLevels = listOf(
         "Primary" to false,
@@ -223,8 +232,14 @@ fun TeacherInputScreen(
                     DropdownMenuItem(
                         text = { Text(district) },
                         onClick = {
+                            val previousDistrict = currentDistrict
                             currentDistrict = district
                             currentDistrictExpanded = false
+                            
+                            // Clear block selection if district changes
+                            if (previousDistrict != district) {
+                                currentBlock = ""
+                            }
                         }
                     )
                 }
@@ -254,7 +269,7 @@ fun TeacherInputScreen(
                 expanded = currentBlockExpanded,
                 onDismissRequest = { currentBlockExpanded = false }
             ) {
-                blocks.forEach { block ->
+                availableBlocks.forEach { block ->
                     DropdownMenuItem(
                         text = { Text(block) },
                         onClick = {
@@ -394,61 +409,204 @@ fun TeacherInputScreen(
         
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Preferred Districts (Multi-select)
+        // Preferred Districts (Multi-select) - Max 3
         Text(
-            text = "🎯 Preferred Districts (Multi-select)",
+            text = "🎯 Preferred Districts (Max 3)",
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        // District Dropdown
+        var districtDropdownExpanded by remember { mutableStateOf(false) }
+        ExposedDropdownMenuBox(
+            expanded = districtDropdownExpanded,
+            onExpandedChange = { districtDropdownExpanded = it },
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(districts.take(10)) { district ->
-                FilterChip(
-                    selected = preferredDistricts.contains(district),
-                    onClick = {
-                        preferredDistricts = if (preferredDistricts.contains(district)) {
-                            preferredDistricts - district
-                        } else {
-                            preferredDistricts + district
+            OutlinedTextField(
+                value = "",
+                onValueChange = { },
+                readOnly = true,
+                label = { Text("Select District") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = districtDropdownExpanded) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
+            )
+            ExposedDropdownMenu(
+                expanded = districtDropdownExpanded,
+                onDismissRequest = { districtDropdownExpanded = false }
+            ) {
+                districts.filter { district -> !preferredDistricts.contains(district) }
+                    .forEach { district ->
+                        DropdownMenuItem(
+                            text = { Text(district) },
+                            onClick = {
+                                if (preferredDistricts.size < 3) {
+                                    preferredDistricts = preferredDistricts + district
+                                }
+                                districtDropdownExpanded = false
+                            }
+                        )
+                    }
+            }
+        }
+        
+        // Selected Districts Display
+        if (preferredDistricts.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Selected Districts:",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(preferredDistricts) { district ->
+                    Card(
+                        modifier = Modifier.padding(vertical = 2.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        )
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = district,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            IconButton(
+                                onClick = {
+                                    preferredDistricts = preferredDistricts - district
+                                },
+                                modifier = Modifier.size(20.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Remove",
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
                         }
-                    },
-                    label = { Text(district) }
-                )
+                    }
+                }
             }
         }
         
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Willing to move radio buttons
+        // Preferred Blocks (Optional) - Only from selected districts
         Text(
-            text = "🔁 Willing to move to partner's school?",
+            text = "📍 Preferred Blocks (Optional)",
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(
-                    selected = willingToMove,
-                    onClick = { willingToMove = true }
+        // Get blocks only from selected districts
+        val availableBlocks = if (preferredDistricts.isNotEmpty()) {
+            preferredDistricts.flatMap { district ->
+                Blocks.getBlocksForDistrict(district)
+            }.distinct().sorted()
+        } else {
+            emptyList()
+        }
+        
+        // Block Dropdown (only if districts are selected)
+        if (preferredDistricts.isNotEmpty()) {
+            var blockDropdownExpanded by remember { mutableStateOf(false) }
+            ExposedDropdownMenuBox(
+                expanded = blockDropdownExpanded,
+                onExpandedChange = { blockDropdownExpanded = it },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = "",
+                    onValueChange = { },
+                    readOnly = true,
+                    label = { Text("Select Block") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = blockDropdownExpanded) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor()
                 )
-                Text("Yes")
+                ExposedDropdownMenu(
+                    expanded = blockDropdownExpanded,
+                    onDismissRequest = { blockDropdownExpanded = false }
+                ) {
+                    availableBlocks.filter { block -> !preferredBlocks.contains(block) }
+                        .forEach { block ->
+                            DropdownMenuItem(
+                                text = { Text(block) },
+                                onClick = {
+                                    preferredBlocks = preferredBlocks + block
+                                    blockDropdownExpanded = false
+                                }
+                            )
+                        }
+                }
             }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(
-                    selected = !willingToMove,
-                    onClick = { willingToMove = false }
+            
+            // Selected Blocks Display
+            if (preferredBlocks.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Selected Blocks:",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(bottom = 4.dp)
                 )
-                Text("No")
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(preferredBlocks) { block ->
+                        Card(
+                            modifier = Modifier.padding(vertical = 2.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                            )
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                            ) {
+                                Text(
+                                    text = block,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                IconButton(
+                                    onClick = {
+                                        preferredBlocks = preferredBlocks - block
+                                    },
+                                    modifier = Modifier.size(20.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Remove",
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
+        } else {
+            Text(
+                text = "Please select preferred districts first to choose blocks",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
         }
         
         Spacer(modifier = Modifier.height(16.dp))
@@ -497,9 +655,9 @@ fun TeacherInputScreen(
                             schoolName = currentSchool,
                             preferredDistrict = preferredDistricts.firstOrNull() ?: "",
                             preferredDistricts = preferredDistricts,
+                            preferredBlocks = preferredBlocks,
                             designation = designation,
                             contactPreference = contactPreference,
-                            willingToMove = willingToMove,
                             contact = Contact(phone = mobileNumber),
                             timestamp = System.currentTimeMillis()
                         )

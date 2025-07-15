@@ -15,7 +15,8 @@ data class Teacher(
     val designation: String = "",
     val contactPreference: Boolean = true, // Allow contact: Yes/No
     val willingToMove: Boolean = false, // Willing to move to partner's school
-    val preferredDistricts: List<String> = emptyList() // Multi-select preferred districts
+    val preferredDistricts: List<String> = emptyList(), // Multi-select preferred districts
+    val preferredBlocks: List<String> = emptyList() // Multi-select preferred blocks
 )
 
 data class Contact(
