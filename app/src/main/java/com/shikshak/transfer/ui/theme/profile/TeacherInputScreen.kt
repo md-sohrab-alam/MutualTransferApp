@@ -15,10 +15,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
 import com.shikshak.transfer.ui.theme.data.Blocks
+import com.shikshak.transfer.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -167,7 +169,7 @@ fun TeacherInputScreen(
     ) {
         // Screen Title
         Text(
-            text = "🔄 Mutual Transfer Form",
+            text = stringResource(R.string.teacher_input_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 24.dp)
@@ -177,7 +179,7 @@ fun TeacherInputScreen(
         OutlinedTextField(
             value = fullName,
             onValueChange = { fullName = it },
-            label = { Text("👤 Full Name") },
+            label = { Text(stringResource(R.string.full_name_label)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -188,7 +190,7 @@ fun TeacherInputScreen(
         OutlinedTextField(
             value = mobileNumber,
             onValueChange = { },
-            label = { Text("📞 Mobile Number") },
+            label = { Text(stringResource(R.string.mobile_number_label)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = false,
             singleLine = true
@@ -200,7 +202,7 @@ fun TeacherInputScreen(
         OutlinedTextField(
             value = currentSchool,
             onValueChange = { currentSchool = it },
-            label = { Text("🏫 Current School Name") },
+            label = { Text(stringResource(R.string.current_school_label)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -218,7 +220,7 @@ fun TeacherInputScreen(
                 value = currentDistrict,
                 onValueChange = { },
                 readOnly = true,
-                label = { Text("📍 Current District") },
+                label = { Text(stringResource(R.string.current_district_label)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = currentDistrictExpanded) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -259,7 +261,7 @@ fun TeacherInputScreen(
                 value = currentBlock,
                 onValueChange = { },
                 readOnly = true,
-                label = { Text("📍 Current Block") },
+                label = { Text(stringResource(R.string.current_block_label)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = currentBlockExpanded) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -294,7 +296,7 @@ fun TeacherInputScreen(
                 value = postLevel,
                 onValueChange = { },
                 readOnly = true,
-                label = { Text("🎓 Post Level") },
+                label = { Text(stringResource(R.string.post_level_label)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = postLevelExpanded) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -350,7 +352,7 @@ fun TeacherInputScreen(
                     value = subject,
                     onValueChange = { },
                     readOnly = true,
-                    label = { Text("📘 Subject") },
+                    label = { Text(stringResource(R.string.subject_label)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = subjectExpanded) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -385,7 +387,7 @@ fun TeacherInputScreen(
                 value = designation,
                 onValueChange = { },
                 readOnly = true,
-                label = { Text("👨‍🏫 Designation") },
+                label = { Text(stringResource(R.string.designation_label)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = designationExpanded) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -411,7 +413,7 @@ fun TeacherInputScreen(
 
         // Preferred Districts (Multi-select) - Max 3
         Text(
-            text = "🎯 Preferred Districts (Max 3)",
+            text = stringResource(R.string.preferred_districts_label),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -424,16 +426,16 @@ fun TeacherInputScreen(
             onExpandedChange = { districtDropdownExpanded = it },
             modifier = Modifier.fillMaxWidth()
         ) {
-            OutlinedTextField(
-                value = "",
-                onValueChange = { },
-                readOnly = true,
-                label = { Text("Select District") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = districtDropdownExpanded) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .menuAnchor()
-            )
+                            OutlinedTextField(
+                    value = "",
+                    onValueChange = { },
+                    readOnly = true,
+                    label = { Text(stringResource(R.string.select_district_hint)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = districtDropdownExpanded) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor()
+                )
             ExposedDropdownMenu(
                 expanded = districtDropdownExpanded,
                 onDismissRequest = { districtDropdownExpanded = false }
@@ -457,7 +459,7 @@ fun TeacherInputScreen(
         if (preferredDistricts.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Selected Districts:",
+                text = stringResource(R.string.selected_districts),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(bottom = 4.dp)
@@ -504,7 +506,7 @@ fun TeacherInputScreen(
 
         // Preferred Blocks (Optional) - Only from selected districts
         Text(
-            text = "📍 Preferred Blocks (Optional)",
+            text = stringResource(R.string.preferred_blocks_label),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -531,7 +533,7 @@ fun TeacherInputScreen(
                     value = "",
                     onValueChange = { },
                     readOnly = true,
-                    label = { Text("Select Block") },
+                    label = { Text(stringResource(R.string.select_block_hint)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = blockDropdownExpanded) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -558,7 +560,7 @@ fun TeacherInputScreen(
             if (preferredBlocks.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Selected Blocks:",
+                    text = stringResource(R.string.selected_blocks),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(bottom = 4.dp)
@@ -602,7 +604,7 @@ fun TeacherInputScreen(
             }
         } else {
             Text(
-                text = "Please select preferred districts first to choose blocks",
+                text = stringResource(R.string.select_districts_first),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(vertical = 8.dp)
@@ -613,7 +615,7 @@ fun TeacherInputScreen(
 
         // Contact Preference
         Text(
-            text = "📞 Contact Preference",
+            text = stringResource(R.string.contact_preference_label),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -628,14 +630,14 @@ fun TeacherInputScreen(
                     selected = contactPreference,
                     onClick = { contactPreference = true }
                 )
-                Text("Allow contact")
+                Text(stringResource(R.string.allow_contact))
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
                     selected = !contactPreference,
                     onClick = { contactPreference = false }
                 )
-                Text("Don't allow contact")
+                Text(stringResource(R.string.dont_allow_contact))
             }
         }
         
@@ -682,7 +684,7 @@ fun TeacherInputScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-                Text("✅ Submit Form")
+                Text(stringResource(R.string.submit_form_button))
             }
     }
 

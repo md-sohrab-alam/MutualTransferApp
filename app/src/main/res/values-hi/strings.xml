@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">MutualTransferApp</string>
+    
+    <!-- App Title and Navigation -->
+    <string name="app_title">म्यूचुअल ट्रांसफर बिहार</string>
+    <string name="app_subtitle">जिलों में शिक्षकों को जोड़ना</string>
+    <string name="app_footer">© 2024 म्यूचुअल ट्रांसफर बिहार</string>
+    
+    <!-- Splash Screen -->
+    <string name="splash_title">म्यूचुअल ट्रांसफर बिहार</string>
+    <string name="splash_subtitle">जिलों में शिक्षकों को जोड़ना</string>
+    <string name="splash_footer">© 2024 म्यूचुअल ट्रांसफर बिहार</string>
+    
+    <!-- Login Screen -->
+    <string name="login_title">वापसी पर स्वागत है</string>
+    <string name="login_subtitle">अपने खाते में साइन इन करें</string>
+    <string name="phone_number_label">फोन नंबर</string>
+    <string name="phone_number_hint">अपना फोन नंबर दर्ज करें</string>
+    <string name="send_otp_button">OTP भेजें</string>
+    <string name="login_footer">जारी रखने पर, आप हमारी शर्तों &amp; शर्तों से सहमत होते हैं</string>
+    <string name="phone_validation_error">कृपया एक वैध 10-अंकीय फोन नंबर दर्ज करें</string>
+    <string name="phone_format_error">फोन नंबर 6, 7, 8, या 9 से शुरू होना चाहिए</string>
+    
+    <!-- OTP Screen -->
+    <string name="otp_title">OTP सत्यापित करें</string>
+    <string name="otp_subtitle">अपने फोन पर भेजे गए 6-अंकीय कोड दर्ज करें</string>
+    <string name="otp_hint">6-अंकीय OTP दर्ज करें</string>
+    <string name="verify_otp_button">OTP सत्यापित करें</string>
+    <string name="resend_otp_text">कोड नहीं मिला? में पुनः भेजें</string>
+    <string name="otp_validation_error">कृपया एक वैध 6-अंकीय OTP दर्ज करें</string>
+    <string name="otp_format_error">OTP में केवल अंक होने चाहिए</string>
+    
+    <!-- Teacher Input Screen -->
+    <string name="teacher_input_title">म्यूचुअल ट्रांसफर फॉर्म</string>
+    <string name="full_name_label">पूरा नाम</string>
+    <string name="mobile_number_label">मोबाइल नंबर</string>
+    <string name="current_school_label">वर्तमान स्कूल का नाम</string>
+    <string name="current_district_label">वर्तमान जिला</string>
+    <string name="current_block_label">वर्तमान ब्लॉक</string>
+    <string name="post_level_label">पद स्तर</string>
+    <string name="subject_label">विषय</string>
+    <string name="designation_label">पदनाम</string>
+    <string name="preferred_districts_label">पसंदीदा जिले (अधिकतम 3)</string>
+    <string name="preferred_blocks_label">पसंदीदा ब्लॉक (वैकल्पिक)</string>
+    <string name="select_district_hint">जिला चुनें</string>
+    <string name="select_block_hint">ब्लॉक चुनें</string>
+    <string name="contact_preference_label">संपर्क वरीयता</string>
+    <string name="allow_contact">संपर्क की अनुमति दें</string>
+    <string name="dont_allow_contact">संपर्क की अनुमति न दें</string>
+    <string name="submit_form_button">फॉर्म जमा करें</string>
+    <string name="selected_districts">चयनित जिले:</string>
+    <string name="selected_blocks">चयनित ब्लॉक:</string>
+    <string name="select_districts_first">कृपया पहले पसंदीदा जिले चुनें ब्लॉक चुनने के लिए</string>
+    
+    <!-- Teacher Profile Screen -->
+    <string name="teacher_profile_title">शिक्षक प्रोफाइल</string>
+    <string name="edit_profile">प्रोफाइल संपादित करें</string>
+    <string name="save_profile">प्रोफाइल सहेजें</string>
+    <string name="edit_button">संपादित करें</string>
+    <string name="save_button">सहेजें</string>
+    <string name="cancel_button">रद्द करें</string>
+    
+    <!-- Validation Messages -->
+    <string name="validation_full_name_required">पूरा नाम आवश्यक है</string>
+    <string name="validation_school_required">स्कूल का नाम आवश्यक है</string>
+    <string name="validation_district_required">वर्तमान जिला आवश्यक है</string>
+    <string name="validation_post_level_required">पद स्तर आवश्यक है</string>
+    <string name="validation_designation_required">पदनाम आवश्यक है</string>
+    <string name="validation_subject_required">माध्यमिक और उच्च माध्यमिक के लिए विषय आवश्यक है</string>
+    <string name="validation_districts_required">कृपया कम से कम एक पसंदीदा जिला चुनें</string>
+    
+    <!-- Common -->
+    <string name="loading">लोड हो रहा है...</string>
+    <string name="error">त्रुटि</string>
+    <string name="retry">पुनः प्रयास करें</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="ok">ठीक है</string>
+    <string name="remove">हटाएं</string>
+    <string name="close">बंद करें</string>
+    
+    <!-- Post Levels -->
+    <string name="post_level_primary">प्राथमिक</string>
+    <string name="post_level_upper_primary">उच्च प्राथमिक</string>
+    <string name="post_level_secondary">माध्यमिक</string>
+    <string name="post_level_higher_secondary">उच्च माध्यमिक</string>
+    
+    <!-- Designations -->
+    <string name="designation_assistant_teacher">सहायक शिक्षक</string>
+    <string name="designation_head_teacher">प्रधानाध्यापक</string>
+    <string name="designation_pet">शारीरिक शिक्षा शिक्षक (PET)</string>
+    <string name="designation_art_music">कला / संगीत शिक्षक</string>
+    <string name="designation_tgt">प्रशिक्षित स्नातक शिक्षक (TGT)</string>
+    <string name="designation_pgt">स्नातकोत्तर शिक्षक (PGT)</string>
+    <string name="designation_lecturer">प्रवक्ता</string>
+</resources> 

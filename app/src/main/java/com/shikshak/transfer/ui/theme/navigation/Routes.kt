@@ -1,6 +1,7 @@
 package com.shikshak.transfer.ui.theme.navigation
 
 object Routes {
+    const val LanguageSelector = "language_selector"
     const val Splash = "splash"
     const val Auth = "auth"
     const val PhoneInput = "phone_input"

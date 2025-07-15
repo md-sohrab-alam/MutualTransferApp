@@ -1,3 +1,95 @@
 <resources>
     <string name="app_name">MutualTransferApp</string>
+    
+    <!-- App Title and Navigation -->
+    <string name="app_title">Mutual Transfer Bihar</string>
+    <string name="app_subtitle">Connecting Teachers Across Districts</string>
+    <string name="app_footer">© 2024 Mutual Transfer Bihar</string>
+    
+    <!-- Splash Screen -->
+    <string name="splash_title">Mutual Transfer Bihar</string>
+    <string name="splash_subtitle">Connecting Teachers Across Districts</string>
+    <string name="splash_footer">© 2024 Mutual Transfer Bihar</string>
+    
+    <!-- Login Screen -->
+    <string name="login_title">Welcome Back</string>
+    <string name="login_subtitle">Sign in to your account</string>
+    <string name="phone_number_label">Phone Number</string>
+    <string name="phone_number_hint">Enter your phone number</string>
+    <string name="send_otp_button">Send OTP</string>
+    <string name="login_footer">By continuing, you agree to our Terms &amp; Conditions</string>
+    <string name="phone_validation_error">Please enter a valid 10-digit phone number</string>
+    <string name="phone_format_error">Phone number must start with 6, 7, 8, or 9</string>
+    
+    <!-- OTP Screen -->
+    <string name="otp_title">Verify OTP</string>
+    <string name="otp_subtitle">Enter the 6-digit code sent to your phone</string>
+    <string name="otp_hint">Enter 6-digit OTP</string>
+    <string name="verify_otp_button">Verify OTP</string>
+    <string name="resend_otp_text">Didn\'t receive code? Resend in</string>
+    <string name="otp_validation_error">Please enter a valid 6-digit OTP</string>
+    <string name="otp_format_error">OTP must contain only digits</string>
+    
+    <!-- Teacher Input Screen -->
+    <string name="teacher_input_title">Mutual Transfer Form</string>
+    <string name="full_name_label">Full Name</string>
+    <string name="mobile_number_label">Mobile Number</string>
+    <string name="current_school_label">Current School Name</string>
+    <string name="current_district_label">Current District</string>
+    <string name="current_block_label">Current Block</string>
+    <string name="post_level_label">Post Level</string>
+    <string name="subject_label">Subject</string>
+    <string name="designation_label">Designation</string>
+    <string name="preferred_districts_label">Preferred Districts (Max 3)</string>
+    <string name="preferred_blocks_label">Preferred Blocks (Optional)</string>
+    <string name="select_district_hint">Select District</string>
+    <string name="select_block_hint">Select Block</string>
+    <string name="contact_preference_label">Contact Preference</string>
+    <string name="allow_contact">Allow contact</string>
+    <string name="dont_allow_contact">Don\'t allow contact</string>
+    <string name="submit_form_button">Submit Form</string>
+    <string name="selected_districts">Selected Districts:</string>
+    <string name="selected_blocks">Selected Blocks:</string>
+    <string name="select_districts_first">Please select preferred districts first to choose blocks</string>
+    
+    <!-- Teacher Profile Screen -->
+    <string name="teacher_profile_title">Teacher Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="save_profile">Save Profile</string>
+    <string name="edit_button">Edit</string>
+    <string name="save_button">Save</string>
+    <string name="cancel_button">Cancel</string>
+    
+    <!-- Validation Messages -->
+    <string name="validation_full_name_required">Full name is required</string>
+    <string name="validation_school_required">School name is required</string>
+    <string name="validation_district_required">Current district is required</string>
+    <string name="validation_post_level_required">Post level is required</string>
+    <string name="validation_designation_required">Designation is required</string>
+    <string name="validation_subject_required">Subject is required for Secondary and Higher Secondary</string>
+    <string name="validation_districts_required">Please select at least one preferred district</string>
+    
+    <!-- Common -->
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="remove">Remove</string>
+    <string name="close">Close</string>
+    
+    <!-- Post Levels -->
+    <string name="post_level_primary">Primary</string>
+    <string name="post_level_upper_primary">Upper Primary</string>
+    <string name="post_level_secondary">Secondary</string>
+    <string name="post_level_higher_secondary">Higher Secondary</string>
+    
+    <!-- Designations -->
+    <string name="designation_assistant_teacher">Assistant Teacher (सहायक शिक्षक)</string>
+    <string name="designation_head_teacher">Head Teacher (प्रधानाध्यापक)</string>
+    <string name="designation_pet">Physical Education Teacher (PET)</string>
+    <string name="designation_art_music">Art / Music Teacher</string>
+    <string name="designation_tgt">Trained Graduate Teacher (TGT)</string>
+    <string name="designation_pgt">Post Graduate Teacher (PGT)</string>
+    <string name="designation_lecturer">Lecturer (प्रवक्ता)</string>
 </resources>

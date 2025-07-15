@@ -28,6 +28,7 @@ import com.shikshak.transfer.ui.theme.profile.TeacherProfileScreen
 import com.shikshak.transfer.ui.theme.profile.TeacherInputScreen
 import com.shikshak.transfer.ui.theme.register.RegisterScreen
 import com.shikshak.transfer.ui.theme.splash.SplashScreen
+import com.shikshak.transfer.ui.theme.language.LanguageSelectorScreen
 
 @Composable
 fun AppNavHost(
@@ -71,7 +72,17 @@ fun AppNavHost(
         return
     }
 
-    NavHost(navController = navController, startDestination = Routes.Splash) {
+    NavHost(navController = navController, startDestination = Routes.LanguageSelector) {
+        composable(Routes.LanguageSelector) {
+            LanguageSelectorScreen(
+                onLanguageSelected = {
+                    navController.navigate(Routes.Splash) {
+                        popUpTo(Routes.LanguageSelector) { inclusive = true }
+                    }
+                }
+            )
+        }
+        
         composable(Routes.Splash) {
             SplashScreen(
                 onSplashComplete = {
