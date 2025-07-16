@@ -109,6 +109,10 @@
     <string name="potential_matches">संभावित मैच</string>
     <string name="no_matches_yet">हम अभी भी मैच की तलाश कर रहे हैं। प्रतीक्षा करें — जब कोई उपलब्ध होगा तो हम आपको सूचित करेंगे।</string>
     <string name="contact_now">अभी संपर्क करें</string>
+    <string name="your_transfer_request">आपका ट्रांसफर अनुरोध</string>
+    <string name="matching_requests">मैचिंग अनुरोध</string>
+    <string name="no_matching_request_found">कोई मैचिंग अनुरोध नहीं मिला।</string>
+    <string name="we_will_notify_you">जब हमें मैच मिलेगा तो हम आपको सूचित करेंगे।</string>
     
     <!-- Bottom Navigation -->
     <string name="home">होम</string>
@@ -121,7 +125,6 @@
     <string name="create_transfer_request_title">ट्रांसफर अनुरोध बनाएं</string>
     <string name="create_transfer_request_subtitle">म्यूचुअल ट्रांसफर साथी खोजने के लिए अपनी ट्रांसफर प्राथमिकताएं जमा करें</string>
     <string name="edit_transfer_request_title">ट्रांसफर अनुरोध संपादित करें</string>
-    <string name="your_transfer_request">आपका ट्रांसफर अनुरोध</string>
     <string name="edit_or_cancel_request_subtitle">अपने मौजूदा ट्रांसफर अनुरोध को देखें, संपादित करें या रद्द करें</string>
     <string name="request_details">अनुरोध विवरण</string>
     <string name="current_location">वर्तमान स्थान</string>

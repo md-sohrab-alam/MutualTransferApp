@@ -44,9 +44,10 @@ class SharedViewModel @Inject constructor() : ViewModel() {
         val t = currentTeacher
         return t != null &&
                 t.name.isNotBlank() &&
-                t.subject.isNotBlank() &&
+                t.schoolName.isNotBlank() &&
                 t.district.isNotBlank() &&
-                t.preferredDistrict.isNotBlank()
+                t.designation.isNotBlank() &&
+                t.post.isNotBlank()
     }
 
 }

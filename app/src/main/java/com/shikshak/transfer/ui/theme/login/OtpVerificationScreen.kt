@@ -38,6 +38,7 @@ import com.shikshak.transfer.ui.theme.navigation.Routes
 import com.shikshak.transfer.ui.theme.utils.CommonErrorDialog
 import com.shikshak.transfer.ui.theme.utils.FullScreenLoader
 import com.shikshak.transfer.ui.theme.utils.InlineError
+import androidx.compose.runtime.collectAsState
 
 @Composable
 fun OtpVerificationScreen(
@@ -47,6 +48,7 @@ fun OtpVerificationScreen(
     var otpCode by remember { mutableStateOf("") }
     var isOtpValid by remember { mutableStateOf(true) }
     var otpError by remember { mutableStateOf("") }
+    val isLoading by viewModel.isLoading.collectAsState()
 
     // Function to validate OTP
     fun validateOtp(otp: String): Boolean {
@@ -167,7 +169,7 @@ fun OtpVerificationScreen(
                         Color(0xFFFFEB3B) else Color(0xFFCCCCCC) // Light yellow or gray
                 ),
                 shape = RoundedCornerShape(12.dp),
-                enabled = otpCode.length == 6 && isOtpValid && !viewModel.isLoading.value
+                enabled = otpCode.length == 6 && isOtpValid && !isLoading
             ) {
                 Text(
                     text = "Verify OTP",
@@ -200,7 +202,7 @@ fun OtpVerificationScreen(
         }
 
         // Full screen loader
-        if (viewModel.isLoading.value) {
+        if (isLoading) {
             FullScreenLoader(message = "Verifying OTP...")
         }
     }

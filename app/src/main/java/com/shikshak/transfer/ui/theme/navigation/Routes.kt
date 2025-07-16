@@ -9,7 +9,6 @@ object Routes {
     const val Login = "login"
     const val Register = "register"
     const val Profile = "profile"
-    const val TeacherInput = "teacher_input"
     const val MatchList = "matches"
     const val TeacherList = "teachers"
     

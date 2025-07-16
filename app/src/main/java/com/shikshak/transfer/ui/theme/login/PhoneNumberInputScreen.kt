@@ -38,6 +38,7 @@ import com.shikshak.transfer.ui.theme.navigation.Routes
 import com.shikshak.transfer.ui.theme.utils.CommonErrorDialog
 import com.shikshak.transfer.ui.theme.utils.FullScreenLoader
 import com.shikshak.transfer.ui.theme.utils.InlineError
+import androidx.compose.runtime.collectAsState
 
 @Composable
 fun PhoneNumberInputScreen(
@@ -48,6 +49,7 @@ fun PhoneNumberInputScreen(
     var phoneNumber by remember { mutableStateOf("") }
     var isPhoneValid by remember { mutableStateOf(true) }
     var phoneError by remember { mutableStateOf("") }
+    val isLoading by viewModel.isLoading.collectAsState()
 
     // Function to validate phone number
     fun validatePhoneNumber(phone: String): Boolean {
@@ -155,7 +157,7 @@ fun PhoneNumberInputScreen(
             Spacer(modifier = Modifier.height(32.dp))
             
             // Send OTP Button
-            if (viewModel.isLoading.value) {
+            if (isLoading) {
                 CircularProgressIndicator(
                     color = Color.Black,
                     modifier = Modifier.size(24.dp)
@@ -202,7 +204,7 @@ fun PhoneNumberInputScreen(
         }
 
         // Full screen loader
-        if (viewModel.isLoading.value) {
+        if (isLoading) {
             FullScreenLoader(message = "Sending OTP...")
         }
     }

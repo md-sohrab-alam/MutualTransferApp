@@ -13,10 +13,11 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor() : BaseViewModel() {
     private val db = Firebase.firestore
 
-    fun saveTeacherProfile(teacher: Teacher) {
+    fun saveTeacherProfile(teacher: Teacher, onSuccess: () -> Unit = {}) {
         updateLoadingState(true)
         db.collection("teachers").document(teacher.uid).set(teacher)
             .addOnSuccessListener {
+                onSuccess()
                 updateLoadingState(false)
             }
             .addOnFailureListener { exception ->

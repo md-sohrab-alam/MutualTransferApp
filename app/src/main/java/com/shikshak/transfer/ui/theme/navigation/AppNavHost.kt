@@ -30,7 +30,6 @@ import com.shikshak.transfer.ui.theme.login.PhoneAuthViewModel
 import com.shikshak.transfer.ui.theme.login.PhoneNumberInputScreen
 import com.shikshak.transfer.ui.theme.matchprofile.MatchListScreen
 import com.shikshak.transfer.ui.theme.profile.TeacherProfileScreen
-import com.shikshak.transfer.ui.theme.profile.TeacherInputScreen
 import com.shikshak.transfer.ui.theme.request.RequestScreen
 import com.shikshak.transfer.ui.theme.request.CreateRequestScreen
 import com.shikshak.transfer.ui.theme.request.EditRequestScreen
@@ -38,6 +37,7 @@ import com.shikshak.transfer.ui.theme.request.RequestViewModel
 import com.shikshak.transfer.ui.theme.register.RegisterScreen
 import com.shikshak.transfer.ui.theme.splash.SplashScreen
 import com.shikshak.transfer.ui.theme.language.LanguageSelectorScreen
+import com.shikshak.transfer.ui.theme.more.MoreScreen
 import android.content.Context
 
 @Composable
@@ -83,11 +83,13 @@ fun AppNavHost(
 
     // ⏳ Wait for the state to be determined
     if (!appReady) {
-        Box(
-            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
+        // Show splash screen while determining start destination
+        SplashScreen(
+            onSplashComplete = {
+                // This will be handled by the LaunchedEffect above
+                // The splash screen will show until appReady becomes true
+            }
+        )
         return
     }
 
@@ -116,13 +118,12 @@ fun AppNavHost(
                     TeacherProfileScreen(
                         onProfileSaved = { teacher ->
                             sharedViewModel.setTeacher(teacher)
-                            navController.navigate(Routes.Home) {
-                                popUpTo(Routes.Profile) { inclusive = true }
-                            }
+                            // Don't navigate away, just update the shared view model
                         },
                         onNavigateToTeacherInput = {
-                            navController.navigate(Routes.TeacherInput)
-                        }
+                            // This will be handled by the ProfileViewModel for deleting transfer request
+                        },
+                        isFirstLogin = !sharedViewModel.isProfileComplete()
                     )
                 }
                 
@@ -145,22 +146,22 @@ fun AppNavHost(
                 }
                 
                 composable(Routes.More) {
-                    // TODO: Implement More screen
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
-                }
-                
-                composable(Routes.TeacherInput) {
-                    TeacherInputScreen(
-                        onFormSubmitted = { teacher ->
-                            sharedViewModel.setTeacher(teacher)
-                            navController.navigate(Routes.Home) {
-                                popUpTo(Routes.TeacherInput) { inclusive = true }
+                    MoreScreen(
+                        onNavigateToLanguageSelector = {
+                            navController.navigate(Routes.LanguageSelector)
+                        },
+                        onNavigateToLogin = {
+                            // Clear all navigation and restart the app flow
+                            // This will trigger a restart of the entire app flow
+                            // by clearing the navigation stack and restarting the app
+                            navController.navigate(Routes.PhoneInput) {
+                                popUpTo(0) { inclusive = true }
                             }
                         }
                     )
                 }
+                
+
                 
                 composable(Routes.MatchList) {
                     sharedViewModel.currentTeacher?.let { teacher ->
@@ -176,7 +177,7 @@ fun AppNavHost(
                 composable(Routes.CreateRequest) {
                     CreateRequestScreen(
                         onRequestSubmitted = { transferRequest ->
-                            navController.navigate(Routes.Request) {
+                            navController.navigate(Routes.Home) {
                                 popUpTo(Routes.CreateRequest) { inclusive = true }
                             }
                         }
@@ -191,6 +192,72 @@ fun AppNavHost(
                             popUpTo(Routes.EditRequest) { inclusive = true }
                         }
                     }
+                }
+                
+                composable(Routes.LanguageSelector) {
+                    LanguageSelectorScreen(
+                        onLanguageSelected = {
+                            navController.navigate(Routes.More) {
+                                popUpTo(Routes.LanguageSelector) { inclusive = true }
+                            }
+                        }
+                    )
+                }
+                
+                // Auth routes for logout functionality
+                navigation(startDestination = Routes.PhoneInput, Routes.Auth) {
+                    composable(Routes.PhoneInput) {
+                        val parentEntry = remember(it) {
+                            navController.getBackStackEntry(Routes.Auth)
+                        }
+                        val viewModel = hiltViewModel<PhoneAuthViewModel>(parentEntry)
+                        PhoneNumberInputScreen(
+                            viewModel = viewModel, activity = activity, navController = navController
+                        )
+                    }
+                    composable(Routes.OtpVerification) {
+                        val parentEntry = remember(it) {
+                            navController.getBackStackEntry(Routes.Auth)
+                        }
+                        val viewModel = hiltViewModel<PhoneAuthViewModel>(parentEntry)
+                        OtpVerificationScreen(viewModel = viewModel, navController = navController)
+                    }
+                }
+                
+                // PhoneInput route for logout functionality
+                composable(Routes.PhoneInput) {
+                    val parentEntry = remember(it) {
+                        navController.getBackStackEntry(Routes.Auth)
+                    }
+                    val viewModel = hiltViewModel<PhoneAuthViewModel>(parentEntry)
+                    PhoneNumberInputScreen(
+                        viewModel = viewModel, activity = activity, navController = navController
+                    )
+                }
+                
+                // Splash route for logout functionality
+                composable(Routes.Splash) {
+                    SplashScreen(
+                        onSplashComplete = {
+                            // Navigate to the appropriate screen based on authentication state
+                            val user = FirebaseAuth.getInstance().currentUser
+                            if (user != null) {
+                                if (sharedViewModel.isProfileComplete()) {
+                                    navController.navigate(Routes.Home) {
+                                        popUpTo(Routes.Splash) { inclusive = true }
+                                    }
+                                } else {
+                                    navController.navigate(Routes.Profile) {
+                                        popUpTo(Routes.Splash) { inclusive = true }
+                                    }
+                                }
+                            } else {
+                                navController.navigate(Routes.Auth) {
+                                    popUpTo(Routes.Splash) { inclusive = true }
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -272,23 +339,21 @@ fun AppNavHost(
                 TeacherProfileScreen(
                     onProfileSaved = { teacher ->
                         sharedViewModel.setTeacher(teacher)
-                        navController.navigate(Routes.Home)
+                        // Navigate to Splash to restart the app flow with bottom navigation
+                        navController.navigate(Routes.Splash) {
+                            popUpTo(0) { inclusive = true }
+                        }
                     },
                     onNavigateToTeacherInput = {
-                        navController.navigate(Routes.TeacherInput)
-                    }
+                        // This will be handled by the ProfileViewModel for deleting transfer request
+                    },
+                    isFirstLogin = !sharedViewModel.isProfileComplete()
                 )
             }
-
-            composable(Routes.TeacherInput) {
-                TeacherInputScreen(
-                    onFormSubmitted = { teacher ->
-                        sharedViewModel.setTeacher(teacher)
-                        navController.navigate(Routes.Home) {
-                            popUpTo(Routes.Profile) { inclusive = true }
-                        }
-                    }
-                )
+            
+            // Home route for auth flow
+            composable(Routes.Home) {
+                HomeScreen(navController)
             }
         }
     }

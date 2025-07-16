@@ -108,6 +108,10 @@
     <string name="potential_matches">Potential Matches</string>
     <string name="no_matches_yet">We\'re still looking for a match. Hang tight — we\'ll notify you when one is available.</string>
     <string name="contact_now">Contact Now</string>
+    <string name="your_transfer_request">Your Transfer Request</string>
+    <string name="matching_requests">Matching Requests</string>
+    <string name="no_matching_request_found">No matching request found.</string>
+    <string name="we_will_notify_you">We\'ll notify you when we find a match.</string>
     
     <!-- Bottom Navigation -->
     <string name="home">Home</string>
@@ -120,7 +124,6 @@
     <string name="create_transfer_request_title">Create Transfer Request</string>
     <string name="create_transfer_request_subtitle">Submit your transfer preferences to find a mutual transfer partner</string>
     <string name="edit_transfer_request_title">Edit Transfer Request</string>
-    <string name="your_transfer_request">Your Transfer Request</string>
     <string name="edit_or_cancel_request_subtitle">View, edit, or cancel your existing transfer request</string>
     <string name="request_details">Request Details</string>
     <string name="current_location">Current Location</string>
