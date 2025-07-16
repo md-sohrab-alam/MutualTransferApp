@@ -1,7 +1,7 @@
 package com.shikshak.transfer.ui.theme.register
 
-import Teacher
-import Contact
+import com.shikshak.transfer.ui.theme.data.Teacher
+import com.shikshak.transfer.ui.theme.data.Contact
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue

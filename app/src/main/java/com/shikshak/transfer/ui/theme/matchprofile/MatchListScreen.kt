@@ -1,6 +1,7 @@
 package com.shikshak.transfer.ui.theme.matchprofile
 
-import Teacher
+import com.shikshak.transfer.ui.theme.data.Teacher
+import com.shikshak.transfer.ui.theme.data.Contact
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

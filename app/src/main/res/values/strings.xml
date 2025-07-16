@@ -92,4 +92,48 @@
     <string name="designation_tgt">Trained Graduate Teacher (TGT)</string>
     <string name="designation_pgt">Post Graduate Teacher (PGT)</string>
     <string name="designation_lecturer">Lecturer (प्रवक्ता)</string>
+    
+    <!-- Home Screen -->
+    <string name="welcome_message">Welcome</string>
+    <string name="welcome_back_message">Welcome back</string>
+    <string name="app_purpose_title">Purpose Summary</string>
+    <string name="app_purpose_description">This app helps Bihar government teachers find a mutual transfer partner from another district. Submit your transfer request to get started.</string>
+    <string name="ready_to_transfer">Ready to transfer?</string>
+    <string name="submit_transfer_request">Submit Transfer Request</string>
+    <string name="how_it_works_title">How Mutual Transfer Works</string>
+    <string name="how_it_works_description">• You submit your preferred district/school\n• The app matches you with a teacher who wants to swap with your location\n• You can then contact them and proceed through official process</string>
+    <string name="faq_title">Frequently Asked Questions</string>
+    <string name="faq_content">• What if I change my mind?\n• Is my data safe?\n• Can I cancel a request?</string>
+    <string name="your_request">Your Request</string>
+    <string name="potential_matches">Potential Matches</string>
+    <string name="no_matches_yet">We\'re still looking for a match. Hang tight — we\'ll notify you when one is available.</string>
+    <string name="contact_now">Contact Now</string>
+    
+    <!-- Bottom Navigation -->
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="request">Request</string>
+    <string name="updates">Updates</string>
+    <string name="more">More</string>
+    
+    <!-- Request Screen -->
+    <string name="create_transfer_request_title">Create Transfer Request</string>
+    <string name="create_transfer_request_subtitle">Submit your transfer preferences to find a mutual transfer partner</string>
+    <string name="edit_transfer_request_title">Edit Transfer Request</string>
+    <string name="your_transfer_request">Your Transfer Request</string>
+    <string name="edit_or_cancel_request_subtitle">View, edit, or cancel your existing transfer request</string>
+    <string name="request_details">Request Details</string>
+    <string name="current_location">Current Location</string>
+    <string name="preferred_locations">Preferred Locations</string>
+    <string name="status">Status</string>
+    <string name="submitted_date">Submitted Date</string>
+    <string name="current_request_info">Current Request Info</string>
+    <string name="edit_request">Edit Request</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="update_request">Update Request</string>
+    <string name="cancel_request_title">Cancel Request</string>
+    <string name="cancel_request_message">Are you sure you want to cancel your transfer request? This action cannot be undone.</string>
+    <string name="cancel_request_confirm">Yes, Cancel</string>
+    <string name="cancel_request_dismiss">No, Keep</string>
+    <string name="notes_label">Notes (Optional)</string>
 </resources>

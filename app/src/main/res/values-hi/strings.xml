@@ -93,4 +93,48 @@
     <string name="designation_tgt">प्रशिक्षित स्नातक शिक्षक (TGT)</string>
     <string name="designation_pgt">स्नातकोत्तर शिक्षक (PGT)</string>
     <string name="designation_lecturer">प्रवक्ता</string>
+    
+    <!-- Home Screen -->
+    <string name="welcome_message">स्वागत है</string>
+    <string name="welcome_back_message">वापसी पर स्वागत है</string>
+    <string name="app_purpose_title">उद्देश्य सारांश</string>
+    <string name="app_purpose_description">यह ऐप बिहार सरकार के शिक्षकों को दूसरे जिले से म्यूचुअल ट्रांसफर साथी खोजने में मदद करता है। शुरू करने के लिए अपना ट्रांसफर अनुरोध जमा करें।</string>
+    <string name="ready_to_transfer">ट्रांसफर के लिए तैयार हैं?</string>
+    <string name="submit_transfer_request">ट्रांसफर अनुरोध जमा करें</string>
+    <string name="how_it_works_title">म्यूचुअल ट्रांसफर कैसे काम करता है</string>
+    <string name="how_it_works_description">• आप अपना पसंदीदा जिला/स्कूल जमा करें\n• ऐप आपको उस शिक्षक से मिलाता है जो आपके स्थान से स्वैप करना चाहता है\n• आप फिर उनसे संपर्क कर सकते हैं और आधिकारिक प्रक्रिया के माध्यम से आगे बढ़ सकते हैं</string>
+    <string name="faq_title">अक्सर पूछे जाने वाले प्रश्न</string>
+    <string name="faq_content">• अगर मैं अपना मन बदल लूं तो क्या होगा?\n• क्या मेरा डेटा सुरक्षित है?\n• क्या मैं अनुरोध रद्द कर सकता हूं?</string>
+    <string name="your_request">आपका अनुरोध</string>
+    <string name="potential_matches">संभावित मैच</string>
+    <string name="no_matches_yet">हम अभी भी मैच की तलाश कर रहे हैं। प्रतीक्षा करें — जब कोई उपलब्ध होगा तो हम आपको सूचित करेंगे।</string>
+    <string name="contact_now">अभी संपर्क करें</string>
+    
+    <!-- Bottom Navigation -->
+    <string name="home">होम</string>
+    <string name="profile">प्रोफाइल</string>
+    <string name="request">अनुरोध</string>
+    <string name="updates">अपडेट</string>
+    <string name="more">अधिक</string>
+    
+    <!-- Request Screen -->
+    <string name="create_transfer_request_title">ट्रांसफर अनुरोध बनाएं</string>
+    <string name="create_transfer_request_subtitle">म्यूचुअल ट्रांसफर साथी खोजने के लिए अपनी ट्रांसफर प्राथमिकताएं जमा करें</string>
+    <string name="edit_transfer_request_title">ट्रांसफर अनुरोध संपादित करें</string>
+    <string name="your_transfer_request">आपका ट्रांसफर अनुरोध</string>
+    <string name="edit_or_cancel_request_subtitle">अपने मौजूदा ट्रांसफर अनुरोध को देखें, संपादित करें या रद्द करें</string>
+    <string name="request_details">अनुरोध विवरण</string>
+    <string name="current_location">वर्तमान स्थान</string>
+    <string name="preferred_locations">पसंदीदा स्थान</string>
+    <string name="status">स्थिति</string>
+    <string name="submitted_date">जमा करने की तिथि</string>
+    <string name="current_request_info">वर्तमान अनुरोध जानकारी</string>
+    <string name="edit_request">अनुरोध संपादित करें</string>
+    <string name="cancel_request">अनुरोध रद्द करें</string>
+    <string name="update_request">अनुरोध अपडेट करें</string>
+    <string name="cancel_request_title">अनुरोध रद्द करें</string>
+    <string name="cancel_request_message">क्या आप वाकई अपना ट्रांसफर अनुरोध रद्द करना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।</string>
+    <string name="cancel_request_confirm">हां, रद्द करें</string>
+    <string name="cancel_request_dismiss">नहीं, रखें</string>
+    <string name="notes_label">टिप्पणियां (वैकल्पिक)</string>
 </resources> 

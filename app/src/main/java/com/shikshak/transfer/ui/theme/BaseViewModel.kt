@@ -4,14 +4,18 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.shikshak.transfer.ui.theme.utils.FirestoreErrorHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
 open class BaseViewModel @Inject constructor() : ViewModel() {
-    private val _isLoading = mutableStateOf(false)
-    val isLoading: State<Boolean> = _isLoading
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun updateLoadingState(isLoading: Boolean) {
         _isLoading.value = isLoading

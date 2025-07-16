@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
+import com.shikshak.transfer.ui.theme.data.Teacher
+import com.shikshak.transfer.ui.theme.data.Contact
 
 @Composable
 fun TeacherFilterListScreen(viewModel: FilterListViewModel = hiltViewModel()) {

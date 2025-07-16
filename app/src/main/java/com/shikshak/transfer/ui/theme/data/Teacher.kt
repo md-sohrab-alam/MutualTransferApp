@@ -1,3 +1,5 @@
+package com.shikshak.transfer.ui.theme.data
+
 data class Teacher(
     val uid: String = "",
     val name: String = "",

@@ -63,11 +63,13 @@ dependencies {
 
 
     // Compose
-    implementation(libs.compose.ui)
-    implementation(libs.compose.material)
-    implementation(libs.compose.preview)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation("androidx.compose.runtime:runtime")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-tooling-preview")
     implementation(libs.transport.api)
-    debugImplementation(libs.compose.tooling)
+    debugImplementation("androidx.compose.ui:ui-tooling")
 
 
     // Hilt

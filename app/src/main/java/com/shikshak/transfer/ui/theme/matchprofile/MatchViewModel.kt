@@ -1,6 +1,7 @@
 package com.shikshak.transfer.ui.theme.matchprofile
 
-import Teacher
+import com.shikshak.transfer.ui.theme.data.Teacher
+import com.shikshak.transfer.ui.theme.data.Contact
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel

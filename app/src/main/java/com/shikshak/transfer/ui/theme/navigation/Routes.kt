@@ -12,4 +12,15 @@ object Routes {
     const val TeacherInput = "teacher_input"
     const val MatchList = "matches"
     const val TeacherList = "teachers"
+    
+    // Bottom Navigation Routes
+    const val Home = "home"
+    const val Request = "request"
+    const val Updates = "updates"
+    const val More = "more"
+    
+    // Request Flow Routes
+    const val CreateRequest = "create_request"
+    const val EditRequest = "edit_request"
+    const val RequestStatus = "request_status"
 }

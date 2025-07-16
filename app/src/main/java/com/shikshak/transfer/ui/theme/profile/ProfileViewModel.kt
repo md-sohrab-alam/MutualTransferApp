@@ -1,6 +1,7 @@
 package com.shikshak.transfer.ui.theme.profile
 
-import Teacher
+import com.shikshak.transfer.ui.theme.data.Teacher
+import com.shikshak.transfer.ui.theme.data.Contact
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

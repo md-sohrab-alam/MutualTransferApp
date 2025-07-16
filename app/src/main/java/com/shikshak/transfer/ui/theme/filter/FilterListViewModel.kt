@@ -1,6 +1,7 @@
 package com.shikshak.transfer.ui.theme.filter
 
-import Teacher
+import com.shikshak.transfer.ui.theme.data.Teacher
+import com.shikshak.transfer.ui.theme.data.Contact
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore

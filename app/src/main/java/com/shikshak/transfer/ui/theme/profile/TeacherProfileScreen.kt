@@ -1,7 +1,7 @@
 package com.shikshak.transfer.ui.theme.profile
 
-import Teacher
-import Contact
+import com.shikshak.transfer.ui.theme.data.Teacher
+import com.shikshak.transfer.ui.theme.data.Contact
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
