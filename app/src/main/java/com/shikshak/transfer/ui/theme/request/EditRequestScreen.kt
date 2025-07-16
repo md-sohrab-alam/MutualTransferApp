@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.shikshak.transfer.R
 import com.shikshak.transfer.ui.theme.data.Blocks
 import com.shikshak.transfer.ui.theme.data.TransferRequest
+import com.shikshak.transfer.ui.theme.navigation.SharedViewModel
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,13 +26,51 @@ import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
 fun EditRequestScreen(
     transferRequest: TransferRequest,
     viewModel: EditRequestViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel = hiltViewModel(),
     onRequestUpdated: (TransferRequest) -> Unit
 ) {
+    val currentTeacher = sharedViewModel.currentTeacher
+    
+    // Load teacher profile data when screen is created
+    LaunchedEffect(Unit) {
+        if (currentTeacher == null) {
+            sharedViewModel.loadCurrentTeacher(
+                onLoaded = {
+                    // Profile loaded successfully
+                },
+                onError = { error ->
+                    // Handle error if needed
+                }
+            )
+        }
+    }
+    
+    // Show loader while loading teacher profile
+    if (currentTeacher == null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+    
+    // Create a TransferRequest with real profile data
+    val realTransferRequest = transferRequest.copy(
+        teacherId = currentTeacher?.uid ?: "",
+        teacherName = currentTeacher?.name ?: "",
+        currentDistrict = currentTeacher?.district ?: "",
+        currentSchool = currentTeacher?.schoolName ?: "",
+        designation = currentTeacher?.designation ?: "",
+        subject = currentTeacher?.subject ?: ""
+    )
+    
     // State for form fields - pre-filled with existing data
-    var preferredDistricts by remember { mutableStateOf(transferRequest.preferredDistricts) }
-    var preferredBlocks by remember { mutableStateOf(transferRequest.preferredBlocks) }
-    var contactPreference by remember { mutableStateOf(transferRequest.contactPreference) }
-    var notes by remember { mutableStateOf(transferRequest.notes) }
+    var preferredDistricts by remember { mutableStateOf(realTransferRequest.preferredDistricts) }
+    var preferredBlocks by remember { mutableStateOf(realTransferRequest.preferredBlocks) }
+    var contactPreference by remember { mutableStateOf(realTransferRequest.contactPreference) }
+    var notes by remember { mutableStateOf(realTransferRequest.notes) }
     
     // Function to validate form
     fun validateForm(): Boolean {
@@ -71,7 +110,7 @@ fun EditRequestScreen(
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        // Current Request Info
+        // Teacher Profile Info Section
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -82,20 +121,20 @@ fun EditRequestScreen(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.current_request_info),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    text = "👤 Teacher Profile",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text("Name: ${transferRequest.teacherName}")
-                Text("Current School: ${transferRequest.currentSchool}")
-                Text("Current District: ${transferRequest.currentDistrict}")
-                Text("Designation: ${transferRequest.designation}")
-                if (transferRequest.subject.isNotBlank()) {
-                    Text("Subject: ${transferRequest.subject}")
+                
+                currentTeacher?.let { teacher ->
+                    Text("Name: ${teacher.name}")
+                    Text("Designation: ${teacher.designation}")
+                    Text("Subject: ${teacher.subject}")
+                    Text("School: ${teacher.schoolName}")
+                    Text("District: ${teacher.district}")
+                    Text("Block: ${teacher.block}")
                 }
-                Text("Status: ${transferRequest.status}")
-                Text("Submitted: ${transferRequest.submittedDate}")
             }
         }
         
@@ -349,7 +388,7 @@ fun EditRequestScreen(
         Button(
             onClick = {
                 if (validateForm()) {
-                    val updatedRequest = transferRequest.copy(
+                    val updatedRequest = realTransferRequest.copy(
                         preferredDistricts = preferredDistricts,
                         preferredBlocks = preferredBlocks,
                         contactPreference = contactPreference,

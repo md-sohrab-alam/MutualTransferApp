@@ -9,11 +9,9 @@ data class Teacher(
     val district: String = "",
     val block: String = "",
     val schoolName: String = "",
-    val preferredDistrict: String = "",
-    val preferredBlock: String = "",
     val contact: Contact = Contact(),
     val timestamp: Long? = null,
-    // New fields for enhanced form
+    // Enhanced form fields
     val designation: String = "",
     val contactPreference: Boolean = true, // Allow contact: Yes/No
     val willingToMove: Boolean = false, // Willing to move to partner's school

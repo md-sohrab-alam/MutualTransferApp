@@ -17,19 +17,33 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shikshak.transfer.R
 import com.shikshak.transfer.ui.theme.data.TransferRequest
+import com.shikshak.transfer.ui.theme.navigation.SharedViewModel
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
 
 @Composable
 fun RequestScreen(
     viewModel: RequestViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel = hiltViewModel(),
     onNavigateToCreateRequest: () -> Unit = {},
     onNavigateToEditRequest: () -> Unit = {}
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val hasTransferRequest by viewModel.hasTransferRequest.collectAsState()
     val transferRequest by viewModel.transferRequest.collectAsState()
+    val currentTeacher = sharedViewModel.currentTeacher
     
+    // Load teacher profile data when screen is created
     LaunchedEffect(Unit) {
+        if (currentTeacher == null) {
+            sharedViewModel.loadCurrentTeacher(
+                onLoaded = {
+                    // Profile loaded successfully
+                },
+                onError = { error ->
+                    // Handle error if needed
+                }
+            )
+        }
         viewModel.checkTransferRequest()
     }
     
@@ -40,7 +54,8 @@ fun RequestScreen(
         )
     }
     
-    if (isLoading) {
+    // Show loader while loading teacher profile or transfer request
+    if (isLoading || currentTeacher == null) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -82,33 +97,6 @@ fun CreateRequestScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Header
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp),
-                    tint = Color.Blue
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.create_transfer_request_title),
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stringResource(R.string.create_transfer_request_subtitle),
-                    color = Color.Gray
-                )
-            }
-        }
-        
         // How It Works Section
         Card(
             modifier = Modifier.fillMaxWidth()
@@ -186,33 +174,6 @@ fun EditRequestScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Header
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp),
-                    tint = Color.Blue
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.your_transfer_request),
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stringResource(R.string.edit_or_cancel_request_subtitle),
-                    color = Color.Gray
-                )
-            }
-        }
-        
         // Request Details
         Card(
             modifier = Modifier.fillMaxWidth()

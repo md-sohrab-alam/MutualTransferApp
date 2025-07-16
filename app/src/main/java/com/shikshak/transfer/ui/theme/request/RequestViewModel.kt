@@ -80,11 +80,9 @@ class RequestViewModel @Inject constructor() : BaseViewModel() {
     }
     
     fun navigateToEditRequest() {
-        // Pass the current transfer request data to the edit screen
-        val currentRequest = _transferRequest.value
-        if (currentRequest != null) {
-            onNavigateToEditRequest?.invoke()
-        }
+        // Navigate to the EditRequest screen
+        // The navigation will be handled by the parent composable
+        onNavigateToEditRequest?.invoke()
     }
     
     fun showCancelConfirmation() {

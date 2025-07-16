@@ -22,19 +22,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.shikshak.transfer.ui.theme.filter.TeacherFilterListScreen
 import com.shikshak.transfer.ui.theme.home.HomeScreen
-import com.shikshak.transfer.ui.theme.login.LoginScreen
 import com.shikshak.transfer.ui.theme.login.OtpVerificationScreen
 import com.shikshak.transfer.ui.theme.login.PhoneAuthViewModel
 import com.shikshak.transfer.ui.theme.login.PhoneNumberInputScreen
-import com.shikshak.transfer.ui.theme.matchprofile.MatchListScreen
 import com.shikshak.transfer.ui.theme.profile.TeacherProfileScreen
 import com.shikshak.transfer.ui.theme.request.RequestScreen
-import com.shikshak.transfer.ui.theme.request.CreateRequestScreen
-import com.shikshak.transfer.ui.theme.request.EditRequestScreen
 import com.shikshak.transfer.ui.theme.request.RequestViewModel
-import com.shikshak.transfer.ui.theme.register.RegisterScreen
+import com.shikshak.transfer.ui.theme.request.EditRequestScreen
+import com.shikshak.transfer.ui.theme.data.TransferRequest
+import com.shikshak.transfer.ui.theme.navigation.SharedViewModel
 import com.shikshak.transfer.ui.theme.splash.SplashScreen
 import com.shikshak.transfer.ui.theme.language.LanguageSelectorScreen
 import com.shikshak.transfer.ui.theme.more.MoreScreen
@@ -163,35 +160,78 @@ fun AppNavHost(
                 
 
                 
+                // TODO: Implement MatchList and TeacherList screens
                 composable(Routes.MatchList) {
-                    sharedViewModel.currentTeacher?.let { teacher ->
-                        MatchListScreen(currentTeacher = teacher,
-                            onGoToTeacherList = { navController.navigate(Routes.TeacherList) })
-                    } ?: CircularProgressIndicator()
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
                 }
                 
                 composable(Routes.TeacherList) {
-                    TeacherFilterListScreen()
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
                 }
                 
                 composable(Routes.CreateRequest) {
-                    CreateRequestScreen(
-                        onRequestSubmitted = { transferRequest ->
+                    // Create a new transfer request with current teacher's profile data
+                    // The EditRequestScreen will load real profile data from SharedViewModel
+                    val transferRequest = TransferRequest(
+                        teacherId = "",
+                        teacherName = "",
+                        currentDistrict = "",
+                        currentSchool = "",
+                        preferredDistricts = emptyList(),
+                        preferredBlocks = emptyList(),
+                        postLevel = "Secondary",
+                        designation = "",
+                        subject = "",
+                        status = "PENDING",
+                        submittedDate = java.time.LocalDate.now().toString(),
+                        contactPreference = true,
+                        notes = ""
+                    )
+                    
+                    EditRequestScreen(
+                        transferRequest = transferRequest,
+                        onRequestUpdated = { updatedRequest ->
+                            // Navigate to Home screen after successful creation to see matches
                             navController.navigate(Routes.Home) {
-                                popUpTo(Routes.CreateRequest) { inclusive = true }
+                                // Clear the entire back stack and start fresh from Home
+                                popUpTo(0) { inclusive = true }
                             }
                         }
                     )
                 }
                 
                 composable(Routes.EditRequest) {
-                    // For now, navigate back to Request screen
-                    // The EditRequest functionality will be handled within the RequestScreen
-                    LaunchedEffect(Unit) {
-                        navController.navigate(Routes.Request) {
-                            popUpTo(Routes.EditRequest) { inclusive = true }
+                    // Create a TransferRequest with empty data - EditRequestScreen will load real data
+                    val transferRequest = TransferRequest(
+                        teacherId = "",
+                        teacherName = "",
+                        currentDistrict = "",
+                        currentSchool = "",
+                        preferredDistricts = emptyList(),
+                        preferredBlocks = emptyList(),
+                        postLevel = "Secondary",
+                        designation = "",
+                        subject = "",
+                        status = "PENDING",
+                        submittedDate = java.time.LocalDate.now().toString(),
+                        contactPreference = true,
+                        notes = ""
+                    )
+                    
+                    EditRequestScreen(
+                        transferRequest = transferRequest,
+                        onRequestUpdated = { updatedRequest ->
+                            // Navigate to Home screen after successful update to see matches
+                            navController.navigate(Routes.Home) {
+                                // Clear the entire back stack and start fresh from Home
+                                popUpTo(0) { inclusive = true }
+                            }
                         }
-                    }
+                    )
                 }
                 
                 composable(Routes.LanguageSelector) {
@@ -317,22 +357,17 @@ fun AppNavHost(
                 }
             }
             
+            // TODO: Implement Login and Register screens
             composable(Routes.Login) {
-                LoginScreen(navController, onLoginSuccess = {
-                    sharedViewModel.loadCurrentTeacher(onLoaded = {
-                        if (sharedViewModel.isProfileComplete()) {
-                            navController.navigate(Routes.Home)
-                        } else {
-                            navController.navigate(Routes.Profile)
-                        }
-                    }, onError = { navController.navigate(Routes.Profile) })
-                })
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
             }
             
             composable(Routes.Register) {
-                RegisterScreen(onRegisterSuccess = {
-                    navController.navigate(Routes.Login)
-                }, onNavigateToLogin = { navController.navigate(Routes.Login) })
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
             }
 
             composable(Routes.Profile) {
