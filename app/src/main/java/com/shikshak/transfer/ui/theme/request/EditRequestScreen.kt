@@ -30,6 +30,7 @@ fun EditRequestScreen(
     onRequestUpdated: (TransferRequest) -> Unit
 ) {
     val currentTeacher = sharedViewModel.currentTeacher
+    val isLoading by viewModel.isLoading.collectAsState()
     
     // Load teacher profile data when screen is created
     LaunchedEffect(Unit) {
@@ -406,9 +407,9 @@ fun EditRequestScreen(
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !viewModel.isLoading.value && validateForm()
+            enabled = !isLoading && validateForm()
         ) {
-            if (viewModel.isLoading.value) {
+            if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
                     color = MaterialTheme.colorScheme.onPrimary

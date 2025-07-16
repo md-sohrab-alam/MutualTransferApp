@@ -310,7 +310,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     fun contactMatch(match: Teacher) {
         // This would typically open a contact dialog or navigate to a contact screen
         Timber.d("Contacting match: ${match.name}")
-        // TODO: Implement contact functionality
     }
     
     fun refreshData() {

@@ -1,5 +1,7 @@
 package com.shikshak.transfer.ui.theme.home
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +22,7 @@ import com.shikshak.transfer.ui.theme.data.Teacher
 import com.shikshak.transfer.ui.theme.data.TransferRequest
 import com.shikshak.transfer.ui.theme.navigation.Routes
 import com.shikshak.transfer.ui.theme.utils.MatchingService
+import timber.log.Timber
 
 @Composable
 fun HomeScreen(
@@ -285,6 +288,8 @@ fun HomeScreenWithRequest(
     navController: NavController,
     viewModel: HomeViewModel
 ) {
+    val context = LocalContext.current
+
     val transferRequest by viewModel.transferRequest.collectAsState()
     val matches by viewModel.matches.collectAsState()
     
@@ -460,7 +465,12 @@ fun HomeScreenWithRequest(
                     matches.forEach { match ->
                         MatchCard(
                             match = match,
-                            onContact = { viewModel.contactMatch(match) },
+                            onContact = {
+                                Timber.d("Contacting match: ${match.name}")
+                                val intent = Intent(Intent.ACTION_DIAL).apply {
+                                    data = Uri.parse("tel:${match.contact.phone}")
+                                }
+                                context.startActivity(intent)},
                             currentRequest = transferRequest
                         )
                         Spacer(modifier = Modifier.height(12.dp))
