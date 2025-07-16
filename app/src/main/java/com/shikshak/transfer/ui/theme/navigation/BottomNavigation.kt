@@ -46,8 +46,8 @@ enum class BottomNavigationItems(
     val icon: ImageVector
 ) {
     HOME(Routes.Home, "Home", Icons.Default.Home),
-    PROFILE(Routes.Profile, "Profile", Icons.Default.Person),
-    REQUEST(Routes.Request, "Request", Icons.Default.List),
+    PROFILE(Routes.Profile, "My Profile", Icons.Default.Person),
+    REQUEST(Routes.Request, "My Request", Icons.Default.List),
     UPDATES(Routes.Updates, "Updates", Icons.Default.Notifications),
     MORE(Routes.More, "More", Icons.Default.Menu)
 } 

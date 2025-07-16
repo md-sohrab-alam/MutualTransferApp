@@ -75,59 +75,66 @@ fun HomeScreenFirstTime(
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Welcome Section
+        // Welcome Section - Clickable to open Profile
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer
-            )
+            ),
+            onClick = { navController.navigate(Routes.Profile) }
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(20.dp)
             ) {
-                Text(
-                    text = "👋 ${stringResource(R.string.welcome_message)}",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
-                )
-                
-                teacher?.let { t ->
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "📍 ${t.schoolName}, ${t.district}",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Text(
-                        text = "🎯 ${t.designation}",
-                        style = MaterialTheme.typography.bodyLarge
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "👋 Welcome back, ${teacher?.name ?: "Teacher"}!",
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        
+                        teacher?.let { t ->
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "🎯 ${t.designation}",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = "🏫 ${t.schoolName}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = "📍 ${t.district}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                    
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Profile",
+                        modifier = Modifier.size(32.dp)
                     )
                 }
-            }
-        }
-        
-        // App Purpose Summary
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
+                
+                Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = stringResource(R.string.app_purpose_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.app_purpose_description),
-                    style = MaterialTheme.typography.bodyMedium
+                    text = "Tap to view/edit your profile",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
         
-        // Primary Action Card
+        // Make Your Request Section
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -135,25 +142,47 @@ fun HomeScreenFirstTime(
             )
         ) {
             Column(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                    modifier = Modifier.size(48.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                
+                Spacer(modifier = Modifier.height(12.dp))
+                
                 Text(
-                    text = stringResource(R.string.ready_to_transfer),
-                    style = MaterialTheme.typography.titleMedium,
+                    text = "🚀 Make Your Transfer Request",
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                Text(
+                    text = "Create your transfer request and find matching teachers for mutual transfers",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
                 Button(
                     onClick = { navController.navigate(Routes.Request) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = null,
                         modifier = Modifier.padding(end = 8.dp)
                     )
-                    Text(stringResource(R.string.submit_transfer_request))
+                    Text("Create Transfer Request")
                 }
             }
         }
@@ -163,38 +192,88 @@ fun HomeScreenFirstTime(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(20.dp)
             ) {
                 Text(
-                    text = "📌 ${stringResource(R.string.how_it_works_title)}",
-                    style = MaterialTheme.typography.titleMedium,
+                    text = "📋 How It Works",
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.how_it_works_description),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
-        
-        // FAQ Section
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.faq_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.faq_content),
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Create,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 12.dp)
+                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "1. Create Request",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "Fill your transfer details and preferences",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 12.dp)
+                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "2. Find Matches",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "Discover teachers with matching transfer needs",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Phone,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 12.dp)
+                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "3. Connect & Transfer",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "Contact matched teachers and complete transfers",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
         }
     }
@@ -214,45 +293,76 @@ fun HomeScreenWithRequest(
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Welcome Back Section
+        // Welcome Section - Clickable to open Profile
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer
-            )
+            ),
+            onClick = { navController.navigate(Routes.Profile) }
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(20.dp)
             ) {
-                Text(
-                    text = "👋 ${stringResource(R.string.welcome_back_message)}",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
-                )
-                
-                teacher?.let { t ->
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "📍 ${t.schoolName}, ${t.district}",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Text(
-                        text = "🎯 ${t.designation}",
-                        style = MaterialTheme.typography.bodyLarge
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "👋 Welcome back, ${teacher?.name ?: "Teacher"}!",
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        
+                        teacher?.let { t ->
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "🎯 ${t.designation}",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = "🏫 ${t.schoolName}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = "📍 ${t.district}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                    
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Profile",
+                        modifier = Modifier.size(32.dp)
                     )
                 }
+                
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Tap to view/edit your profile",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
         
-        // Transfer Request Summary
+        // Your Transfer Request Section
         transferRequest?.let { request ->
             Card(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                ),
+                onClick = { navController.navigate(Routes.Request) }
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(20.dp)
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -260,63 +370,126 @@ fun HomeScreenWithRequest(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "📄 ${stringResource(R.string.your_transfer_request)}",
-                            style = MaterialTheme.typography.titleMedium,
+                            text = "📄 Your Transfer Request",
+                            style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
-                        Row {
-                            IconButton(onClick = { navController.navigate(Routes.Request) }) {
-                                Icon(Icons.Default.Edit, contentDescription = "Edit")
-                            }
-                            IconButton(onClick = { viewModel.cancelRequest() }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Cancel")
-                            }
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 12.dp)
+                        )
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = request.teacherName,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = request.designation,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = request.subject,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
                         }
                     }
                     
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("────────────────────────────")
-                    Text("| Name: ${request.teacherName}")
-                    Text("| Post: ${request.designation}")
-                    Text("| Subject: ${request.subject}")
-                    Text("| From: ${request.currentDistrict}")
-                    Text("| To: ${request.preferredDistricts.joinToString(", ")}")
-                    Text("────────────────────────────")
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 12.dp)
+                        )
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "From: ${request.currentDistrict}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = "To: ${request.preferredDistricts.joinToString(", ")}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "Tap to edit/delete your transfer request",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
         }
         
-        // Matches Section
+        // Matching Requests Section
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(20.dp)
             ) {
                 Text(
-                    text = "🤝 ${stringResource(R.string.matching_requests)}",
-                    style = MaterialTheme.typography.titleMedium,
+                    text = "🤝 Matching Requests",
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
                 
                 if (matches.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     matches.forEach { match ->
                         MatchCard(
                             match = match,
                             onContact = { viewModel.contactMatch(match) },
                             currentRequest = transferRequest
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 } else {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("😔 ${stringResource(R.string.no_matching_request_found)}")
-                    Text(
-                        text = stringResource(R.string.we_will_notify_you),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(48.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "😔 No matching requests found yet",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "We'll notify you when we find matching teachers",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
@@ -336,50 +509,102 @@ fun MatchCard(
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer
         )
     ) {
         Column(
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
-            Text("────────────────────────────")
-            Text("| Name: ${match.name}")
-            Text("| Post: ${match.designation}")
-            Text("| Subject: ${match.subject}")
-            Text("| From: ${match.district}")
-            Text("| To: ${match.preferredDistricts.joinToString(", ")}")
-            Text("| Match Quality: $matchQuality")
-            Text("| [${stringResource(R.string.contact_now)}]")
-            Text("────────────────────────────")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = match.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = match.designation,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = match.subject,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Text(
+                        text = matchQuality,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "From: ${match.district}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = "To: ${match.preferredDistricts.joinToString(", ")}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
             
             // Show compatibility details if available
             if (compatibilityDetails.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Compatibility:",
+                    text = "✅ Compatibility:",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
                 compatibilityDetails.forEach { detail ->
                     Text(
-                        text = detail,
+                        text = "• $detail",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
             
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            
             Button(
                 onClick = onContact,
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
             ) {
                 Icon(
                     imageVector = Icons.Default.Phone,
                     contentDescription = null,
-                    modifier = Modifier.padding(end = 4.dp)
+                    modifier = Modifier.padding(end = 8.dp)
                 )
-                Text(stringResource(R.string.contact_now))
+                Text("Contact Now")
             }
         }
     }

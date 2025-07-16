@@ -486,13 +486,6 @@ fun TeacherProfileScreen(
                     }
                 }
             } else {
-                // Display Mode
-                Text(
-                    text = if (isFirstLogin) "📋 Complete Your Profile" else "📋 Profile Information",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
                 
                 // Profile Card
                 Card(
