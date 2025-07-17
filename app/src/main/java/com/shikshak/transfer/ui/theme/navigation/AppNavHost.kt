@@ -35,11 +35,14 @@ import com.shikshak.transfer.ui.theme.navigation.SharedViewModel
 import com.shikshak.transfer.ui.theme.splash.SplashScreen
 import com.shikshak.transfer.ui.theme.language.LanguageSelectorScreen
 import com.shikshak.transfer.ui.theme.more.MoreScreen
+import com.shikshak.transfer.ui.theme.updates.UpdatesScreen
 import android.content.Context
 
 @Composable
 fun AppNavHost(
-    sharedViewModel: SharedViewModel = hiltViewModel()
+    sharedViewModel: SharedViewModel = hiltViewModel(),
+    initialNotificationType: String? = null,
+    initialNotificationAction: String? = null
 ) {
     val navController = rememberNavController()
     val activity = LocalActivity.current!!
@@ -49,6 +52,36 @@ fun AppNavHost(
     var appReady by remember { mutableStateOf(false) }
     var startDestination by remember { mutableStateOf(Routes.Splash) }
     var showBottomNavigation by remember { mutableStateOf(false) }
+    
+    // Handle notification navigation
+    LaunchedEffect(initialNotificationType, initialNotificationAction) {
+        if (initialNotificationType != null && sharedViewModel.isProfileComplete()) {
+            // Navigate based on notification action
+            when (initialNotificationAction) {
+                "navigate_to_home" -> {
+                    navController.navigate(Routes.Home) {
+                        popUpTo(Routes.Home) { inclusive = false }
+                    }
+                }
+                "navigate_to_request" -> {
+                    navController.navigate(Routes.Request) {
+                        popUpTo(Routes.Home) { inclusive = false }
+                    }
+                }
+                "navigate_to_updates" -> {
+                    navController.navigate(Routes.Updates) {
+                        popUpTo(Routes.Home) { inclusive = false }
+                    }
+                }
+                else -> {
+                    // Default to Updates tab
+                    navController.navigate(Routes.Updates) {
+                        popUpTo(Routes.Home) { inclusive = false }
+                    }
+                }
+            }
+        }
+    }
 
     // ✅ Check if language has been selected
     fun hasLanguageBeenSelected(): Boolean {
@@ -142,10 +175,25 @@ fun AppNavHost(
                 }
                 
                 composable(Routes.Updates) {
-                    // TODO: Implement Updates screen
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
+                    UpdatesScreen(
+                        onNotificationTap = { notification ->
+                            // Handle specific notification types
+                            when (notification.type) {
+                                "match" -> {
+                                    // Navigate to match details or home to see matches
+                                    navController.navigate(Routes.Home)
+                                }
+                                "transfer_request" -> {
+                                    // Navigate to request screen
+                                    navController.navigate(Routes.Request)
+                                }
+                                else -> {
+                                    // For general notifications, stay on Updates tab
+                                    // User can navigate back to Home manually
+                                }
+                            }
+                        }
+                    )
                 }
                 
                 composable(Routes.More) {
@@ -155,7 +203,6 @@ fun AppNavHost(
                         },
                         onNavigateToLogin = {
                             // Navigate to Splash to restart the app flow properly
-                            // This will trigger a complete app restart through the Splash screen
                             navController.navigate(Routes.Splash) {
                                 popUpTo(0) { inclusive = true }
                             }
@@ -163,24 +210,8 @@ fun AppNavHost(
                     )
                 }
                 
-
-                
-                // TODO: Implement MatchList and TeacherList screens
-                composable(Routes.MatchList) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
-                }
-                
-                composable(Routes.TeacherList) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
-                }
-                
                 composable(Routes.CreateRequest) {
-                    // Create a new transfer request with current teacher's profile data
-                    // The EditRequestScreen will load real profile data from SharedViewModel
+                    // Create a TransferRequest with empty data - CreateRequestScreen will handle creation
                     val transferRequest = TransferRequest(
                         teacherId = "",
                         teacherName = "",
@@ -199,7 +230,7 @@ fun AppNavHost(
                     
                     EditRequestScreen(
                         transferRequest = transferRequest,
-                        onRequestUpdated = { updatedRequest ->
+                        onRequestUpdated = { createdRequest ->
                             // Navigate to Home screen after successful creation to see matches
                             navController.navigate(Routes.Home) {
                                 // Clear the entire back stack and start fresh from Home
@@ -311,7 +342,7 @@ fun AppNavHost(
                             }
                         } else {
                             // Navigate to PhoneInput for authentication
-                            navController.navigate(Routes.PhoneInput) {
+                            navController.navigate("auth_flow") {
                                 popUpTo(Routes.Splash) { inclusive = true }
                             }
                         }
@@ -319,38 +350,32 @@ fun AppNavHost(
                 )
             }
 
-            navigation(startDestination = Routes.PhoneInput, Routes.Auth) {
+            // Create a navigation graph for auth flow to share ViewModel
+            navigation(startDestination = Routes.PhoneInput, route = "auth_flow") {
                 composable(Routes.PhoneInput) {
                     val parentEntry = remember(it) {
-                        navController.getBackStackEntry(Routes.Auth)
+                        navController.getBackStackEntry("auth_flow")
                     }
                     val viewModel = hiltViewModel<PhoneAuthViewModel>(parentEntry)
                     PhoneNumberInputScreen(
-                        viewModel = viewModel, activity = activity, navController = navController
+                        viewModel = viewModel,
+                        activity = activity,
+                        navController = navController
                     )
                 }
+
                 composable(Routes.OtpVerification) {
                     val parentEntry = remember(it) {
-                        navController.getBackStackEntry(Routes.Auth)
+                        navController.getBackStackEntry("auth_flow")
                     }
                     val viewModel = hiltViewModel<PhoneAuthViewModel>(parentEntry)
-                    OtpVerificationScreen(viewModel = viewModel, navController = navController)
+                    OtpVerificationScreen(
+                        viewModel = viewModel,
+                        navController = navController
+                    )
                 }
             }
             
-            // TODO: Implement Login and Register screens
-            composable(Routes.Login) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }
-            
-            composable(Routes.Register) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }
-
             composable(Routes.Profile) {
                 TeacherProfileScreen(
                     onProfileSaved = { teacher ->

@@ -241,6 +241,28 @@
     <string name="profile_updated_toast">Profile updated successfully!</string>
     <string name="not_set">Not set</string>
     
+    <!-- Updates Screen -->
+    <string name="updates_title">Updates</string>
+    <string name="notification_permission_required">Notification Permission Required</string>
+    <string name="notification_permission_description">You need to allow notifications to receive updates about new matches, transfer requests, and app updates. Without this permission, you won\'t receive any notifications.</string>
+    <string name="allow_notifications">Allow Notifications</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="push_notifications">Push Notifications</string>
+    <string name="notification_description">Receive notifications about new matches, transfer requests, and app updates</string>
+    <string name="no_notifications">No notifications yet</string>
+    <string name="no_notifications_description">You\'ll see your notifications here when they arrive</string>
+    <string name="new_badge">NEW</string>
+    <string name="clear_all_notifications">Clear All Notifications</string>
+    <string name="mark_as_read">Mark as Read</string>
+    <string name="refresh_notifications">Refresh</string>
+    
+    <!-- Notification Types -->
+    <string name="notification_type_match">New Match</string>
+    <string name="notification_type_transfer">Transfer Update</string>
+    <string name="notification_type_general">General Update</string>
+    <string name="notification_type_system">System Message</string>
+    
 
     
 </resources>

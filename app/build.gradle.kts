@@ -81,6 +81,9 @@ dependencies {
     implementation(libs.navigation.compose)
 
     implementation(libs.jakewharton.timber)
+    
+    // Accompanist for SwipeRefresh
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

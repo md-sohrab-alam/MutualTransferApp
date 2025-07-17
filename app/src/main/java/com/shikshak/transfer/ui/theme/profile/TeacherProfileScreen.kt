@@ -33,6 +33,30 @@ fun TeacherProfileScreen(
     val currentUser = FirebaseAuth.getInstance().currentUser
     val isLoading by viewModel.isLoading.collectAsState()
     
+    // String resources
+    val completeProfileHeader = stringResource(R.string.complete_profile_header)
+    val teacherProfileHeader = stringResource(R.string.teacher_profile_header)
+    val editProfileHeader = stringResource(R.string.edit_profile_header)
+    val fullNameLabel = stringResource(R.string.full_name_label)
+    val mobileNumberLabel = stringResource(R.string.mobile_number_label)
+    val postLevelLabel = stringResource(R.string.post_level_label)
+    val designationLabel = stringResource(R.string.designation_label)
+    val subjectLabel = stringResource(R.string.subject_label)
+    val qualificationLabel = stringResource(R.string.qualification_label)
+    val currentSchoolNameLabel = stringResource(R.string.current_school_name_label)
+    val schoolDistrictLabel = stringResource(R.string.school_district_label)
+    val schoolBlockLabel = stringResource(R.string.school_block_label)
+    val contactPreferenceLabel = stringResource(R.string.contact_preference_label)
+    val allowContact = stringResource(R.string.allow_contact)
+    val dontAllowContact = stringResource(R.string.dont_allow_contact)
+    val completeProfileButton = stringResource(R.string.complete_profile_button)
+    val saveChangesButton = stringResource(R.string.save_changes_button)
+    val cancelButton = stringResource(R.string.cancel_button)
+    val editProfileButton = stringResource(R.string.edit_profile_button)
+    val profileCompletedToast = stringResource(R.string.profile_completed_toast)
+    val profileUpdatedToast = stringResource(R.string.profile_updated_toast)
+    val notSet = stringResource(R.string.not_set)
+    
     // State for editing mode
     var isEditing by remember { mutableStateOf(false) }
     
@@ -74,7 +98,7 @@ fun TeacherProfileScreen(
     ) {
         // Header
         Text(
-            text = if (isFirstLogin) stringResource(R.string.complete_profile_header) else stringResource(R.string.teacher_profile_header),
+            text = if (isFirstLogin) completeProfileHeader else teacherProfileHeader,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 24.dp)
@@ -92,7 +116,7 @@ fun TeacherProfileScreen(
             if (isEditing) {
                 // Edit Mode
                 Text(
-                    text = if (isFirstLogin) stringResource(R.string.complete_profile_header) else stringResource(R.string.edit_profile_header),
+                    text = if (isFirstLogin) completeProfileHeader else editProfileHeader,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -101,7 +125,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text(stringResource(R.string.full_name_label)) },
+                    label = { Text(fullNameLabel) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -112,7 +136,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = mobileNumber,
                     onValueChange = { },
-                    label = { Text(stringResource(R.string.mobile_number_label)) },
+                    label = { Text(mobileNumberLabel) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     readOnly = true,
@@ -132,7 +156,7 @@ fun TeacherProfileScreen(
                         value = postLevel,
                         onValueChange = { },
                         readOnly = true,
-                        label = { Text(stringResource(R.string.post_level_label)) },
+                        label = { Text(postLevelLabel) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = postLevelExpanded) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -208,7 +232,7 @@ fun TeacherProfileScreen(
                             value = designation,
                             onValueChange = { },
                             readOnly = true,
-                            label = { Text(stringResource(R.string.designation_label)) },
+                            label = { Text(designationLabel) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = designationExpanded) },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -287,7 +311,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = subject,
                     onValueChange = { subject = it },
-                    label = { Text(stringResource(R.string.subject_label)) },
+                    label = { Text(subjectLabel) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -297,7 +321,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = qualification,
                     onValueChange = { qualification = it },
-                    label = { Text(stringResource(R.string.qualification_label)) },
+                    label = { Text(qualificationLabel) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -307,7 +331,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = school,
                     onValueChange = { school = it },
-                    label = { Text(stringResource(R.string.current_school_name_label)) },
+                    label = { Text(currentSchoolNameLabel) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -325,7 +349,7 @@ fun TeacherProfileScreen(
                         value = district,
                         onValueChange = { },
                         readOnly = true,
-                        label = { Text(stringResource(R.string.school_district_label)) },
+                        label = { Text(schoolDistrictLabel) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = districtExpanded) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -369,7 +393,7 @@ fun TeacherProfileScreen(
                             value = block,
                             onValueChange = { },
                             readOnly = true,
-                            label = { Text(stringResource(R.string.school_block_label)) },
+                            label = { Text(schoolBlockLabel) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = blockExpanded) },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -400,7 +424,7 @@ fun TeacherProfileScreen(
                 
                 // Contact Preference
                 Text(
-                    text = stringResource(R.string.contact_preference_label),
+                    text = contactPreferenceLabel,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(bottom = 8.dp)
@@ -415,14 +439,14 @@ fun TeacherProfileScreen(
                             selected = contactPreference,
                             onClick = { contactPreference = true }
                         )
-                        Text(stringResource(R.string.allow_contact))
+                        Text(allowContact)
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(
                             selected = !contactPreference,
                             onClick = { contactPreference = false }
                         )
-                        Text(stringResource(R.string.dont_allow_contact))
+                        Text(dontAllowContact)
                     }
                 }
                 
@@ -462,7 +486,7 @@ fun TeacherProfileScreen(
                                 mobileNumber = updatedTeacher.contact.phone
                             }
                             isEditing = false
-                            Toast.makeText(context, stringResource(R.string.profile_completed_toast), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, profileCompletedToast, Toast.LENGTH_SHORT).show()
                         },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = !isLoading
@@ -474,7 +498,7 @@ fun TeacherProfileScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                         }
-                        Text(stringResource(R.string.complete_profile_button))
+                        Text(completeProfileButton)
                     }
                 } else {
                     // For regular editing, show both save and cancel buttons
@@ -513,7 +537,7 @@ fun TeacherProfileScreen(
                                     mobileNumber = updatedTeacher.contact.phone
                                 }
                                 isEditing = false
-                                Toast.makeText(context, stringResource(R.string.profile_updated_toast), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, profileUpdatedToast, Toast.LENGTH_SHORT).show()
                             },
                             modifier = Modifier.weight(1f),
                             enabled = !isLoading
@@ -525,14 +549,14 @@ fun TeacherProfileScreen(
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                             }
-                            Text(stringResource(R.string.save_changes_button))
+                            Text(saveChangesButton)
                         }
                         
                         OutlinedButton(
                             onClick = { isEditing = false },
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text(stringResource(R.string.cancel_button))
+                            Text(cancelButton)
                         }
                     }
                 }
@@ -546,20 +570,6 @@ fun TeacherProfileScreen(
                     Column(
                         modifier = Modifier.padding(16.dp)
                     ) {
-                        val fullNameLabel = stringResource(R.string.full_name_label)
-                        val mobileNumberLabel = stringResource(R.string.mobile_number_label)
-                        val currentSchoolNameLabel = stringResource(R.string.current_school_name_label)
-                        val schoolDistrictLabel = stringResource(R.string.school_district_label)
-                        val schoolBlockLabel = stringResource(R.string.school_block_label)
-                        val postLevelLabel = stringResource(R.string.post_level_label)
-                        val subjectLabel = stringResource(R.string.subject_label)
-                        val designationLabel = stringResource(R.string.designation_label)
-                        val qualificationLabel = stringResource(R.string.qualification_label)
-                        val contactPreferenceLabel = stringResource(R.string.contact_preference_label)
-                        val notSet = stringResource(R.string.not_set)
-                        val allowContact = stringResource(R.string.allow_contact)
-                        val dontAllowContact = stringResource(R.string.dont_allow_contact)
-
                         ProfileInfoRow(fullNameLabel, name.ifBlank { notSet })
                         ProfileInfoRow(mobileNumberLabel, mobileNumber.ifBlank { notSet })
                         ProfileInfoRow(currentSchoolNameLabel, school.ifBlank { notSet })
@@ -587,7 +597,7 @@ fun TeacherProfileScreen(
                         onClick = { isEditing = true },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(stringResource(R.string.edit_profile_button))
+                        Text(editProfileButton)
                     }
                 }
             }

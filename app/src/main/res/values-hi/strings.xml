@@ -237,6 +237,23 @@
     <string name="profile_updated_toast">प्रोफाइल सफलतापूर्वक अपडेट किया गया!</string>
     <string name="not_set">सेट नहीं किया गया</string>
     
-
+    <!-- Updates Screen -->
+    <string name="updates_title">अपडेट</string>
+    <string name="notification_permission_required">सूचना अनुमति आवश्यक</string>
+    <string name="notification_permission_description">नए मैच, ट्रांसफर अनुरोध और ऐप अपडेट के बारे में सूचनाएं प्राप्त करने के लिए आपको सूचनाएं अनुमति देनी होगी। इस अनुमति के बिना, आपको कोई सूचना नहीं मिलेगी।</string>
+    <string name="allow_notifications">सूचनाएं अनुमति दें</string>
+    <string name="open_settings">सेटिंग्स खोलें</string>
+    <string name="no_notifications">अभी तक कोई सूचना नहीं</string>
+    <string name="no_notifications_description">जब सूचनाएं आएंगी तो आप उन्हें यहां देखेंगे</string>
+    <string name="new_badge">नया</string>
+    <string name="clear_all_notifications">सभी सूचनाएं साफ करें</string>
+    <string name="mark_as_read">पढ़ा हुआ मार्क करें</string>
+    <string name="refresh_notifications">रिफ्रेश</string>
+    
+    <!-- Notification Types -->
+    <string name="notification_type_match">नया मैच</string>
+    <string name="notification_type_transfer">ट्रांसफर अपडेट</string>
+    <string name="notification_type_general">सामान्य अपडेट</string>
+    <string name="notification_type_system">सिस्टम संदेश</string>
     
 </resources> 
