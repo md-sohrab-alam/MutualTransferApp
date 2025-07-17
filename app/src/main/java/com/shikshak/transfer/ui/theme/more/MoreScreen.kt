@@ -7,12 +7,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.ui.platform.LocalContext
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
+import com.shikshak.transfer.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +37,7 @@ fun MoreScreen(
     ) {
         // Header
         Text(
-            text = "⚙️ More Options",
+            text = "⚙️ ${stringResource(R.string.more_options_title)}",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 24.dp)
@@ -44,24 +46,24 @@ fun MoreScreen(
         // Change Language
         MenuItem(
             icon = "🌐",
-            title = "Change Language",
-            subtitle = "Select your preferred language",
+            title = stringResource(R.string.change_language),
+            subtitle = stringResource(R.string.change_language_subtitle),
             onClick = { onNavigateToLanguageSelector() }
         )
         
         // About
         MenuItem(
             icon = "ℹ️",
-            title = "About",
-            subtitle = "Learn more about the app",
+            title = stringResource(R.string.about),
+            subtitle = stringResource(R.string.about_subtitle),
             onClick = { viewModel.showAboutDialog() }
         )
         
         // Logout
         MenuItem(
             icon = "🚪",
-            title = "Logout",
-            subtitle = "Sign out from your account",
+            title = stringResource(R.string.logout),
+            subtitle = stringResource(R.string.logout_subtitle),
             onClick = { showLogoutDialog = true }
         )
     }
@@ -71,29 +73,29 @@ fun MoreScreen(
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
             title = {
-                Text("🚪 Confirm Logout")
+                Text("🚪 ${stringResource(R.string.confirm_logout_title)}")
             },
             text = {
-                Text("Are you sure you want to logout? You will need to sign in again to access the app.")
+                Text(stringResource(R.string.confirm_logout_message))
             },
             confirmButton = {
-                                        Button(
-                            onClick = {
-                                viewModel.logout(context) {
-                                    // Restart the app completely to ensure proper flow
-                                    viewModel.restartApp(context)
-                                }
-                                showLogoutDialog = false
-                            }
-                        ) {
-                            Text("Yes, Logout")
+                Button(
+                    onClick = {
+                        viewModel.logout(context) {
+                            // Restart the app completely to ensure proper flow
+                            viewModel.restartApp(context)
                         }
+                        showLogoutDialog = false
+                    }
+                ) {
+                    Text(stringResource(R.string.yes_logout))
+                }
             },
             dismissButton = {
                 OutlinedButton(
                     onClick = { showLogoutDialog = false }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -104,31 +106,18 @@ fun MoreScreen(
         AlertDialog(
             onDismissRequest = { viewModel.hideAboutDialog() },
             title = {
-                Text("ℹ️ About Mutual Transfer App")
+                Text("ℹ️ ${stringResource(R.string.about_dialog_title)}")
             },
             text = {
                 Column {
-                    Text(
-                        "This app helps teachers in Bihar, India to find mutual transfer opportunities. " +
-                        "Teachers can create transfer requests, view matching requests, and connect with " +
-                        "other teachers for mutual transfers.\n\n" +
-                        "Features:\n" +
-                        "• Create transfer requests\n" +
-                        "• View matching requests\n" +
-                        "• Manage teacher profiles\n" +
-                        "• Filter and search options\n\n" +
-                        "Developed for the education community of Bihar.\n\n" +
-                        "📱 App Information:\n" +
-                        "Version: 1.0.0\n" +
-                        "Mutual Transfer App for Bihar Teachers"
-                    )
+                    Text(stringResource(R.string.about_dialog_content))
                 }
             },
             confirmButton = {
                 Button(
                     onClick = { viewModel.hideAboutDialog() }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )

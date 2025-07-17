@@ -32,6 +32,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.shikshak.transfer.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.shikshak.transfer.ui.theme.navigation.Routes
@@ -50,19 +52,24 @@ fun OtpVerificationScreen(
     var otpError by remember { mutableStateOf("") }
     val isLoading by viewModel.isLoading.collectAsState()
 
+    // Get string resources in Composable context
+    val otpRequiredText = stringResource(R.string.otp_required)
+    val otpMustBe6DigitsText = stringResource(R.string.otp_must_be_6_digits)
+    val otpMustContainOnlyDigitsText = stringResource(R.string.otp_must_contain_only_digits)
+
     // Function to validate OTP
     fun validateOtp(otp: String): Boolean {
         return when {
             otp.isEmpty() -> {
-                otpError = "OTP is required"
+                otpError = otpRequiredText
                 false
             }
             otp.length != 6 -> {
-                otpError = "OTP must be 6 digits"
+                otpError = otpMustBe6DigitsText
                 false
             }
             !otp.all { it.isDigit() } -> {
-                otpError = "OTP must contain only digits"
+                otpError = otpMustContainOnlyDigitsText
                 false
             }
             else -> {
@@ -95,7 +102,7 @@ fun OtpVerificationScreen(
         ) {
             // Title
             Text(
-                text = "OTP Verification",
+                text = stringResource(R.string.otp_verification),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
@@ -106,7 +113,7 @@ fun OtpVerificationScreen(
             
             // Subtitle
             Text(
-                text = "Enter the 6-digit code sent to your phone",
+                text = stringResource(R.string.enter_6_digit_code_sent_to_your_phone),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color(0xFF666666),
@@ -119,7 +126,7 @@ fun OtpVerificationScreen(
             OutlinedTextField(
                 value = otpCode,
                 onValueChange = { onOtpChange(it) },
-                placeholder = { Text("Enter 6-digit OTP") },
+                placeholder = { Text(stringResource(R.string.enter_6_digit_otp)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
@@ -172,7 +179,7 @@ fun OtpVerificationScreen(
                 enabled = otpCode.length == 6 && isOtpValid && !isLoading
             ) {
                 Text(
-                    text = "Verify OTP",
+                    text = stringResource(R.string.verify_otp),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = if (otpCode.length == 6 && isOtpValid) Color.Black else Color(0xFF666666)
@@ -183,7 +190,7 @@ fun OtpVerificationScreen(
             
             // Resend OTP option
             Text(
-                text = "Didn't receive OTP?",
+                text = stringResource(R.string.didnt_receive_otp),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color(0xFF666666),
@@ -193,7 +200,7 @@ fun OtpVerificationScreen(
             Spacer(modifier = Modifier.height(8.dp))
             
             Text(
-                text = "You can request a new OTP after 30 seconds",
+                text = stringResource(R.string.you_can_request_new_otp_after_30_seconds),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color(0xFF999999),
@@ -203,7 +210,7 @@ fun OtpVerificationScreen(
 
         // Full screen loader
         if (isLoading) {
-            FullScreenLoader(message = "Verifying OTP...")
+            FullScreenLoader(message = stringResource(R.string.verifying_otp))
         }
     }
 
@@ -212,7 +219,7 @@ fun OtpVerificationScreen(
         if (showErrorDialog.value && errorMessage.value != null) {
             CommonErrorDialog(
                 showDialog = showErrorDialog.value,
-                title = "Verification Failed",
+                title = stringResource(R.string.verification_failed),
                 message = errorMessage.value!!,
                 onDismiss = {
                     showErrorDialog.value = false

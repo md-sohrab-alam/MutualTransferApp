@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MutualTransferApp</string>
+    <string name="app_name">म्यूचुअल ट्रांसफर</string>
     <string name="debug_test">हिंदी टेस्ट स्ट्रिंग</string>
     <string name="teacher">शिक्षक</string>
     <string name="tap_to_view_profile">प्रोफाइल देखने/संपादित करने के लिए टैप करें</string>
@@ -26,20 +26,17 @@
     <!-- App Title and Navigation -->
     <string name="app_title">म्यूचुअल ट्रांसफर बिहार</string>
     <string name="app_subtitle">जिलों में शिक्षकों को जोड़ना</string>
-    <string name="app_footer">© 2024 म्यूचुअल ट्रांसफर बिहार</string>
-    
+
     <!-- Splash Screen -->
     <string name="splash_title">म्यूचुअल ट्रांसफर बिहार</string>
     <string name="splash_subtitle">जिलों में शिक्षकों को जोड़ना</string>
-    <string name="splash_footer">© 2024 म्यूचुअल ट्रांसफर बिहार</string>
-    
+
     <!-- Login Screen -->
     <string name="login_title">स्वागत है</string>
     <string name="login_subtitle">अपने खाते में साइन इन करें</string>
     <string name="phone_number_label">फोन नंबर</string>
     <string name="phone_number_hint">अपना फोन नंबर दर्ज करें</string>
     <string name="send_otp_button">OTP भेजें</string>
-    <string name="login_footer">जारी रखने पर, आप हमारी शर्तों और स्थितियों से सहमत होते हैं</string>
     <string name="phone_validation_error">कृपया एक वैध 10-अंकीय फोन नंबर दर्ज करें</string>
     <string name="phone_format_error">फोन नंबर 6, 7, 8, या 9 से शुरू होना चाहिए</string>
     
@@ -54,33 +51,21 @@
     
     <!-- Teacher Input Screen -->
     <string name="teacher_input_title">म्यूचुअल ट्रांसफर फॉर्म</string>
-    <string name="full_name_label">पूरा नाम</string>
-    <string name="mobile_number_label">मोबाइल नंबर</string>
-    <string name="current_school_label">वर्तमान स्कूल का नाम</string>
     <string name="current_district_label">वर्तमान जिला</string>
     <string name="current_block_label">वर्तमान ब्लॉक</string>
-    <string name="post_level_label">पद स्तर</string>
-    <string name="subject_label">विषय</string>
-    <string name="designation_label">पदनाम</string>
     <string name="preferred_districts_label">पसंदीदा जिले (अधिकतम 3)</string>
     <string name="preferred_blocks_label">पसंदीदा ब्लॉक (वैकल्पिक)</string>
     <string name="select_district_hint">जिला चुनें</string>
     <string name="select_block_hint">ब्लॉक चुनें</string>
-    <string name="contact_preference_label">संपर्क वरीयता</string>
-    <string name="allow_contact">संपर्क की अनुमति दें</string>
-    <string name="dont_allow_contact">संपर्क की अनुमति न दें</string>
-    <string name="submit_form_button">फॉर्म जमा करें</string>
     <string name="selected_districts">चयनित जिले:</string>
     <string name="selected_blocks">चयनित ब्लॉक:</string>
     <string name="select_districts_first">कृपया पहले पसंदीदा जिले चुनें</string>
     
     <!-- Teacher Profile Screen -->
-    <string name="teacher_profile_title">शिक्षक प्रोफाइल</string>
     <string name="edit_profile">प्रोफाइल संपादित करें</string>
     <string name="save_profile">प्रोफाइल सहेजें</string>
     <string name="edit_button">संपादित करें</string>
     <string name="save_button">सहेजें</string>
-    <string name="cancel_button">रद्द करें</string>
     
     <!-- Validation Messages -->
     <string name="validation_full_name_required">पूरा नाम आवश्यक है</string>
@@ -159,4 +144,99 @@
     <string name="cancel_request_confirm">हां, रद्द करें</string>
     <string name="cancel_request_dismiss">नहीं, रखें</string>
     <string name="notes_label">टिप्पणियां (वैकल्पिक)</string>
+    
+    <!-- More Screen -->
+    <string name="more_options_title">अधिक विकल्प</string>
+    <string name="change_language">भाषा बदलें</string>
+    <string name="change_language_subtitle">अपनी पसंदीदा भाषा चुनें</string>
+    <string name="about">ऐप के बारे में</string>
+    <string name="about_subtitle">ऐप के बारे में अधिक जानें</string>
+    <string name="logout">लॉगआउट</string>
+    <string name="logout_subtitle">अपने खाते से साइन आउट करें</string>
+    
+    <!-- About Dialog -->
+    <string name="about_dialog_title">म्यूचुअल ट्रांसफर ऐप के बारे में</string>
+    <string name="about_dialog_content">यह ऐप बिहार, भारत के शिक्षकों को म्यूचुअल ट्रांसफर के अवसर खोजने में मदद करता है। शिक्षक ट्रांसफर अनुरोध बना सकते हैं, मिलान वाले अनुरोध देख सकते हैं, और म्यूचुअल ट्रांसफर के लिए अन्य शिक्षकों से जुड़ सकते हैं।\n\nविशेषताएं:\n• ट्रांसफर अनुरोध बनाएं\n• मिलान वाले अनुरोध देखें\n• शिक्षक प्रोफाइल प्रबंधित करें\n• फ़िल्टर और खोज विकल्प\n\nबिहार के शिक्षा समुदाय के लिए विकसित।\n\n📱 ऐप जानकारी:\nसंस्करण: 1.0.0\nबिहार शिक्षकों के लिए म्यूचुअल ट्रांसफर ऐप</string>
+    
+    <!-- Logout Dialog -->
+    <string name="confirm_logout_title">लॉगआउट की पुष्टि करें</string>
+    <string name="confirm_logout_message">क्या आप वाकई लॉगआउट करना चाहते हैं? ऐप का उपयोग करने के लिए आपको फिर से साइन इन करना होगा।</string>
+    <string name="yes_logout">हाँ, लॉगआउट करें</string>
+    
+    <!-- Splash Screen -->
+    <string name="splash_app_title">म्यूचुअल ट्रांसफर बिहार</string>
+    <string name="splash_app_subtitle">जिलों में शिक्षकों को जोड़ना</string>
+
+    <!-- Login Screen -->
+    <string name="teacher_transfer_title">शिक्षक ट्रांसफर</string>
+    <string name="welcome_title">स्वागत है</string>
+    <string name="send_otp_button_text">OTP भेजें</string>
+    <string name="bihar_teachers_only">केवल बिहार सरकार के शिक्षक ही इस ऐप का उपयोग कर सकते हैं</string>
+    <string name="welcome">स्वागत है</string>
+    <string name="enter_phone_number">अपना फोन नंबर दर्ज करें</string>
+    <string name="send_otp">OTP भेजें</string>
+    <string name="only_bihar_govt_teachers">केवल बिहार सरकार के शिक्षक ही इस ऐप का उपयोग कर सकते हैं</string>
+    <string name="sending_otp">OTP भेज रहा है...</string>
+    <string name="otp_send_failed">OTP भेजने में विफल</string>
+    
+    <!-- OTP Screen -->
+    <string name="otp_verification_title">OTP सत्यापन</string>
+    <string name="otp_verification_subtitle">अपने फोन पर भेजे गए 6-अंकीय कोड दर्ज करें</string>
+    <string name="verify_otp_button_text">OTP सत्यापित करें</string>
+    <string name="didnt_receive_otp">OTP नहीं मिला?</string>
+    <string name="otp_resend_message">आप 30 सेकंड के बाद नया OTP अनुरोध कर सकते हैं</string>
+    <string name="otp_verification">OTP सत्यापन</string>
+    <string name="enter_6_digit_code_sent_to_your_phone">अपने फोन पर भेजे गए 6-अंकीय कोड दर्ज करें</string>
+    <string name="enter_6_digit_otp">6-अंकीय OTP दर्ज करें</string>
+    <string name="verify_otp">OTP सत्यापित करें</string>
+    <string name="you_can_request_new_otp_after_30_seconds">आप 30 सेकंड के बाद नया OTP अनुरोध कर सकते हैं</string>
+    <string name="verifying_otp">OTP सत्यापित कर रहा है...</string>
+    <string name="verification_failed">सत्यापन विफल</string>
+    <string name="otp_required">OTP आवश्यक है</string>
+    <string name="otp_must_be_6_digits">OTP 6 अंकों का होना चाहिए</string>
+    <string name="otp_must_contain_only_digits">OTP में केवल अंक होने चाहिए</string>
+    
+    <!-- Language Selector -->
+    <string name="choose_language">भाषा चुनें / Choose Language</string>
+    <string name="continue_button">जारी रखें / Continue</string>
+    
+    <!-- Home Screen -->
+    <string name="from_label_text">से:</string>
+    <string name="to_label_text">तक:</string>
+    <string name="tap_to_edit_request_text">अपने ट्रांसफर अनुरोध को संपादित/हटाने के लिए टैप करें</string>
+    <string name="we_will_notify_text">जब हमें मिलान वाले शिक्षक मिलेंगे तो हम आपको सूचित करेंगे</string>
+    
+    <!-- Profile Screen -->
+    <string name="complete_profile_title">अपना प्रोफाइल पूरा करें</string>
+    <string name="teacher_profile_title">शिक्षक प्रोफाइल</string>
+    <string name="edit_profile_title">प्रोफाइल संपादित करें</string>
+    <string name="complete_profile_header">अपना प्रोफाइल पूरा करें</string>
+    <string name="teacher_profile_header">शिक्षक प्रोफाइल</string>
+    <string name="edit_profile_header">प्रोफाइल संपादित करें</string>
+    <string name="full_name_label">पूरा नाम</string>
+    <string name="mobile_number_label">मोबाइल नंबर</string>
+    <string name="post_level_label">पद स्तर</string>
+    <string name="designation_label">पदनाम</string>
+    <string name="subject_label">विषय</string>
+    <string name="qualification_label">योग्यता</string>
+    <string name="current_school_label">वर्तमान स्कूल का नाम</string>
+    <string name="current_school_name_label">वर्तमान स्कूल का नाम</string>
+    <string name="school_district_label">आपके स्कूल का जिला</string>
+    <string name="school_block_label">आपके स्कूल का ब्लॉक</string>
+    <string name="contact_preference_label">संपर्क वरीयता</string>
+    <string name="allow_contact">संपर्क की अनुमति दें</string>
+    <string name="dont_allow_contact">संपर्क की अनुमति न दें</string>
+    <string name="complete_profile_button">प्रोफाइल पूरा करें</string>
+    <string name="save_changes_button">परिवर्तन सहेजें</string>
+    <string name="cancel_button_text">रद्द करें</string>
+    <string name="cancel_button">रद्द करें</string>
+    <string name="edit_profile_button">प्रोफाइल संपादित करें</string>
+    <string name="profile_completed_success">प्रोफाइल सफलतापूर्वक पूरा किया गया!</string>
+    <string name="profile_updated_success">प्रोफाइल सफलतापूर्वक अपडेट किया गया!</string>
+    <string name="profile_completed_toast">प्रोफाइल सफलतापूर्वक पूरा किया गया!</string>
+    <string name="profile_updated_toast">प्रोफाइल सफलतापूर्वक अपडेट किया गया!</string>
+    <string name="not_set">सेट नहीं किया गया</string>
+    
+
+    
 </resources> 

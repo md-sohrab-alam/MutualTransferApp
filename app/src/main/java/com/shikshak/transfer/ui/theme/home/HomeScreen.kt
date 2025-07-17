@@ -1,7 +1,5 @@
 package com.shikshak.transfer.ui.theme.home
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,8 +17,11 @@ import androidx.navigation.NavController
 import com.shikshak.transfer.R
 import com.shikshak.transfer.ui.theme.data.Teacher
 import com.shikshak.transfer.ui.theme.data.TransferRequest
-import com.shikshak.transfer.ui.theme.navigation.Routes
 import com.shikshak.transfer.ui.theme.utils.MatchingService
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import com.shikshak.transfer.ui.theme.navigation.Routes
 import timber.log.Timber
 
 @Composable
@@ -427,11 +427,11 @@ fun HomeScreenWithRequest(
                         )
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "From: ${request.currentDistrict}",
+                                text = "${stringResource(R.string.from_label_text)} ${request.currentDistrict}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "To: ${request.preferredDistricts.joinToString(", ")}",
+                                text = "${stringResource(R.string.to_label_text)} ${request.preferredDistricts.joinToString(", ")}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -439,7 +439,7 @@ fun HomeScreenWithRequest(
                     
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "Tap to edit/delete your transfer request",
+                        text = stringResource(R.string.tap_to_edit_request_text),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -495,7 +495,7 @@ fun HomeScreenWithRequest(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "We'll notify you when we find matching teachers",
+                            text = stringResource(R.string.we_will_notify_text),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -573,11 +573,11 @@ fun MatchCard(
                 )
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "From: ${match.district}",
+                        text = "${stringResource(R.string.from_label_text)} ${match.district}",
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = "To: ${match.preferredDistricts.joinToString(", ")}",
+                        text = "${stringResource(R.string.to_label_text)} ${match.preferredDistricts.joinToString(", ")}",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

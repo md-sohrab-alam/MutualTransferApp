@@ -61,7 +61,7 @@ fun LanguageSelectorScreen(
         
         // Language Selection Title
         Text(
-            text = "Choose Language / भाषा चुनें",
+            text = stringResource(R.string.choose_language),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(bottom = 24.dp)
@@ -161,7 +161,7 @@ fun LanguageSelectorScreen(
             )
         ) {
             Text(
-                text = "Continue / जारी रखें",
+                text = stringResource(R.string.continue_button),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Medium
             )

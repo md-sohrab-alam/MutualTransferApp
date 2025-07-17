@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext as LocalContext1
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
 import com.shikshak.transfer.ui.theme.data.Blocks
 import androidx.compose.runtime.collectAsState
+import com.shikshak.transfer.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,37 +48,6 @@ fun TeacherProfileScreen(
     var contactPreference by remember { mutableStateOf(true) }
     var mobileNumber by remember { mutableStateOf("") }
     
-    // Function to get designations based on post level
-    fun getDesignationsForPostLevel(level: String): List<String> {
-        return when (level) {
-            "Primary" -> listOf(
-                "Assistant Teacher (सहायक शिक्षक)",
-                "Head Teacher (प्रधानाध्यापक)",
-                "Physical Education Teacher (PET)"
-            )
-            "Upper Primary" -> listOf(
-                "Assistant Teacher (सहायक शिक्षक)",
-                "Head Teacher (प्रधानाध्यापक)",
-                "Physical Education Teacher (PET)",
-                "Art / Music Teacher"
-            )
-            "Secondary" -> listOf(
-                "Trained Graduate Teacher (TGT)",
-                "Head Teacher (प्रधानाध्यापक)",
-                "Physical Education Teacher (PET)",
-                "Art / Music Teacher"
-            )
-            "Higher Secondary" -> listOf(
-                "Post Graduate Teacher (PGT)",
-                "Lecturer (प्रवक्ता)",
-                "Head Teacher (प्रधानाध्यापक)",
-                "Physical Education Teacher (PET)",
-                "Art / Music Teacher"
-            )
-            else -> emptyList()
-        }
-    }
-    
     // Load teacher data when component is created
     LaunchedEffect(Unit) {
         currentUser?.uid?.let { uid ->
@@ -103,7 +74,7 @@ fun TeacherProfileScreen(
     ) {
         // Header
         Text(
-            text = if (isFirstLogin) "👨‍🏫 Complete Your Profile" else "👨‍🏫 Teacher Profile",
+            text = if (isFirstLogin) stringResource(R.string.complete_profile_header) else stringResource(R.string.teacher_profile_header),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 24.dp)
@@ -121,7 +92,7 @@ fun TeacherProfileScreen(
             if (isEditing) {
                 // Edit Mode
                 Text(
-                    text = if (isFirstLogin) "✏️ Complete Your Profile" else "✏️ Edit Profile",
+                    text = if (isFirstLogin) stringResource(R.string.complete_profile_header) else stringResource(R.string.edit_profile_header),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -130,7 +101,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("👤 Full Name") },
+                    label = { Text(stringResource(R.string.full_name_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -141,7 +112,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = mobileNumber,
                     onValueChange = { },
-                    label = { Text("📱 Mobile Number") },
+                    label = { Text(stringResource(R.string.mobile_number_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     readOnly = true,
@@ -161,7 +132,7 @@ fun TeacherProfileScreen(
                         value = postLevel,
                         onValueChange = { },
                         readOnly = true,
-                        label = { Text("🎓 Post Level") },
+                        label = { Text(stringResource(R.string.post_level_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = postLevelExpanded) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -171,7 +142,12 @@ fun TeacherProfileScreen(
                         expanded = postLevelExpanded,
                         onDismissRequest = { postLevelExpanded = false }
                     ) {
-                        listOf("Primary", "Upper Primary", "Secondary", "Higher Secondary").forEach { level ->
+                        listOf(
+                            stringResource(R.string.post_level_primary),
+                            stringResource(R.string.post_level_upper_primary),
+                            stringResource(R.string.post_level_secondary),
+                            stringResource(R.string.post_level_higher_secondary)
+                        ).forEach { level ->
                             DropdownMenuItem(
                                 text = { Text(level) },
                                 onClick = {
@@ -181,7 +157,33 @@ fun TeacherProfileScreen(
                                     
                                     // Clear designation if it's not valid for new post level
                                     if (previousPostLevel != level) {
-                                        val validDesignations = getDesignationsForPostLevel(level)
+                                        val validDesignations = when (level) {
+                                            "Primary" -> listOf(
+                                                "Assistant Teacher (सहायक शिक्षक)",
+                                                "Head Teacher (प्रधानाध्यापक)",
+                                                "Physical Education Teacher (PET)"
+                                            )
+                                            "Upper Primary" -> listOf(
+                                                "Assistant Teacher (सहायक शिक्षक)",
+                                                "Head Teacher (प्रधानाध्यापक)",
+                                                "Physical Education Teacher (PET)",
+                                                "Art / Music Teacher"
+                                            )
+                                            "Secondary" -> listOf(
+                                                "Trained Graduate Teacher (TGT)",
+                                                "Head Teacher (प्रधानाध्यापक)",
+                                                "Physical Education Teacher (PET)",
+                                                "Art / Music Teacher"
+                                            )
+                                            "Higher Secondary" -> listOf(
+                                                "Post Graduate Teacher (PGT)",
+                                                "Lecturer (प्रवक्ता)",
+                                                "Head Teacher (प्रधानाध्यापक)",
+                                                "Physical Education Teacher (PET)",
+                                                "Art / Music Teacher"
+                                            )
+                                            else -> emptyList()
+                                        }
                                         if (!validDesignations.contains(designation)) {
                                             designation = ""
                                         }
@@ -206,7 +208,7 @@ fun TeacherProfileScreen(
                             value = designation,
                             onValueChange = { },
                             readOnly = true,
-                            label = { Text("👨‍🏫 Designation") },
+                            label = { Text(stringResource(R.string.designation_label)) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = designationExpanded) },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -216,14 +218,63 @@ fun TeacherProfileScreen(
                             expanded = designationExpanded,
                             onDismissRequest = { designationExpanded = false }
                         ) {
-                            getDesignationsForPostLevel(postLevel).forEach { designationName ->
-                                DropdownMenuItem(
-                                    text = { Text(designationName) },
-                                    onClick = {
-                                        designation = designationName
-                                        designationExpanded = false
-                                    }
-                                )
+                            when (postLevel) {
+                                "Primary" -> listOf(
+                                    "Assistant Teacher (सहायक शिक्षक)",
+                                    "Head Teacher (प्रधानाध्यापक)",
+                                    "Physical Education Teacher (PET)"
+                                ).forEach { designationName ->
+                                    DropdownMenuItem(
+                                        text = { Text(designationName) },
+                                        onClick = {
+                                            designation = designationName
+                                            designationExpanded = false
+                                        }
+                                    )
+                                }
+                                "Upper Primary" -> listOf(
+                                    "Assistant Teacher (सहायक शिक्षक)",
+                                    "Head Teacher (प्रधानाध्यापक)",
+                                    "Physical Education Teacher (PET)",
+                                    "Art / Music Teacher"
+                                ).forEach { designationName ->
+                                    DropdownMenuItem(
+                                        text = { Text(designationName) },
+                                        onClick = {
+                                            designation = designationName
+                                            designationExpanded = false
+                                        }
+                                    )
+                                }
+                                "Secondary" -> listOf(
+                                    "Trained Graduate Teacher (TGT)",
+                                    "Head Teacher (प्रधानाध्यापक)",
+                                    "Physical Education Teacher (PET)",
+                                    "Art / Music Teacher"
+                                ).forEach { designationName ->
+                                    DropdownMenuItem(
+                                        text = { Text(designationName) },
+                                        onClick = {
+                                            designation = designationName
+                                            designationExpanded = false
+                                        }
+                                    )
+                                }
+                                "Higher Secondary" -> listOf(
+                                    "Post Graduate Teacher (PGT)",
+                                    "Lecturer (प्रवक्ता)",
+                                    "Head Teacher (प्रधानाध्यापक)",
+                                    "Physical Education Teacher (PET)",
+                                    "Art / Music Teacher"
+                                ).forEach { designationName ->
+                                    DropdownMenuItem(
+                                        text = { Text(designationName) },
+                                        onClick = {
+                                            designation = designationName
+                                            designationExpanded = false
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -236,7 +287,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = subject,
                     onValueChange = { subject = it },
-                    label = { Text("📘 Subject") },
+                    label = { Text(stringResource(R.string.subject_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -246,7 +297,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = qualification,
                     onValueChange = { qualification = it },
-                    label = { Text("🎓 Qualification") },
+                    label = { Text(stringResource(R.string.qualification_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -256,7 +307,7 @@ fun TeacherProfileScreen(
                 OutlinedTextField(
                     value = school,
                     onValueChange = { school = it },
-                    label = { Text("🏫 Current School Name") },
+                    label = { Text(stringResource(R.string.current_school_name_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -274,7 +325,7 @@ fun TeacherProfileScreen(
                         value = district,
                         onValueChange = { },
                         readOnly = true,
-                        label = { Text("📍 Your School District") },
+                        label = { Text(stringResource(R.string.school_district_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = districtExpanded) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -318,7 +369,7 @@ fun TeacherProfileScreen(
                             value = block,
                             onValueChange = { },
                             readOnly = true,
-                            label = { Text("🏘️ Your School Block") },
+                            label = { Text(stringResource(R.string.school_block_label)) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = blockExpanded) },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -349,7 +400,7 @@ fun TeacherProfileScreen(
                 
                 // Contact Preference
                 Text(
-                    text = "📞 Contact Preference",
+                    text = stringResource(R.string.contact_preference_label),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(bottom = 8.dp)
@@ -364,14 +415,14 @@ fun TeacherProfileScreen(
                             selected = contactPreference,
                             onClick = { contactPreference = true }
                         )
-                        Text("Allow contact")
+                        Text(stringResource(R.string.allow_contact))
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(
                             selected = !contactPreference,
                             onClick = { contactPreference = false }
                         )
-                        Text("Don't allow contact")
+                        Text(stringResource(R.string.dont_allow_contact))
                     }
                 }
                 
@@ -411,7 +462,7 @@ fun TeacherProfileScreen(
                                 mobileNumber = updatedTeacher.contact.phone
                             }
                             isEditing = false
-                            Toast.makeText(context, "Profile completed successfully!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, stringResource(R.string.profile_completed_toast), Toast.LENGTH_SHORT).show()
                         },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = !isLoading
@@ -423,7 +474,7 @@ fun TeacherProfileScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                         }
-                        Text("💾 Complete Profile")
+                        Text(stringResource(R.string.complete_profile_button))
                     }
                 } else {
                     // For regular editing, show both save and cancel buttons
@@ -462,7 +513,7 @@ fun TeacherProfileScreen(
                                     mobileNumber = updatedTeacher.contact.phone
                                 }
                                 isEditing = false
-                                Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, stringResource(R.string.profile_updated_toast), Toast.LENGTH_SHORT).show()
                             },
                             modifier = Modifier.weight(1f),
                             enabled = !isLoading
@@ -474,14 +525,14 @@ fun TeacherProfileScreen(
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                             }
-                            Text("💾 Save Changes")
+                            Text(stringResource(R.string.save_changes_button))
                         }
                         
                         OutlinedButton(
                             onClick = { isEditing = false },
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("❌ Cancel")
+                            Text(stringResource(R.string.cancel_button))
                         }
                     }
                 }
@@ -495,16 +546,30 @@ fun TeacherProfileScreen(
                     Column(
                         modifier = Modifier.padding(16.dp)
                     ) {
-                        ProfileInfoRow("👤 Full Name", name.ifBlank { "Not set" })
-                        ProfileInfoRow("📱 Mobile Number", mobileNumber.ifBlank { "Not set" })
-                        ProfileInfoRow("🏫 Current School", school.ifBlank { "Not set" })
-                        ProfileInfoRow("📍 Your School District", district.ifBlank { "Not set" })
-                        ProfileInfoRow("🏘️ Your School Block", block.ifBlank { "Not set" })
-                        ProfileInfoRow("🎓 Post Level", postLevel.ifBlank { "Not set" })
-                        ProfileInfoRow("📘 Subject", subject.ifBlank { "Not set" })
-                        ProfileInfoRow("👨‍🏫 Designation", designation.ifBlank { "Not set" })
-                        ProfileInfoRow("🎓 Qualification", qualification.ifBlank { "Not set" })
-                        ProfileInfoRow("📞 Contact Preference", if (contactPreference) "Allow contact" else "Don't allow contact")
+                        val fullNameLabel = stringResource(R.string.full_name_label)
+                        val mobileNumberLabel = stringResource(R.string.mobile_number_label)
+                        val currentSchoolNameLabel = stringResource(R.string.current_school_name_label)
+                        val schoolDistrictLabel = stringResource(R.string.school_district_label)
+                        val schoolBlockLabel = stringResource(R.string.school_block_label)
+                        val postLevelLabel = stringResource(R.string.post_level_label)
+                        val subjectLabel = stringResource(R.string.subject_label)
+                        val designationLabel = stringResource(R.string.designation_label)
+                        val qualificationLabel = stringResource(R.string.qualification_label)
+                        val contactPreferenceLabel = stringResource(R.string.contact_preference_label)
+                        val notSet = stringResource(R.string.not_set)
+                        val allowContact = stringResource(R.string.allow_contact)
+                        val dontAllowContact = stringResource(R.string.dont_allow_contact)
+
+                        ProfileInfoRow(fullNameLabel, name.ifBlank { notSet })
+                        ProfileInfoRow(mobileNumberLabel, mobileNumber.ifBlank { notSet })
+                        ProfileInfoRow(currentSchoolNameLabel, school.ifBlank { notSet })
+                        ProfileInfoRow(schoolDistrictLabel, district.ifBlank { notSet })
+                        ProfileInfoRow(schoolBlockLabel, block.ifBlank { notSet })
+                        ProfileInfoRow(postLevelLabel, postLevel.ifBlank { notSet })
+                        ProfileInfoRow(subjectLabel, subject.ifBlank { notSet })
+                        ProfileInfoRow(designationLabel, designation.ifBlank { notSet })
+                        ProfileInfoRow(qualificationLabel, qualification.ifBlank { notSet })
+                        ProfileInfoRow(contactPreferenceLabel, if (contactPreference) allowContact else dontAllowContact)
                     }
                 }
                 
@@ -522,7 +587,7 @@ fun TeacherProfileScreen(
                         onClick = { isEditing = true },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("✏️ Edit Profile")
+                        Text(stringResource(R.string.edit_profile_button))
                     }
                 }
             }

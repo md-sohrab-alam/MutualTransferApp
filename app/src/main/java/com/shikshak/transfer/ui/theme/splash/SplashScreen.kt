@@ -18,6 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import androidx.compose.ui.res.stringResource
+import com.shikshak.transfer.R
 
 @Composable
 fun SplashScreen(
@@ -129,7 +131,7 @@ fun SplashScreen(
             
             // App Title
             Text(
-                text = "MutualTransfer Bihar",
+                text = stringResource(R.string.app_title),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF424242), // Dark grey
@@ -141,7 +143,7 @@ fun SplashScreen(
             
             // Subtitle
             Text(
-                text = "Connecting Teachers Across Districts",
+                text = stringResource(R.string.app_subtitle),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color(0xFF666666), // Medium grey
@@ -153,7 +155,7 @@ fun SplashScreen(
             
             // Footer
             Text(
-                text = "Powered by Open Collaboration",
+                text = stringResource(R.string.powered_by),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color(0xFF999999), // Light grey

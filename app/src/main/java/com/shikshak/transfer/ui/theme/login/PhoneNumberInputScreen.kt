@@ -39,6 +39,8 @@ import com.shikshak.transfer.ui.theme.utils.CommonErrorDialog
 import com.shikshak.transfer.ui.theme.utils.FullScreenLoader
 import com.shikshak.transfer.ui.theme.utils.InlineError
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.stringResource
+import com.shikshak.transfer.R
 
 @Composable
 fun PhoneNumberInputScreen(
@@ -100,7 +102,7 @@ fun PhoneNumberInputScreen(
         ) {
             // Title
             Text(
-                text = "Teacher Transfer",
+                text = stringResource(R.string.app_name),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
@@ -111,7 +113,7 @@ fun PhoneNumberInputScreen(
             
             // Welcome Text
             Text(
-                text = "Welcome",
+                text = stringResource(R.string.welcome),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -124,7 +126,7 @@ fun PhoneNumberInputScreen(
             OutlinedTextField(
                 value = phoneNumber,
                 onValueChange = { onPhoneNumberChange(it) },
-                placeholder = { Text("Enter your phone number") },
+                placeholder = { Text(stringResource(R.string.enter_phone_number)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
@@ -183,7 +185,7 @@ fun PhoneNumberInputScreen(
                     enabled = phoneNumber.length == 10 && isPhoneValid
                 ) {
                     Text(
-                        text = "Send OTP",
+                        text = stringResource(R.string.send_otp),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = if (phoneNumber.length == 10 && isPhoneValid) Color.Black else Color(0xFF666666)
@@ -195,7 +197,7 @@ fun PhoneNumberInputScreen(
             
             // Footer Text
             Text(
-                text = "Only Bihar government teachers can access this app",
+                text = stringResource(R.string.only_bihar_govt_teachers),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color.Black,
@@ -205,7 +207,7 @@ fun PhoneNumberInputScreen(
 
         // Full screen loader
         if (isLoading) {
-            FullScreenLoader(message = "Sending OTP...")
+            FullScreenLoader(message = stringResource(R.string.sending_otp))
         }
     }
 
@@ -214,7 +216,7 @@ fun PhoneNumberInputScreen(
         if (showErrorDialog.value && errorMessage.value != null) {
             CommonErrorDialog(
                 showDialog = showErrorDialog.value,
-                title = "OTP Send Failed",
+                title = stringResource(R.string.otp_send_failed),
                 message = errorMessage.value!!,
                 onDismiss = {
                     showErrorDialog.value = false
