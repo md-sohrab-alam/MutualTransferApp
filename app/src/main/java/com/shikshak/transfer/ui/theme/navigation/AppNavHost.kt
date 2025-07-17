@@ -66,14 +66,13 @@ fun AppNavHost(
                 } else {
                     Routes.Profile
                 }
-                showBottomNavigation = sharedViewModel.isProfileComplete()
                 appReady = true
             }, onError = {
-                startDestination = Routes.Auth
+                startDestination = Routes.Splash
                 appReady = true
             })
         } else {
-            startDestination = Routes.Auth
+            startDestination = Routes.Splash
             appReady = true
         }
     }
@@ -97,7 +96,11 @@ fun AppNavHost(
         Routes.LanguageSelector
     }
 
-    if (showBottomNavigation) {
+    // Show bottom navigation for authenticated users with complete profiles
+    val shouldShowBottomNavigation = sharedViewModel.isProfileComplete() && 
+        FirebaseAuth.getInstance().currentUser != null
+
+    if (shouldShowBottomNavigation) {
         // Main app with bottom navigation
         Scaffold(
             bottomBar = { BottomNavigation(navController) }
@@ -115,7 +118,10 @@ fun AppNavHost(
                     TeacherProfileScreen(
                         onProfileSaved = { teacher ->
                             sharedViewModel.setTeacher(teacher)
-                            // Don't navigate away, just update the shared view model
+                            // Navigate to Splash to restart the app flow with bottom navigation
+                            navController.navigate(Routes.Splash) {
+                                popUpTo(0) { inclusive = true }
+                            }
                         },
                         onNavigateToTeacherInput = {
                             // This will be handled by the ProfileViewModel for deleting transfer request
@@ -148,10 +154,9 @@ fun AppNavHost(
                             navController.navigate(Routes.LanguageSelector)
                         },
                         onNavigateToLogin = {
-                            // Clear all navigation and restart the app flow
-                            // This will trigger a restart of the entire app flow
-                            // by clearing the navigation stack and restarting the app
-                            navController.navigate(Routes.PhoneInput) {
+                            // Navigate to Splash to restart the app flow properly
+                            // This will trigger a complete app restart through the Splash screen
+                            navController.navigate(Routes.Splash) {
                                 popUpTo(0) { inclusive = true }
                             }
                         }
@@ -244,42 +249,15 @@ fun AppNavHost(
                     )
                 }
                 
-                // Auth routes for logout functionality
-                navigation(startDestination = Routes.PhoneInput, Routes.Auth) {
-                    composable(Routes.PhoneInput) {
-                        val parentEntry = remember(it) {
-                            navController.getBackStackEntry(Routes.Auth)
-                        }
-                        val viewModel = hiltViewModel<PhoneAuthViewModel>(parentEntry)
-                        PhoneNumberInputScreen(
-                            viewModel = viewModel, activity = activity, navController = navController
-                        )
-                    }
-                    composable(Routes.OtpVerification) {
-                        val parentEntry = remember(it) {
-                            navController.getBackStackEntry(Routes.Auth)
-                        }
-                        val viewModel = hiltViewModel<PhoneAuthViewModel>(parentEntry)
-                        OtpVerificationScreen(viewModel = viewModel, navController = navController)
-                    }
-                }
-                
-                // PhoneInput route for logout functionality
-                composable(Routes.PhoneInput) {
-                    val parentEntry = remember(it) {
-                        navController.getBackStackEntry(Routes.Auth)
-                    }
-                    val viewModel = hiltViewModel<PhoneAuthViewModel>(parentEntry)
-                    PhoneNumberInputScreen(
-                        viewModel = viewModel, activity = activity, navController = navController
-                    )
-                }
+                // Auth routes should not be in the main navigation with bottom bar
+                // They are handled in the else block below
                 
                 // Splash route for logout functionality
                 composable(Routes.Splash) {
                     SplashScreen(
                         onSplashComplete = {
-                            // Navigate to the appropriate screen based on authentication state
+                            // In main navigation, we only handle authenticated users
+                            // Unauthenticated users should be handled by the auth flow
                             val user = FirebaseAuth.getInstance().currentUser
                             if (user != null) {
                                 if (sharedViewModel.isProfileComplete()) {
@@ -292,7 +270,9 @@ fun AppNavHost(
                                     }
                                 }
                             } else {
-                                navController.navigate(Routes.Auth) {
+                                // If somehow we get here without a user, just go to Home
+                                // The auth flow should handle unauthenticated users
+                                navController.navigate(Routes.Home) {
                                     popUpTo(Routes.Splash) { inclusive = true }
                                 }
                             }
@@ -330,7 +310,8 @@ fun AppNavHost(
                                 }
                             }
                         } else {
-                            navController.navigate(Routes.Auth) {
+                            // Navigate to PhoneInput for authentication
+                            navController.navigate(Routes.PhoneInput) {
                                 popUpTo(Routes.Splash) { inclusive = true }
                             }
                         }
