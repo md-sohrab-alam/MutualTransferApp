@@ -1,5 +1,26 @@
 <resources>
     <string name="app_name">MutualTransferApp</string>
+    <string name="debug_test">English Test String</string>
+    <string name="teacher">Teacher</string>
+    <string name="tap_to_view_profile">Tap to view/edit your profile</string>
+    <string name="make_transfer_request">Make Your Transfer Request</string>
+    <string name="create_transfer_request_description">Create your transfer request and find matching teachers for mutual transfers</string>
+    <string name="create_transfer_request_button">Create Transfer Request</string>
+    <string name="how_it_works">How It Works</string>
+    <string name="step_1_title">Create Request</string>
+    <string name="step_1_description">Fill your transfer details and preferences</string>
+    <string name="step_2_title">Find Matches</string>
+    <string name="step_2_description">Discover teachers with matching transfer needs</string>
+    <string name="step_3_title">Connect &amp; Transfer</string>
+    <string name="step_3_description">Contact matched teachers and complete transfers</string>
+    <string name="your_transfer_request_title">Your Transfer Request</string>
+    <string name="from_label">From:</string>
+    <string name="to_label">To:</string>
+    <string name="tap_to_edit_request">Tap to edit/delete your transfer request</string>
+    <string name="matching_requests_title">Matching Requests</string>
+    <string name="no_matches_found">No matching requests found yet</string>
+
+    <string name="compatibility_label">Compatibility:</string>
     
     <!-- App Title and Navigation -->
     <string name="app_title">Mutual Transfer Bihar</string>
@@ -111,7 +132,7 @@
     <string name="your_transfer_request">Your Transfer Request</string>
     <string name="matching_requests">Matching Requests</string>
     <string name="no_matching_request_found">No matching request found.</string>
-    <string name="we_will_notify_you">We\'ll notify you when we find a match.</string>
+    <string name="we_will_notify_you">We will notify you when we find a match.</string>
     
     <!-- Bottom Navigation -->
     <string name="home">Home</string>

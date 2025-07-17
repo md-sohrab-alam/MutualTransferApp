@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MutualTransferApp</string>
+    <string name="debug_test">हिंदी टेस्ट स्ट्रिंग</string>
+    <string name="teacher">शिक्षक</string>
+    <string name="tap_to_view_profile">प्रोफाइल देखने/संपादित करने के लिए टैप करें</string>
+    <string name="make_transfer_request">अपना ट्रांसफर अनुरोध बनाएं</string>
+    <string name="create_transfer_request_description">अपना ट्रांसफर अनुरोध बनाएं और म्यूचुअल ट्रांसफर के लिए मिलान वाले शिक्षकों को खोजें</string>
+    <string name="create_transfer_request_button">ट्रांसफर अनुरोध बनाएं</string>
+    <string name="how_it_works">यह कैसे काम करता है</string>
+    <string name="step_1_title">अनुरोध बनाएं</string>
+    <string name="step_1_description">अपने ट्रांसफर विवरण और प्राथमिकताएं भरें</string>
+    <string name="step_2_title">मैच खोजें</string>
+    <string name="step_2_description">मिलान वाली ट्रांसफर आवश्यकताओं वाले शिक्षकों को खोजें</string>
+    <string name="step_3_title">संपर्क करें और ट्रांसफर करें</string>
+    <string name="step_3_description">मिलान वाले शिक्षकों से संपर्क करें और ट्रांसफर पूरा करें</string>
+    <string name="your_transfer_request_title">आपका ट्रांसफर अनुरोध</string>
+    <string name="from_label">से:</string>
+    <string name="to_label">तक:</string>
+    <string name="tap_to_edit_request">अपना ट्रांसफर अनुरोध संपादित/हटाने के लिए टैप करें</string>
+    <string name="matching_requests_title">मिलान वाले अनुरोध</string>
+    <string name="no_matches_found">अभी तक कोई मिलान वाला अनुरोध नहीं मिला</string>
+
+    <string name="compatibility_label">अनुकूलता:</string>
     
     <!-- App Title and Navigation -->
     <string name="app_title">म्यूचुअल ट्रांसफर बिहार</string>
@@ -95,8 +116,6 @@
     <string name="designation_lecturer">प्रवक्ता</string>
     
     <!-- Home Screen -->
-    <string name="welcome_message">स्वागत है</string>
-    <string name="welcome_back_message">वापसी पर स्वागत है</string>
     <string name="app_purpose_title">उद्देश्य सारांश</string>
     <string name="app_purpose_description">यह ऐप बिहार सरकार के शिक्षकों को दूसरे जिले से म्यूचुअल ट्रांसफर साथी खोजने में मदद करता है। शुरू करने के लिए अपना ट्रांसफर अनुरोध जमा करें।</string>
     <string name="ready_to_transfer">ट्रांसफर के लिए तैयार हैं?</string>

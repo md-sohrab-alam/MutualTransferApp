@@ -42,6 +42,15 @@ object LanguageUtils {
         return locale.language
     }
     
+    fun getCurrentLocale(context: Context): Locale {
+        val languageCode = getCurrentLanguage(context)
+        return when (languageCode) {
+            "hi" -> Locale("hi", "IN")
+            "en" -> Locale("en", "US")
+            else -> Locale(languageCode)
+        }
+    }
+    
     fun isHindi(context: Context): Boolean {
         return getCurrentLanguage(context) == "hi"
     }

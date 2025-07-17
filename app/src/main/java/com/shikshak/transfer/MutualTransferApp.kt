@@ -18,6 +18,7 @@ class MutualTransferApp : Application() {
             Timber.d("Timber initialized in DEBUG mode")
         }
         updateLocale()
+        Timber.d("App created with locale: ${getLocaleFromPreferences(this).language}")
     }
 
     override fun attachBaseContext(base: Context) {
@@ -33,11 +34,27 @@ class MutualTransferApp : Application() {
         return createConfigurationContext(config).resources
     }
 
+    override fun createConfigurationContext(overrideConfiguration: Configuration): Context {
+        val locale = getLocaleFromPreferences(this)
+        val config = Configuration(overrideConfiguration)
+        config.setLocale(locale)
+        return super.createConfigurationContext(config)
+    }
+
     private fun getLocaleFromPreferences(context: Context): Locale {
         val sharedPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
         val languageCode = sharedPrefs.getString("language_code", "en") ?: "en"
         Timber.d("Loading locale from preferences: $languageCode")
-        return Locale(languageCode)
+        
+        // Debug: Check if the preference actually exists
+        val allPrefs = sharedPrefs.all
+        Timber.d("All preferences: $allPrefs")
+        
+        return when (languageCode) {
+            "hi" -> Locale("hi", "IN")
+            "en" -> Locale("en", "US")
+            else -> Locale(languageCode)
+        }
     }
 
     private fun updateLocale(context: Context, locale: Locale): Context {
@@ -64,8 +81,12 @@ class MutualTransferApp : Application() {
             val baseContextField = Context::class.java.getDeclaredField("mBase")
             baseContextField.isAccessible = true
             baseContextField.set(this, newContext)
+            Timber.d("Successfully updated base context with locale: ${locale.language}")
         } catch (e: Exception) {
             Timber.e(e, "Failed to update base context")
         }
+        
+        // Remove deprecated updateConfiguration call
+        // resources.updateConfiguration(config, resources.displayMetrics)
     }
 }

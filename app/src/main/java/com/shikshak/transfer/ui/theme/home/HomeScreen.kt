@@ -98,7 +98,7 @@ fun HomeScreenFirstTime(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "👋 Welcome back, ${teacher?.name ?: "Teacher"}!",
+                            text = stringResource(R.string.welcome_back_message) + ", ${teacher?.name ?: stringResource(R.string.teacher)}!",
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold
                         )
@@ -130,7 +130,7 @@ fun HomeScreenFirstTime(
                 
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Tap to view/edit your profile",
+                    text = stringResource(R.string.tap_to_view_profile),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -158,7 +158,7 @@ fun HomeScreenFirstTime(
                 Spacer(modifier = Modifier.height(12.dp))
                 
                 Text(
-                    text = "🚀 Make Your Transfer Request",
+                    text = "🚀 ${stringResource(R.string.make_transfer_request)}",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -166,7 +166,7 @@ fun HomeScreenFirstTime(
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 Text(
-                    text = "Create your transfer request and find matching teachers for mutual transfers",
+                    text = stringResource(R.string.create_transfer_request_description),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -185,7 +185,7 @@ fun HomeScreenFirstTime(
                         contentDescription = null,
                         modifier = Modifier.padding(end = 8.dp)
                     )
-                    Text("Create Transfer Request")
+                    Text(stringResource(R.string.create_transfer_request_button))
                 }
             }
         }
@@ -198,7 +198,7 @@ fun HomeScreenFirstTime(
                 modifier = Modifier.padding(20.dp)
             ) {
                 Text(
-                    text = "📋 How It Works",
+                    text = "📋 ${stringResource(R.string.how_it_works)}",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -216,12 +216,12 @@ fun HomeScreenFirstTime(
                     )
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "1. Create Request",
+                            text = "1. ${stringResource(R.string.step_1_title)}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Fill your transfer details and preferences",
+                            text = stringResource(R.string.step_1_description),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -241,12 +241,12 @@ fun HomeScreenFirstTime(
                     )
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "2. Find Matches",
+                            text = "2. ${stringResource(R.string.step_2_title)}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Discover teachers with matching transfer needs",
+                            text = stringResource(R.string.step_2_description),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -266,12 +266,12 @@ fun HomeScreenFirstTime(
                     )
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "3. Connect & Transfer",
+                            text = "3. ${stringResource(R.string.step_3_title)}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Contact matched teachers and complete transfers",
+                            text = stringResource(R.string.step_3_description),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -318,7 +318,7 @@ fun HomeScreenWithRequest(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "👋 Welcome back, ${teacher?.name ?: "Teacher"}!",
+                            text = stringResource(R.string.welcome_back_message) + ", ${teacher?.name ?: stringResource(R.string.teacher)}!",
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold
                         )
@@ -350,7 +350,7 @@ fun HomeScreenWithRequest(
                 
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Tap to view/edit your profile",
+                    text = stringResource(R.string.tap_to_view_profile),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -375,7 +375,7 @@ fun HomeScreenWithRequest(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "📄 Your Transfer Request",
+                            text = "📄 ${stringResource(R.string.your_transfer_request_title)}",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )

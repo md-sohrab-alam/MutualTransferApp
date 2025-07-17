@@ -52,14 +52,15 @@ class MoreViewModel @Inject constructor() : BaseViewModel() {
         // Get current language setting before clearing
         val sharedPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
         val currentLanguage = sharedPrefs.getString("language_code", "en")
-        
+
         // Clear all SharedPreferences
-        sharedPrefs.edit().clear().apply()
-        
-        // Restore language setting
-        sharedPrefs.edit().putString("language_code", currentLanguage).apply()
-        
-        // Clear any other user-specific data
+        sharedPrefs.edit().clear().commit() // Use commit to ensure it's written immediately
+
+        // Restore language setting immediately
+        sharedPrefs.edit().putString("language_code", currentLanguage).commit()
+
+        // Debug log
+        android.util.Log.d("MoreViewModel", "Restored language_code after clearing: $currentLanguage")
         // You can add more cleanup here as needed
     }
 } 

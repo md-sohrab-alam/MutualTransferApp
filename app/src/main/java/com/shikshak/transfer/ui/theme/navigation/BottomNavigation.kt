@@ -5,8 +5,10 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.shikshak.transfer.R
 
 @Composable
 fun BottomNavigation(
@@ -17,8 +19,8 @@ fun BottomNavigation(
     NavigationBar {
         BottomNavigationItems.values().forEach { item ->
             NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = item.title) },
-                label = { Text(item.title) },
+                icon = { Icon(item.icon, contentDescription = stringResource(item.titleResId)) },
+                label = { Text(stringResource(item.titleResId)) },
                 selected = currentRoute == item.route,
                 onClick = {
                     if (currentRoute != item.route) {
@@ -42,12 +44,12 @@ fun BottomNavigation(
 
 enum class BottomNavigationItems(
     val route: String,
-    val title: String,
+    val titleResId: Int,
     val icon: ImageVector
 ) {
-    HOME(Routes.Home, "Home", Icons.Default.Home),
-    PROFILE(Routes.Profile, "My Profile", Icons.Default.Person),
-    REQUEST(Routes.Request, "My Request", Icons.Default.List),
-    UPDATES(Routes.Updates, "Updates", Icons.Default.Notifications),
-    MORE(Routes.More, "More", Icons.Default.Menu)
+    HOME(Routes.Home, R.string.home, Icons.Default.Home),
+    PROFILE(Routes.Profile, R.string.profile, Icons.Default.Person),
+    REQUEST(Routes.Request, R.string.request, Icons.Default.List),
+    UPDATES(Routes.Updates, R.string.updates, Icons.Default.Notifications),
+    MORE(Routes.More, R.string.more, Icons.Default.Menu)
 } 

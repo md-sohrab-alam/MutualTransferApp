@@ -51,7 +51,6 @@ fun LanguageSelectorScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        
         // Subtitle
         Text(
             text = stringResource(R.string.app_subtitle),
@@ -138,17 +137,20 @@ fun LanguageSelectorScreen(
             onClick = {
                 Timber.d("Continue button clicked with language: $selectedLanguage")
                 
-                // Save language preference
+                // Save language preference with commit to ensure immediate write
                 val sharedPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-                sharedPrefs.edit().putString("language_code", selectedLanguage).apply()
-                Timber.d("Language preference saved: $selectedLanguage")
+                val success = sharedPrefs.edit().putString("language_code", selectedLanguage).commit()
+                Timber.d("Language preference saved: $selectedLanguage, success: $success")
                 
                 // Force complete app restart to ensure language change
                 activity?.let { act ->
+                    // Create a new intent to restart the app completely
                     val intent = act.packageManager.getLaunchIntentForPackage(act.packageName)
                     intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    
+                    // Start the new activity and finish the current one
                     act.startActivity(intent)
                     act.finish()
                 }
