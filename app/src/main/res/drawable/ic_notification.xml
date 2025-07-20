@@ -1,0 +1,48 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- Left Human Figure (simplified) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M6,8C6,6.9 6.9,6 8,6C9.1,6 10,6.9 10,8C10,9.1 9.1,10 8,10C6.9,10 6,9.1 6,8Z" />
+    
+    <!-- Left Figure Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M7.5,10L7.5,16C7.5,16.8 8.2,17.5 9,17.5C9.8,17.5 10.5,16.8 10.5,16L10.5,10Z" />
+    
+    <!-- Right Human Figure (simplified) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14,8C14,6.9 14.9,6 16,6C17.1,6 18,6.9 18,8C18,9.1 17.1,10 16,10C14.9,10 14,9.1 14,8Z" />
+    
+    <!-- Right Figure Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M15.5,10L15.5,16C15.5,16.8 16.2,17.5 17,17.5C17.8,17.5 18.5,16.8 18.5,16L18.5,10Z" />
+    
+    <!-- Bidirectional Arrows -->
+    <!-- Left to Right Arrow -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M11,8L13,8M13,8L12.5,7.5M13,8L12.5,8.5"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFFFFF" />
+    
+    <!-- Right to Left Arrow -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M13,8L11,8M11,8L11.5,7.5M11,8L11.5,8.5"
+        android:strokeWidth="1.5"
+        android:strokeColor="#FFFFFF" />
+    
+    <!-- Connection Line -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M11,8L13,8"
+        android:strokeWidth="1"
+        android:strokeColor="#FFFFFF" />
+</vector> 
