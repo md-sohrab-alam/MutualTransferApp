@@ -22,4 +22,7 @@ object Routes {
     const val CreateRequest = "create_request"
     const val EditRequest = "edit_request"
     const val RequestStatus = "request_status"
+    
+    // Notification Routes
+    const val NotificationDetail = "notification_detail"
 }

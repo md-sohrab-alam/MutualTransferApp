@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,9 +55,8 @@ class UpdatesViewModel @Inject constructor() : ViewModel() {
                             Timber.d("Real-time processing document: ${document.id}")
                             Timber.d("Document data: ${document.data}")
                             
-                            val notification = document.toObject(NotificationItem::class.java)
+                            val notification = NotificationItem.fromDocument(document)
                             if (notification != null) {
-                                notification.id = document.id
                                 notificationList.add(notification)
                                 Timber.d("Real-time loaded notification: ${notification.title}, isRead: ${notification.isRead}, ID: ${notification.id}")
                             } else {
@@ -94,10 +92,13 @@ class UpdatesViewModel @Inject constructor() : ViewModel() {
                                 id = document.id,
                                 title = data["title"] as? String ?: "",
                                 message = data["message"] as? String ?: "",
-                                timestamp = (data["timestamp"] as? Long) ?: System.currentTimeMillis(),
+                                timestamp = ((data["timestamp"]) ?: System.currentTimeMillis().toString()).toString(),
                                 isRead = (data["isRead"] as? Boolean) ?: false,
                                 type = data["type"] as? String ?: "general",
-                                data = (data["data"] as? Map<String, String>) ?: emptyMap()
+                                data = (data["data"] as? Map<String, String>) ?: emptyMap(),
+                                imageUri = data["imageUri"] as? String,
+                                linkUrl = data["linkUrl"] as? String,
+                                fullContent = data["fullContent"] as? String
                             )
                             generalNotifications.add(notification)
                             Timber.d("General notification loaded: ${notification.title}")
@@ -151,9 +152,8 @@ class UpdatesViewModel @Inject constructor() : ViewModel() {
                                 Timber.d("Processing document: ${document.id}")
                                 Timber.d("Document data: ${document.data}")
                                 
-                                val notification = document.toObject(NotificationItem::class.java)
+                                val notification = NotificationItem.fromDocument(document)
                                 if (notification != null) {
-                                    notification.id = document.id
                                     notificationList.add(notification)
                                     Timber.d("Loaded notification: ${notification.title}, isRead: ${notification.isRead}, ID: ${notification.id}")
                                 } else {

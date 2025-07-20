@@ -84,6 +84,12 @@ dependencies {
     
     // Accompanist for SwipeRefresh
     implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
+    
+    // Coil for image loading
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // Material Icons Extended for Compose
+    implementation("androidx.compose.material:material-icons-extended")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

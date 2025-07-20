@@ -36,7 +36,10 @@ import com.shikshak.transfer.ui.theme.splash.SplashScreen
 import com.shikshak.transfer.ui.theme.language.LanguageSelectorScreen
 import com.shikshak.transfer.ui.theme.more.MoreScreen
 import com.shikshak.transfer.ui.theme.updates.UpdatesScreen
+import com.shikshak.transfer.ui.theme.updates.NotificationDetailScreen
+import com.shikshak.transfer.ui.theme.updates.UpdatesViewModel
 import android.content.Context
+import timber.log.Timber
 
 @Composable
 fun AppNavHost(
@@ -56,30 +59,41 @@ fun AppNavHost(
     // Handle notification navigation
     LaunchedEffect(initialNotificationType, initialNotificationAction) {
         if (initialNotificationType != null && sharedViewModel.isProfileComplete()) {
+            Timber.d("=== NOTIFICATION NAVIGATION ===")
+            Timber.d("Notification type: $initialNotificationType")
+            Timber.d("Notification action: $initialNotificationAction")
+            Timber.d("Profile complete: ${sharedViewModel.isProfileComplete()}")
+            
             // Navigate based on notification action
             when (initialNotificationAction) {
                 "navigate_to_home" -> {
+                    Timber.d("Navigating to Home")
                     navController.navigate(Routes.Home) {
                         popUpTo(Routes.Home) { inclusive = false }
                     }
                 }
                 "navigate_to_request" -> {
+                    Timber.d("Navigating to Request")
                     navController.navigate(Routes.Request) {
                         popUpTo(Routes.Home) { inclusive = false }
                     }
                 }
                 "navigate_to_updates" -> {
+                    Timber.d("Navigating to Updates")
                     navController.navigate(Routes.Updates) {
                         popUpTo(Routes.Home) { inclusive = false }
                     }
                 }
                 else -> {
                     // Default to Updates tab
+                    Timber.d("Default navigation to Updates")
                     navController.navigate(Routes.Updates) {
                         popUpTo(Routes.Home) { inclusive = false }
                     }
                 }
             }
+        } else {
+            Timber.d("Notification navigation skipped - type: $initialNotificationType, profile complete: ${sharedViewModel.isProfileComplete()}")
         }
     }
 
@@ -192,8 +206,44 @@ fun AppNavHost(
                                     // User can navigate back to Home manually
                                 }
                             }
+                        },
+                        onNotificationDetailClick = { notification ->
+                            // Navigate to notification detail screen
+                            navController.navigate("${Routes.NotificationDetail}/${notification.id}") {
+                                launchSingleTop = true
+                            }
                         }
                     )
+                }
+                
+                composable(
+                    route = "${Routes.NotificationDetail}/{notificationId}"
+                ) { backStackEntry ->
+                    val notificationId = backStackEntry.arguments?.getString("notificationId") ?: ""
+                    val viewModel = hiltViewModel<UpdatesViewModel>()
+                    val notifications by viewModel.notifications.collectAsState()
+                    
+                    val notification = notifications.find { it.id == notificationId }
+                    
+                    if (notification != null) {
+                        NotificationDetailScreen(
+                            notification = notification,
+                            onBackClick = {
+                                navController.popBackStack()
+                            },
+                            onMarkAsRead = { id ->
+                                viewModel.markAsRead(id)
+                            }
+                        )
+                    } else {
+                        // Show loading or error state
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
                 }
                 
                 composable(Routes.More) {

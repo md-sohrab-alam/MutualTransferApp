@@ -13,14 +13,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +32,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.shikshak.transfer.R
+import coil.compose.AsyncImage
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,7 +40,8 @@ import java.util.*
 @Composable
 fun UpdatesScreen(
     viewModel: UpdatesViewModel = hiltViewModel(),
-    onNotificationTap: ((NotificationItem) -> Unit)? = null
+    onNotificationTap: ((NotificationItem) -> Unit)? = null,
+    onNotificationDetailClick: ((NotificationItem) -> Unit)? = null
 ) {
     val notifications by viewModel.notifications.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -233,8 +238,22 @@ fun UpdatesScreen(
                         NotificationCard(
                             notification = notification,
                             onNotificationClick = { 
+                                // Mark as read immediately when clicked
                                 viewModel.markAsRead(notification.id)
                                 onNotificationTap?.invoke(notification)
+                            },
+                            onDetailClick = {
+                                // Mark as read and open detail screen
+                                viewModel.markAsRead(notification.id)
+                                onNotificationDetailClick?.invoke(notification)
+                            },
+                            onLinkClick = { url ->
+                                try {
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                    context.startActivity(intent)
+                                } catch (e: Exception) {
+                                    // Handle invalid URL
+                                }
                             }
                         )
                     }
@@ -248,16 +267,31 @@ fun UpdatesScreen(
 @Composable
 private fun NotificationCard(
     notification: NotificationItem,
-    onNotificationClick: () -> Unit
+    onNotificationClick: () -> Unit,
+    onDetailClick: () -> Unit,
+    onLinkClick: (String) -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        onClick = onNotificationClick
+        onClick = onDetailClick
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
+            // Image if available
+            notification.imageUri?.let { imageUri ->
+                AsyncImage(
+                    model = imageUri,
+                    contentDescription = "Notification image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .padding(bottom = 12.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -269,18 +303,56 @@ private fun NotificationCard(
                     Text(
                         text = notification.title,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
                     
                     Spacer(modifier = Modifier.height(4.dp))
                     
+                    // Truncated message with "Read more" option
+                    val message = notification.fullContent ?: notification.message
+                    val isLongMessage = message.length > 150
+                    val displayMessage = if (isLongMessage) {
+                        message.take(150) + "..."
+                    } else {
+                        message
+                    }
+                    
                     Text(
-                        text = notification.message,
+                        text = displayMessage,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = if (isLongMessage) 3 else Int.MAX_VALUE,
+                        overflow = TextOverflow.Ellipsis
                     )
                     
+                    // Show "Read more" for long messages
+                    if (isLongMessage) {
+                        TextButton(
+                            onClick = onDetailClick,
+                            modifier = Modifier.padding(top = 4.dp)
+                        ) {
+                            Text("Read more")
+                        }
+                    }
+                    
                     Spacer(modifier = Modifier.height(8.dp))
+                    
+                    // Link button if available
+                    notification.linkUrl?.let { url ->
+                        OutlinedButton(
+                            onClick = { onLinkClick(url) },
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        ) {
+                            Icon(
+                                Icons.Filled.OpenInNew,
+                                contentDescription = "Open link",
+                                modifier = Modifier.padding(end = 4.dp)
+                            )
+                            Text("Open Link")
+                        }
+                    }
                     
                     Text(
                         text = formatDate(notification.timestamp),
@@ -289,6 +361,7 @@ private fun NotificationCard(
                     )
                 }
                 
+                // New badge - only show if not read
                 if (!notification.isRead) {
                     Badge(
                         containerColor = MaterialTheme.colorScheme.primary
@@ -304,8 +377,9 @@ private fun NotificationCard(
     }
 }
 
-private fun formatDate(timestamp: Long): String {
-    val date = Date(timestamp)
+private fun formatDate(timestamp: String?): String {
+    val timestampLong = timestamp?.toLongOrNull() ?: System.currentTimeMillis()
+    val date = Date(timestampLong)
     val formatter = SimpleDateFormat("MMM dd, yyyy 'at' HH:mm", Locale.getDefault())
     return formatter.format(date)
 } 

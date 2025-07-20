@@ -72,21 +72,5 @@ class MutualTransferApp : Application() {
         // Use the modern approach for updating configuration
         val config = Configuration(resources.configuration)
         config.setLocale(locale)
-        
-        // Create a new context with the updated configuration
-        val newContext = createConfigurationContext(config)
-        
-        // Update the base context
-        try {
-            val baseContextField = Context::class.java.getDeclaredField("mBase")
-            baseContextField.isAccessible = true
-            baseContextField.set(this, newContext)
-            Timber.d("Successfully updated base context with locale: ${locale.language}")
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to update base context")
-        }
-        
-        // Remove deprecated updateConfiguration call
-        // resources.updateConfiguration(config, resources.displayMetrics)
     }
 }
