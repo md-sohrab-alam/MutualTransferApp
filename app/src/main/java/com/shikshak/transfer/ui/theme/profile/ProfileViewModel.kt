@@ -12,6 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor() : BaseViewModel() {
     private val db = Firebase.firestore
+    private var currentTeacher: Teacher? = null
 
     fun saveTeacherProfile(teacher: Teacher, onSuccess: () -> Unit = {}) {
         updateLoadingState(true)
@@ -32,9 +33,12 @@ class ProfileViewModel @Inject constructor() : BaseViewModel() {
                 updateLoadingState(false)
                 if (document.exists()) {
                     val teacher = document.toObject(Teacher::class.java) ?: Teacher()
+                    currentTeacher = teacher
                     onLoaded(teacher)
                 } else {
-                    onLoaded(Teacher())
+                    val teacher = Teacher()
+                    currentTeacher = teacher
+                    onLoaded(teacher)
                 }
             }
             .addOnFailureListener { exception ->
@@ -42,4 +46,7 @@ class ProfileViewModel @Inject constructor() : BaseViewModel() {
                 handleFirestoreError(exception)
             }
     }
+    
+    fun getCurrentTeacher(): Teacher? = currentTeacher
+    
 }

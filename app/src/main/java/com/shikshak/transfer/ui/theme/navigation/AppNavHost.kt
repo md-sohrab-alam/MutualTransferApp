@@ -330,6 +330,27 @@ fun AppNavHost(
                     )
                 }
                 
+                // Profile Detail Route
+                composable(
+                    route = "${Routes.ProfileDetail}/{teacherId}"
+                ) { backStackEntry ->
+                    val teacherId = backStackEntry.arguments?.getString("teacherId") ?: ""
+                    if (teacherId.isNotEmpty()) {
+                        com.shikshak.transfer.ui.theme.profile.ProfileDetailScreen(
+                            teacherId = teacherId,
+                            navController = navController
+                        )
+                    } else {
+                        // Show error state
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+                
                 // Auth routes should not be in the main navigation with bottom bar
                 // They are handled in the else block below
                 

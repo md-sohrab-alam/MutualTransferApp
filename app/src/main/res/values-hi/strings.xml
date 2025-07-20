@@ -122,7 +122,7 @@
     <string name="home">होम</string>
     <string name="profile">मेरा प्रोफाइल</string>
     <string name="request">मेरा अनुरोध</string>
-    <string name="updates">सूचनाएं</string>
+    <string name="updates">सूचना</string>
     <string name="more">अधिक</string>
     
     <!-- Request Screen -->
@@ -155,8 +155,8 @@
     <string name="logout_subtitle">अपने खाते से साइन आउट करें</string>
     
     <!-- About Dialog -->
-    <string name="about_dialog_title">म्यूचुअल ट्रांसफर ऐप के बारे में</string>
-    <string name="about_dialog_content">यह ऐप बिहार, भारत के शिक्षकों को म्यूचुअल ट्रांसफर के अवसर खोजने में मदद करता है। शिक्षक ट्रांसफर अनुरोध बना सकते हैं, मिलान वाले अनुरोध देख सकते हैं, और म्यूचुअल ट्रांसफर के लिए अन्य शिक्षकों से जुड़ सकते हैं।\n\nविशेषताएं:\n• ट्रांसफर अनुरोध बनाएं\n• मिलान वाले अनुरोध देखें\n• शिक्षक प्रोफाइल प्रबंधित करें\n• फ़िल्टर और खोज विकल्प\n\nबिहार के शिक्षा समुदाय के लिए विकसित।\n\n📱 ऐप जानकारी:\nसंस्करण: 1.0.0\nबिहार शिक्षकों के लिए म्यूचुअल ट्रांसफर ऐप</string>
+    <string name="about_dialog_title">इस ऐप के बारे में</string>
+    <string name="about_dialog_content">ऐप का नाम: MutualTransfer – बिहार शिक्षक आपसी तबादला\nसंस्करण: 1.0.0\nडेवलपर: सोहराब टेक सॉल्यूशंस\nईमेल: iamsohrabalam@gmail.com\n\n📢 अस्वीकरण:\nयह एप्लिकेशन बिहार सरकार या किसी आधिकारिक शिक्षा विभाग से संबद्ध नहीं है। यह एक स्वतंत्र प्लेटफॉर्म है जो बिहार सरकार के स्कूल शिक्षकों को आपसी तबादले के लिए एक-दूसरे से आसानी से जुड़ने में मदद करने के लिए बनाया गया है।\n\nसभी जानकारी उपयोगकर्ता द्वारा प्रस्तुत की गई है, और जबकि हम सटीकता बनाए रखने का प्रयास करते हैं, हम तबादले से संबंधित डेटा की स correctness की गारंटी नहीं देते या जिम्मेदारी नहीं लेते।\n\nकिसी भी तबादले के लिए आगे बढ़ने से पहले हमेशा आधिकारिक चैनलों या अपने जिला शिक्षा कार्यालय से पुष्टि करें।\n\n📄 गोपनीयता और डेटा नीति:\nहम केवल आवश्यक जानकारी (जैसे नाम, स्कूल, जिला) एकत्र करते हैं ताकि आपसी मिलान को सुविधाजनक बनाया जा सके।\nआपका डेटा किसी तृतीय पक्ष के साथ साझा नहीं किया जाता है और Firebase पर सुरक्षित रहता है।</string>
     
     <!-- Logout Dialog -->
     <string name="confirm_logout_title">लॉगआउट की पुष्टि करें</string>
@@ -261,5 +261,59 @@
     <string name="notification_type_transfer">ट्रांसफर अपडेट</string>
     <string name="notification_type_general">सामान्य अपडेट</string>
     <string name="notification_type_system">सिस्टम संदेश</string>
+    
+    <!-- Profile Detail Screen -->
+    <string name="teacher_profile">शिक्षक प्रोफाइल</string>
+    <string name="transfer_preferences">स्थानांतरण प्राथमिकताएं</string>
+    <string name="match_compatibility">मैच अनुकूलता</string>
+    <string name="contact_information">संपर्क जानकारी</string>
+    <string name="call_teacher">शिक्षक को कॉल करें</string>
+    <string name="send_email">ईमेल भेजें</string>
+    <string name="share_profile">प्रोफाइल साझा करें</string>
+    <string name="tap_card_hint">पूरा प्रोफाइल देखने के लिए कार्ड पर टैप करें</string>
+    <string name="compatibility_score">अनुकूलता स्कोर</string>
+    <string name="matching_factors">मैचिंग कारक</string>
+    <string name="preferred_districts">पसंदीदा जिले</string>
+    <string name="preferred_blocks">पसंदीदा ब्लॉक</string>
+    <string name="willing_to_move">स्थानांतरण के लिए तैयार</string>
+    <string name="contact_preference">संपर्क प्राथमिकता</string>
+    
+    <!-- Rate App -->
+    <string name="rate_app">ऐप रेट करें</string>
+    <string name="rate_app_subtitle">Google Play Store पर हमें रेट करें</string>
+    
+    <!-- Form Labels -->
+    <string name="personal_information">व्यक्तिगत जानकारी</string>
+    <string name="professional_information">पेशेवर जानकारी</string>
+    <string name="school_information">स्कूल जानकारी</string>
+    <string name="district_label">जिला</string>
+    <string name="block_label">ब्लॉक</string>
+    
+    <!-- Profile View Labels -->
+    <string name="profile_information">प्रोफाइल जानकारी</string>
+    <string name="name_label">नाम</string>
+    <string name="mobile_label">मोबाइल</string>
+    <string name="school_label">स्कूल</string>
+    <string name="contact_allowed_label">संपर्क की अनुमति</string>
+    <string name="yes">हाँ</string>
+    <string name="no">नहीं</string>
+    
+    <!-- Share Utils -->
+    <string name="shared_via_app">म्यूचुअल ट्रांसफर ऐप के माध्यम से साझा किया गया</string>
+    <string name="mutual_transfer_match">म्यूचुअल ट्रांसफर मैच</string>
+    <string name="share_via">इसके माध्यम से साझा करें</string>
+    
+    <!-- Match Quality -->
+    <string name="perfect_match">पूर्ण मैच</string>
+    <string name="excellent_match">उत्कृष्ट मैच</string>
+    <string name="good_match">अच्छा मैच</string>
+    <string name="compatible_match">संगत मैच</string>
+    <string name="basic_match">बुनियादी मैच</string>
+    
+    <!-- Validation Messages -->
+    <string name="no_preferred_districts_selected">कोई पसंदीदा जिला चयनित नहीं किया गया</string>
+    <string name="post_level_not_specified">पद स्तर निर्दिष्ट नहीं किया गया</string>
+    <string name="designation_not_specified">पदनाम निर्दिष्ट नहीं किया गया</string>
+    <string name="subject_required_for_secondary">माध्यमिक/उच्च माध्यमिक स्तर के लिए विषय आवश्यक है</string>
     
 </resources> 

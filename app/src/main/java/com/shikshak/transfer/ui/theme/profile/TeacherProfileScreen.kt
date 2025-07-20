@@ -25,6 +25,137 @@ import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
 import com.shikshak.transfer.ui.theme.data.Blocks
 import androidx.compose.runtime.collectAsState
 import com.shikshak.transfer.R
+import com.shikshak.transfer.ui.theme.utils.LanguageUtils
+
+// Data classes for bilingual support
+data class PostLevel(
+    val english: String,
+    val hindi: String,
+    val designations: List<Designation>,
+    val subjects: List<Subject>
+)
+
+data class Designation(
+    val english: String,
+    val hindi: String
+)
+
+data class Subject(
+    val english: String,
+    val hindi: String
+)
+
+// Bilingual data structure
+private val postLevelsData = listOf(
+    PostLevel(
+        english = "Primary (Classes I–V)",
+        hindi = "प्राथमिक (कक्षा 1 से 5)",
+        designations = listOf(
+            Designation("Primary Teacher (PRT)", "प्राथमिक शिक्षक (PRT)"),
+            Designation("Headmaster", "प्रधानाध्यापक"),
+            Designation("Special Education Teacher", "विशेष शिक्षा शिक्षक")
+        ),
+        subjects = listOf(
+            Subject("All Subjects", "सभी विषय"),
+            Subject("Hindi", "हिंदी"),
+            Subject("English", "अंग्रेज़ी"),
+            Subject("Mathematics", "गणित"),
+            Subject("Environmental Studies", "पर्यावरण अध्ययन"),
+            Subject("General Science", "सामान्य विज्ञान"),
+            Subject("Social Studies", "सामाजिक अध्ययन"),
+            Subject("Urdu", "उर्दू"),
+            Subject("Bengali", "बंगाली"),
+            Subject("Sanskrit", "संस्कृत"),
+            Subject("Physical Education", "शारीरिक शिक्षा"),
+            Subject("Music", "संगीत"),
+            Subject("Fine Arts", "चित्रकला"),
+            Subject("Dance", "नृत्य")
+        )
+    ),
+    PostLevel(
+        english = "Upper Primary (Classes VI–VIII)",
+        hindi = "उच्च प्राथमिक (कक्षा 6 से 8)",
+        designations = listOf(
+            Designation("Trained Graduate Teacher (TGT)", "प्रशिक्षित स्नातक शिक्षक (TGT)"),
+            Designation("Headmaster", "प्रधानाध्यापक"),
+            Designation("Physical Education Teacher (PT)", "शारीरिक शिक्षा शिक्षक (PT)"),
+            Designation("Special Education Teacher", "विशेष शिक्षा शिक्षक")
+        ),
+        subjects = listOf(
+            Subject("Hindi", "हिंदी"),
+            Subject("English", "अंग्रेज़ी"),
+            Subject("Mathematics", "गणित"),
+            Subject("Science", "विज्ञान"),
+            Subject("Social Science", "सामाजिक विज्ञान"),
+            Subject("Urdu", "उर्दू"),
+            Subject("Bengali", "बंगाली"),
+            Subject("Sanskrit", "संस्कृत"),
+            Subject("Physical Education", "शारीरिक शिक्षा"),
+            Subject("Music", "संगीत"),
+            Subject("Fine Arts", "चित्रकला"),
+            Subject("Dance", "नृत्य")
+        )
+    ),
+    PostLevel(
+        english = "Secondary (Classes IX–X)",
+        hindi = "माध्यमिक (कक्षा 9 से 10)",
+        designations = listOf(
+            Designation("Trained Graduate Teacher (TGT)", "प्रशिक्षित स्नातक शिक्षक (TGT)"),
+            Designation("Headmaster", "प्रधानाध्यापक"),
+            Designation("Physical Education Teacher (PT)", "शारीरिक शिक्षा शिक्षक (PT)"),
+            Designation("Special Education Teacher", "विशेष शिक्षा शिक्षक")
+        ),
+        subjects = listOf(
+            Subject("Hindi", "हिंदी"),
+            Subject("English", "अंग्रेज़ी"),
+            Subject("Mathematics", "गणित"),
+            Subject("Physics", "भौतिकी"),
+            Subject("Chemistry", "रसायन विज्ञान"),
+            Subject("Biology", "जीवविज्ञान"),
+            Subject("History", "इतिहास"),
+            Subject("Geography", "भूगोल"),
+            Subject("Civics", "नागरिक शास्त्र"),
+            Subject("Economics", "अर्थशास्त्र"),
+            Subject("Urdu", "उर्दू"),
+            Subject("Bengali", "बंगाली"),
+            Subject("Sanskrit", "संस्कृत"),
+            Subject("Physical Education", "शारीरिक शिक्षा"),
+            Subject("Music", "संगीत"),
+            Subject("Fine Arts", "चित्रकला"),
+            Subject("Dance", "नृत्य")
+        )
+    ),
+    PostLevel(
+        english = "Senior Secondary (+2, Classes XI–XII)",
+        hindi = "उच्च माध्यमिक (+2, कक्षा 11 से 12)",
+        designations = listOf(
+            Designation("Post Graduate Teacher (PGT)", "स्नातकोत्तर शिक्षक (PGT)"),
+            Designation("Headmaster", "प्रधानाध्यापक"),
+            Designation("Physical Education Teacher (PT)", "शारीरिक शिक्षा शिक्षक (PT)"),
+            Designation("Special Education Teacher", "विशेष शिक्षा शिक्षक")
+        ),
+        subjects = listOf(
+            Subject("Hindi", "हिंदी"),
+            Subject("English", "अंग्रेज़ी"),
+            Subject("Mathematics", "गणित"),
+            Subject("Physics", "भौतिकी"),
+            Subject("Chemistry", "रसायन विज्ञान"),
+            Subject("Biology", "जीवविज्ञान"),
+            Subject("History", "इतिहास"),
+            Subject("Political Science", "राजनीति विज्ञान"),
+            Subject("Geography", "भूगोल"),
+            Subject("Economics", "अर्थशास्त्र"),
+            Subject("Psychology", "मनोविज्ञान"),
+            Subject("Philosophy", "दर्शनशास्त्र"),
+            Subject("Commerce", "वाणिज्य"),
+            Subject("Computer Science", "कंप्यूटर विज्ञान"),
+            Subject("Physical Education", "शारीरिक शिक्षा"),
+            Subject("Music", "संगीत"),
+            Subject("Fine Arts", "चित्रकला"),
+            Subject("Dance", "नृत्य")
+        )
+    )
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,7 +221,12 @@ fun TeacherProfileScreen(
                 postLevel = teacher.post
                 qualification = teacher.qualification
                 contactPreference = teacher.contactPreference
-                mobileNumber = teacher.contact.phone
+                // Use phone number from Firebase Auth if teacher profile doesn't have it
+                mobileNumber = if (teacher.contact.phone.isNotEmpty()) {
+                    teacher.contact.phone
+                } else {
+                    currentUser?.phoneNumber ?: ""
+                }
             }
         }
     }
@@ -100,7 +236,7 @@ fun TeacherProfileScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = if (isFirstLogin) completeProfileHeader else teacherProfileHeader,
+                        text = stringResource(R.string.profile),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
@@ -179,8 +315,8 @@ fun TeacherProfileScreen(
                                 qualification = qualification,
                                 contactPreference = contactPreference,
                                 contact = Contact(phone = mobileNumber),
-                                preferredDistricts = emptyList(),
-                                preferredBlocks = emptyList()
+                                preferredDistricts = viewModel.getCurrentTeacher()?.preferredDistricts ?: emptyList(),
+                                preferredBlocks = viewModel.getCurrentTeacher()?.preferredBlocks ?: emptyList()
                             )
                             viewModel.saveTeacherProfile(teacher) {
                                 onProfileSaved(teacher)
@@ -243,27 +379,28 @@ private fun EditProfileForm(
     saveChangesButton: String,
     cancelButton: String
 ) {
+    val context = LocalContext1.current
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         // Personal Information Card
         ModernCard(
-            title = "Personal Information",
+            title = stringResource(R.string.personal_information),
             icon = Icons.Default.Person
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 ModernTextField(
                     value = name,
                     onValueChange = onNameChange,
-                    label = "Full Name",
+                    label = stringResource(R.string.full_name_label),
                     icon = Icons.Default.Person
                 )
                 
                 ModernTextField(
                     value = mobileNumber,
                     onValueChange = { },
-                    label = "Mobile Number",
+                    label = stringResource(R.string.mobile_number_label),
                     icon = Icons.Default.Phone,
                     readOnly = true,
                     enabled = false
@@ -273,44 +410,40 @@ private fun EditProfileForm(
         
         // Professional Information Card
         ModernCard(
-            title = "Professional Information",
+            title = stringResource(R.string.professional_information),
             icon = Icons.Default.Work
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 ModernDropdown(
                     value = postLevel,
                     onValueChange = onPostLevelChange,
-                    label = "Post Level",
+                    label = stringResource(R.string.post_level_label),
                     icon = Icons.Default.School,
-                    options = listOf(
-                        "Primary",
-                        "Upper Primary", 
-                        "Secondary",
-                        "Higher Secondary"
-                    )
+                    options = getPostLevels(context)
                 )
                 
                 if (postLevel.isNotEmpty()) {
                     ModernDropdown(
                         value = designation,
                         onValueChange = onDesignationChange,
-                        label = "Designation",
+                        label = stringResource(R.string.designation_label),
                         icon = Icons.Default.Badge,
-                        options = getValidDesignations(postLevel)
+                        options = getValidDesignations(postLevel, context)
                     )
                 }
                 
-                ModernTextField(
+                ModernDropdown(
                     value = subject,
                     onValueChange = onSubjectChange,
-                    label = "Subject",
-                    icon = Icons.Default.Book
+                    label = stringResource(R.string.subject_label),
+                    icon = Icons.Default.Book,
+                    options = getValidSubjects(postLevel, context)
                 )
                 
                 ModernTextField(
                     value = qualification,
                     onValueChange = onQualificationChange,
-                    label = "Qualification",
+                    label = stringResource(R.string.qualification_label),
                     icon = Icons.Default.School
                 )
             }
@@ -318,21 +451,21 @@ private fun EditProfileForm(
         
         // School Information Card
         ModernCard(
-            title = "School Information",
+            title = stringResource(R.string.school_information),
             icon = Icons.Default.LocationOn
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 ModernTextField(
                     value = school,
                     onValueChange = onSchoolChange,
-                    label = "Current School Name",
+                    label = stringResource(R.string.current_school_name_label),
                     icon = Icons.Default.School
                 )
                 
                 ModernDropdown(
                     value = district,
                     onValueChange = onDistrictChange,
-                    label = "District",
+                    label = stringResource(R.string.district_label),
                     icon = Icons.Default.LocationOn,
                     options = getBiharDistricts()
                 )
@@ -341,7 +474,7 @@ private fun EditProfileForm(
                     ModernDropdown(
                         value = block,
                         onValueChange = onBlockChange,
-                        label = "Block",
+                        label = stringResource(R.string.block_label),
                         icon = Icons.Default.LocationOn,
                         options = getBlocksForDistrict(district)
                     )
@@ -351,7 +484,7 @@ private fun EditProfileForm(
         
         // Contact Preference Card
         ModernCard(
-            title = "Contact Preferences",
+            title = stringResource(R.string.contact_preference_label),
             icon = Icons.Default.Contacts
         ) {
             Row(
@@ -367,7 +500,7 @@ private fun EditProfileForm(
                         onClick = { onContactPreferenceChange(true) }
                     )
                     Text(
-                        text = "Allow contact",
+                        text = stringResource(R.string.allow_contact),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(start = 8.dp)
                     )
@@ -382,7 +515,7 @@ private fun EditProfileForm(
                         onClick = { onContactPreferenceChange(false) }
                     )
                     Text(
-                        text = "Don't allow contact",
+                        text = stringResource(R.string.dont_allow_contact),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(start = 8.dp)
                     )
@@ -439,39 +572,39 @@ private fun ViewProfileCard(
     ) {
         // Profile Header Card
         ModernCard(
-            title = "Profile Information",
+            title = stringResource(R.string.profile_information),
             icon = Icons.Default.Person
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                ProfileInfoRow("Name", name)
-                ProfileInfoRow("Mobile", mobileNumber)
-                ProfileInfoRow("Post Level", postLevel)
-                ProfileInfoRow("Designation", designation)
-                ProfileInfoRow("Subject", subject)
-                ProfileInfoRow("Qualification", qualification)
+                ProfileInfoRow(stringResource(R.string.name_label), name)
+                ProfileInfoRow(stringResource(R.string.mobile_label), mobileNumber)
+                ProfileInfoRow(stringResource(R.string.post_level_label), postLevel)
+                ProfileInfoRow(stringResource(R.string.designation_label), designation)
+                ProfileInfoRow(stringResource(R.string.subject_label), subject)
+                ProfileInfoRow(stringResource(R.string.qualification_label), qualification)
             }
         }
         
         // School Information Card
         ModernCard(
-            title = "School Information",
+            title = stringResource(R.string.school_information),
             icon = Icons.Default.LocationOn
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                ProfileInfoRow("School", school)
-                ProfileInfoRow("District", district)
-                ProfileInfoRow("Block", block)
+                ProfileInfoRow(stringResource(R.string.school_label), school)
+                ProfileInfoRow(stringResource(R.string.district_label), district)
+                ProfileInfoRow(stringResource(R.string.block_label), block)
             }
         }
         
         // Contact Preference Card
         ModernCard(
-            title = "Contact Preferences",
+            title = stringResource(R.string.contact_preference_label),
             icon = Icons.Default.Contacts
         ) {
             ProfileInfoRow(
-                "Contact Allowed",
-                if (contactPreference) "Yes" else "No"
+                stringResource(R.string.contact_allowed_label),
+                if (contactPreference) stringResource(R.string.yes) else stringResource(R.string.no)
             )
         }
         
@@ -486,7 +619,7 @@ private fun ViewProfileCard(
                 contentDescription = null,
                 modifier = Modifier.padding(end = 8.dp)
             )
-            Text("Edit Profile")
+            Text(stringResource(R.string.edit_profile_button))
         }
     }
 }
@@ -636,7 +769,7 @@ private fun ProfileInfoRow(
             fontWeight = FontWeight.Medium
         )
         Text(
-            text = value.ifEmpty { "Not set" },
+            text = value.ifEmpty { stringResource(R.string.not_set) },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Normal
@@ -644,33 +777,21 @@ private fun ProfileInfoRow(
     }
 }
 
-private fun getValidDesignations(postLevel: String): List<String> {
-    return when (postLevel) {
-        "Primary" -> listOf(
-            "Assistant Teacher (सहायक शिक्षक)",
-            "Head Teacher (प्रधानाध्यापक)",
-            "Physical Education Teacher (PET)"
-        )
-        "Upper Primary" -> listOf(
-            "Assistant Teacher (सहायक शिक्षक)",
-            "Head Teacher (प्रधानाध्यापक)",
-            "Physical Education Teacher (PET)",
-            "Art / Music Teacher"
-        )
-        "Secondary" -> listOf(
-            "Trained Graduate Teacher (TGT)",
-            "Head Teacher (प्रधानाध्यापक)",
-            "Physical Education Teacher (PET)",
-            "Art / Music Teacher"
-        )
-        "Higher Secondary" -> listOf(
-            "Post Graduate Teacher (PGT)",
-            "Lecturer (प्रवक्ता)",
-            "Head Teacher (प्रधानाध्यापक)",
-            "Physical Education Teacher (PET)",
-            "Art / Music Teacher"
-        )
-        else -> emptyList()
+private fun getValidDesignations(postLevel: String, context: android.content.Context): List<String> {
+    val isHindi = LanguageUtils.isHindi(context)
+    val postLevelData = postLevelsData.find { 
+        it.english == postLevel || it.hindi == postLevel 
+    }
+    
+    return postLevelData?.designations?.map { designation ->
+        if (isHindi) designation.hindi else designation.english
+    } ?: emptyList()
+}
+
+private fun getPostLevels(context: android.content.Context): List<String> {
+    val isHindi = LanguageUtils.isHindi(context)
+    return postLevelsData.map { postLevel ->
+        if (isHindi) postLevel.hindi else postLevel.english
     }
 }
 
@@ -690,4 +811,15 @@ private fun getBlocksForDistrict(district: String): List<String> {
     // This would typically come from a data source
     // For now, returning a sample list
     return listOf("Block 1", "Block 2", "Block 3", "Block 4", "Block 5")
+}
+
+private fun getValidSubjects(postLevel: String, context: android.content.Context): List<String> {
+    val isHindi = LanguageUtils.isHindi(context)
+    val postLevelData = postLevelsData.find { 
+        it.english == postLevel || it.hindi == postLevel 
+    }
+    
+    return postLevelData?.subjects?.map { subject ->
+        if (isHindi) subject.hindi else subject.english
+    } ?: emptyList()
 }

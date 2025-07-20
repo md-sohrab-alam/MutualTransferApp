@@ -2,6 +2,7 @@ package com.shikshak.transfer.ui.theme.more
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
@@ -62,5 +63,22 @@ class MoreViewModel @Inject constructor() : BaseViewModel() {
         // Debug log
         android.util.Log.d("MoreViewModel", "Restored language_code after clearing: $currentLanguage")
         // You can add more cleanup here as needed
+    }
+    
+    fun rateApp(context: Context) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("market://details?id=${context.packageName}")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            // Fallback to Play Store web URL if market:// scheme is not available
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("https://play.google.com/store/apps/details?id=${context.packageName}")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(intent)
+        }
     }
 } 

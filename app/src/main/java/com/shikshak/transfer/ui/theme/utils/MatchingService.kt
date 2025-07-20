@@ -2,6 +2,7 @@ package com.shikshak.transfer.ui.theme.utils
 
 import com.shikshak.transfer.ui.theme.data.Teacher
 import com.shikshak.transfer.ui.theme.data.TransferRequest
+import com.shikshak.transfer.R
 import timber.log.Timber
 
 /**
@@ -137,13 +138,13 @@ object MatchingService {
     /**
      * Get match quality description
      */
-    fun getMatchQualityDescription(score: Int): String {
+    fun getMatchQualityDescription(score: Int, context: android.content.Context): String {
         return when {
-            score >= 150 -> "Perfect Match"
-            score >= 100 -> "Excellent Match"
-            score >= 70 -> "Good Match"
-            score >= 50 -> "Compatible Match"
-            else -> "Basic Match"
+            score >= 150 -> context.getString(R.string.perfect_match)
+            score >= 100 -> context.getString(R.string.excellent_match)
+            score >= 70 -> context.getString(R.string.good_match)
+            score >= 50 -> context.getString(R.string.compatible_match)
+            else -> context.getString(R.string.basic_match)
         }
     }
     
@@ -192,24 +193,24 @@ object MatchingService {
     /**
      * Validate transfer request for matching
      */
-    fun validateTransferRequest(request: TransferRequest): List<String> {
+    fun validateTransferRequest(request: TransferRequest, context: android.content.Context): List<String> {
         val errors = mutableListOf<String>()
         
         if (request.preferredDistricts.isEmpty()) {
-            errors.add("No preferred districts selected")
+            errors.add(context.getString(R.string.no_preferred_districts_selected))
         }
         
         if (request.postLevel.isEmpty()) {
-            errors.add("Post level not specified")
+            errors.add(context.getString(R.string.post_level_not_specified))
         }
         
         if (request.designation.isEmpty()) {
-            errors.add("Designation not specified")
+            errors.add(context.getString(R.string.designation_not_specified))
         }
         
         // For secondary levels, subject is required
         if (request.postLevel in listOf("Secondary", "Higher Secondary") && request.subject.isEmpty()) {
-            errors.add("Subject is required for Secondary/Higher Secondary levels")
+            errors.add(context.getString(R.string.subject_required_for_secondary))
         }
         
         return errors

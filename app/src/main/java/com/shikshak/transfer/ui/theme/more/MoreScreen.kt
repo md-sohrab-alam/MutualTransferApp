@@ -59,6 +59,14 @@ fun MoreScreen(
             onClick = { viewModel.showAboutDialog() }
         )
         
+        // Rate App
+        MenuItem(
+            icon = "⭐",
+            title = stringResource(R.string.rate_app),
+            subtitle = stringResource(R.string.rate_app_subtitle),
+            onClick = { viewModel.rateApp(context) }
+        )
+        
         // Logout
         MenuItem(
             icon = "🚪",
@@ -66,6 +74,31 @@ fun MoreScreen(
             subtitle = stringResource(R.string.logout_subtitle),
             onClick = { showLogoutDialog = true }
         )
+        
+        // Footer
+        Spacer(modifier = Modifier.height(32.dp))
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.powered_by),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(R.string.app_footer),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
     
     // Logout Confirmation Dialog
@@ -109,9 +142,7 @@ fun MoreScreen(
                 Text("ℹ️ ${stringResource(R.string.about_dialog_title)}")
             },
             text = {
-                Column {
-                    Text(stringResource(R.string.about_dialog_content))
-                }
+                AboutDialogContent()
             },
             confirmButton = {
                 Button(
@@ -181,6 +212,71 @@ private fun MenuItem(
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        }
+    }
+}
+
+@Composable
+private fun AboutDialogContent() {
+    val context = LocalContext.current
+    val content = stringResource(R.string.about_dialog_content)
+    
+    // Split content by lines to handle email separately
+    val lines = content.split("\n")
+    
+    Column {
+        lines.forEach { line ->
+            when {
+                line.contains("iamsohrabalam@gmail.com") -> {
+                    // Make email clickable
+                    val email = "iamsohrabalam@gmail.com"
+                    val beforeEmail = line.substringBefore(email)
+                    val afterEmail = line.substringAfter(email, "")
+                    
+                    Row {
+                        if (beforeEmail.isNotEmpty()) {
+                            Text(
+                                text = beforeEmail,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                        Text(
+                            text = email,
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                color = MaterialTheme.colorScheme.primary,
+                                textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline
+                            ),
+                            modifier = Modifier.clickable {
+                                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                    data = Uri.parse("mailto:$email")
+                                    putExtra(Intent.EXTRA_SUBJECT, "MutualTransfer App Support")
+                                }
+                                try {
+                                    context.startActivity(intent)
+                                } catch (e: Exception) {
+                                    // Fallback to copy email
+                                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                                    val clip = android.content.ClipData.newPlainText("Email", email)
+                                    clipboard.setPrimaryClip(clip)
+                                    android.widget.Toast.makeText(context, "Email copied to clipboard", android.widget.Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        )
+                        if (afterEmail.isNotEmpty()) {
+                            Text(
+                                text = afterEmail,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }
+                else -> {
+                    Text(
+                        text = line,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
     }
 } 

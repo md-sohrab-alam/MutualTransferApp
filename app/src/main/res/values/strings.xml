@@ -124,7 +124,7 @@
     <string name="home">Home</string>
     <string name="profile">My Profile</string>
     <string name="request">My Request</string>
-    <string name="updates">Notifications</string>
+    <string name="updates">Notification</string>
     <string name="more">More</string>
     
     <!-- Request Screen -->
@@ -157,8 +157,8 @@
     <string name="logout_subtitle">Sign out from your account</string>
 
     <!-- About Dialog -->
-    <string name="about_dialog_title">About Mutual Transfer App</string>
-    <string name="about_dialog_content">This app helps teachers in Bihar, India to find mutual transfer opportunities. Teachers can create transfer requests, view matching requests, and connect with other teachers for mutual transfers.\n\nFeatures:\n• Create transfer requests\n• View matching requests\n• Manage teacher profiles\n• Filter and search options\n\nDeveloped for the education community of Bihar.\n\n📱 App Information:\nVersion: 1.0.0\nMutual Transfer App for Bihar Teachers</string>
+    <string name="about_dialog_title">About This App</string>
+    <string name="about_dialog_content">App Name: MutualTransfer – बिहार शिक्षक आपसी तबादला\nVersion: 1.0.0\nDeveloper: Sohrab Tech Solutions\nEmail: iamsohrabalam@gmail.com\n\n📢 Disclaimer:\nThis application is not affiliated with the Government of Bihar or any official education department. It is an independent platform created to help Bihar government school teachers connect with each other for mutual transfers more easily.\n\nAll information is user-submitted, and while we aim to maintain accuracy, we do not guarantee or take responsibility for the correctness of transfer-related data.\n\nAlways confirm with official channels or your district education office before proceeding with any transfer.\n\n📄 Privacy &amp; Data Policy:\nWe collect only necessary information (e.g., name, school, district) to facilitate mutual matching.\nYour data is not shared with any third party and remains secure on Firebase.</string>
 
     <!-- Logout Dialog -->
     <string name="confirm_logout_title">Confirm Logout</string>
@@ -266,6 +266,58 @@
     <string name="notification_type_general">General Update</string>
     <string name="notification_type_system">System Message</string>
     
-
+    <!-- Profile Detail Screen -->
+    <string name="teacher_profile">Teacher Profile</string>
+    <string name="transfer_preferences">Transfer Preferences</string>
+    <string name="match_compatibility">Match Compatibility</string>
+    <string name="contact_information">Contact Information</string>
+    <string name="call_teacher">Call Teacher</string>
+    <string name="send_email">Send Email</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="tap_card_hint">Tap card to view full profile</string>
+    <string name="compatibility_score">Compatibility Score</string>
+    <string name="matching_factors">Matching Factors</string>
+    <string name="preferred_districts">Preferred Districts</string>
+    <string name="preferred_blocks">Preferred Blocks</string>
+    <string name="willing_to_move">Willing to Move</string>
+    <string name="contact_preference">Contact Preference</string>
+    
+    <!-- Rate App -->
+    <string name="rate_app">Rate App</string>
+    <string name="rate_app_subtitle">Rate us on Google Play Store</string>
+    
+    <!-- Form Labels -->
+    <string name="personal_information">Personal Information</string>
+    <string name="professional_information">Professional Information</string>
+    <string name="school_information">School Information</string>
+    <string name="district_label">District</string>
+    <string name="block_label">Block</string>
+    
+    <!-- Profile View Labels -->
+    <string name="profile_information">Profile Information</string>
+    <string name="name_label">Name</string>
+    <string name="mobile_label">Mobile</string>
+    <string name="school_label">School</string>
+    <string name="contact_allowed_label">Contact Allowed</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    
+    <!-- Share Utils -->
+    <string name="shared_via_app">Shared via Mutual Transfer App</string>
+    <string name="mutual_transfer_match">Mutual Transfer Match</string>
+    <string name="share_via">Share via</string>
+    
+    <!-- Match Quality -->
+    <string name="perfect_match">Perfect Match</string>
+    <string name="excellent_match">Excellent Match</string>
+    <string name="good_match">Good Match</string>
+    <string name="compatible_match">Compatible Match</string>
+    <string name="basic_match">Basic Match</string>
+    
+    <!-- Validation Messages -->
+    <string name="no_preferred_districts_selected">No preferred districts selected</string>
+    <string name="post_level_not_specified">Post level not specified</string>
+    <string name="designation_not_specified">Designation not specified</string>
+    <string name="subject_required_for_secondary">Subject is required for Secondary/Higher Secondary levels</string>
     
 </resources>

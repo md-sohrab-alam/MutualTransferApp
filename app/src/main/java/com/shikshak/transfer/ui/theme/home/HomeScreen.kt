@@ -470,8 +470,12 @@ fun HomeScreenWithRequest(
                                 val intent = Intent(Intent.ACTION_DIAL).apply {
                                     data = Uri.parse("tel:${match.contact.phone}")
                                 }
-                                context.startActivity(intent)},
-                            currentRequest = transferRequest
+                                context.startActivity(intent)
+                            },
+                            currentRequest = transferRequest,
+                            onProfileClick = {
+                                navController.navigate("${Routes.ProfileDetail}/${match.uid}")
+                            }
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                     }
@@ -510,17 +514,20 @@ fun HomeScreenWithRequest(
 fun MatchCard(
     match: Teacher,
     onContact: () -> Unit,
-    currentRequest: TransferRequest? = null
+    currentRequest: TransferRequest? = null,
+    onProfileClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     val matchScore = currentRequest?.let { MatchingService.calculateRelevanceScore(match, it) } ?: 0
-    val matchQuality = MatchingService.getMatchQualityDescription(matchScore)
+    val matchQuality = MatchingService.getMatchQualityDescription(matchScore, context)
     val compatibilityDetails = currentRequest?.let { MatchingService.getMatchCompatibilityDetails(match, it) } ?: emptyList()
     
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer
-        )
+        ),
+        onClick = onProfileClick
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -602,6 +609,7 @@ fun MatchCard(
             
             Spacer(modifier = Modifier.height(16.dp))
             
+            // Contact Button
             Button(
                 onClick = onContact,
                 modifier = Modifier.fillMaxWidth(),
@@ -616,6 +624,14 @@ fun MatchCard(
                 )
                 Text("Contact Now")
             }
+            
+            // Tap hint
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.tap_card_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 } 

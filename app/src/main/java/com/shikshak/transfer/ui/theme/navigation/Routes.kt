@@ -25,4 +25,7 @@ object Routes {
     
     // Notification Routes
     const val NotificationDetail = "notification_detail"
+    
+    // Profile Detail Route
+    const val ProfileDetail = "profile_detail"
 }
