@@ -122,9 +122,9 @@
     
     <!-- Bottom Navigation -->
     <string name="home">Home</string>
-    <string name="profile">Profile</string>
-    <string name="request">Request</string>
-    <string name="updates">Updates</string>
+    <string name="profile">My Profile</string>
+    <string name="request">My Request</string>
+    <string name="updates">Notifications</string>
     <string name="more">More</string>
     
     <!-- Request Screen -->
@@ -242,20 +242,23 @@
     <string name="not_set">Not set</string>
     
     <!-- Updates Screen -->
-    <string name="updates_title">Updates</string>
+    <string name="updates_title">Notifications</string>
     <string name="notification_permission_required">Notification Permission Required</string>
     <string name="notification_permission_description">You need to allow notifications to receive updates about new matches, transfer requests, and app updates. Without this permission, you won\'t receive any notifications.</string>
     <string name="allow_notifications">Allow Notifications</string>
     <string name="open_settings">Open Settings</string>
     <string name="notification_settings">Notification Settings</string>
-    <string name="push_notifications">Push Notifications</string>
-    <string name="notification_description">Receive notifications about new matches, transfer requests, and app updates</string>
-    <string name="no_notifications">No notifications yet</string>
-    <string name="no_notifications_description">You\'ll see your notifications here when they arrive</string>
+    <string name="refresh_notifications">Refresh Notifications</string>
+    <string name="mark_all_as_read">Mark All as Read</string>
+    <string name="loading_notifications">Loading notifications...</string>
+    <string name="loading_more">Loading more...</string>
+    <string name="no_more_notifications">No more notifications</string>
+    <string name="no_notifications_yet">No notifications yet</string>
+    <string name="no_notifications_description">You\'ll see notifications here when they arrive</string>
+    <string name="read_more">Read more</string>
+    <string name="open_link">Open Link</string>
+    <string name="dismiss">Dismiss</string>
     <string name="new_badge">NEW</string>
-    <string name="clear_all_notifications">Clear All Notifications</string>
-    <string name="mark_as_read">Mark as Read</string>
-    <string name="refresh_notifications">Refresh</string>
     
     <!-- Notification Types -->
     <string name="notification_type_match">New Match</string>

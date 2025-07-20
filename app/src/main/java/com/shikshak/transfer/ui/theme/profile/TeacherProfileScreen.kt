@@ -6,10 +6,15 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -90,374 +95,79 @@ fun TeacherProfileScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        // Header
-        Text(
-            text = if (isFirstLogin) completeProfileHeader else teacherProfileHeader,
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = if (isFirstLogin) completeProfileHeader else teacherProfileHeader,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                actions = {
+                    if (!isFirstLogin && !isEditing) {
+                        IconButton(onClick = { isEditing = true }) {
+                            Icon(Icons.Default.Edit, contentDescription = "Edit Profile")
+                        }
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
         if (isLoading) {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator()
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(48.dp),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "Loading profile...",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         } else {
-            // Profile Information Display/Edit
-            if (isEditing) {
-                // Edit Mode
-                Text(
-                    text = if (isFirstLogin) completeProfileHeader else editProfileHeader,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-                
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = { Text(fullNameLabel) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // Mobile Number (Non-editable)
-                OutlinedTextField(
-                    value = mobileNumber,
-                    onValueChange = { },
-                    label = { Text(mobileNumberLabel) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    readOnly = true,
-                    enabled = false
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // Post Level Dropdown
-                var postLevelExpanded by remember { mutableStateOf(false) }
-                ExposedDropdownMenuBox(
-                    expanded = postLevelExpanded,
-                    onExpandedChange = { postLevelExpanded = it },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    OutlinedTextField(
-                        value = postLevel,
-                        onValueChange = { },
-                        readOnly = true,
-                        label = { Text(postLevelLabel) },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = postLevelExpanded) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .menuAnchor()
-                    )
-                    ExposedDropdownMenu(
-                        expanded = postLevelExpanded,
-                        onDismissRequest = { postLevelExpanded = false }
-                    ) {
-                        listOf(
-                            stringResource(R.string.post_level_primary),
-                            stringResource(R.string.post_level_upper_primary),
-                            stringResource(R.string.post_level_secondary),
-                            stringResource(R.string.post_level_higher_secondary)
-                        ).forEach { level ->
-                            DropdownMenuItem(
-                                text = { Text(level) },
-                                onClick = {
-                                    val previousPostLevel = postLevel
-                                    postLevel = level
-                                    postLevelExpanded = false
-                                    
-                                    // Clear designation if it's not valid for new post level
-                                    if (previousPostLevel != level) {
-                                        val validDesignations = when (level) {
-                                            "Primary" -> listOf(
-                                                "Assistant Teacher (सहायक शिक्षक)",
-                                                "Head Teacher (प्रधानाध्यापक)",
-                                                "Physical Education Teacher (PET)"
-                                            )
-                                            "Upper Primary" -> listOf(
-                                                "Assistant Teacher (सहायक शिक्षक)",
-                                                "Head Teacher (प्रधानाध्यापक)",
-                                                "Physical Education Teacher (PET)",
-                                                "Art / Music Teacher"
-                                            )
-                                            "Secondary" -> listOf(
-                                                "Trained Graduate Teacher (TGT)",
-                                                "Head Teacher (प्रधानाध्यापक)",
-                                                "Physical Education Teacher (PET)",
-                                                "Art / Music Teacher"
-                                            )
-                                            "Higher Secondary" -> listOf(
-                                                "Post Graduate Teacher (PGT)",
-                                                "Lecturer (प्रवक्ता)",
-                                                "Head Teacher (प्रधानाध्यापक)",
-                                                "Physical Education Teacher (PET)",
-                                                "Art / Music Teacher"
-                                            )
-                                            else -> emptyList()
-                                        }
-                                        if (!validDesignations.contains(designation)) {
-                                            designation = ""
-                                        }
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // Designation Dropdown (only if post level is selected)
-                if (postLevel.isNotEmpty()) {
-                    var designationExpanded by remember { mutableStateOf(false) }
-                    ExposedDropdownMenuBox(
-                        expanded = designationExpanded,
-                        onExpandedChange = { designationExpanded = it },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        OutlinedTextField(
-                            value = designation,
-                            onValueChange = { },
-                            readOnly = true,
-                            label = { Text(designationLabel) },
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = designationExpanded) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor()
-                        )
-                        ExposedDropdownMenu(
-                            expanded = designationExpanded,
-                            onDismissRequest = { designationExpanded = false }
-                        ) {
-                            when (postLevel) {
-                                "Primary" -> listOf(
-                                    "Assistant Teacher (सहायक शिक्षक)",
-                                    "Head Teacher (प्रधानाध्यापक)",
-                                    "Physical Education Teacher (PET)"
-                                ).forEach { designationName ->
-                                    DropdownMenuItem(
-                                        text = { Text(designationName) },
-                                        onClick = {
-                                            designation = designationName
-                                            designationExpanded = false
-                                        }
-                                    )
-                                }
-                                "Upper Primary" -> listOf(
-                                    "Assistant Teacher (सहायक शिक्षक)",
-                                    "Head Teacher (प्रधानाध्यापक)",
-                                    "Physical Education Teacher (PET)",
-                                    "Art / Music Teacher"
-                                ).forEach { designationName ->
-                                    DropdownMenuItem(
-                                        text = { Text(designationName) },
-                                        onClick = {
-                                            designation = designationName
-                                            designationExpanded = false
-                                        }
-                                    )
-                                }
-                                "Secondary" -> listOf(
-                                    "Trained Graduate Teacher (TGT)",
-                                    "Head Teacher (प्रधानाध्यापक)",
-                                    "Physical Education Teacher (PET)",
-                                    "Art / Music Teacher"
-                                ).forEach { designationName ->
-                                    DropdownMenuItem(
-                                        text = { Text(designationName) },
-                                        onClick = {
-                                            designation = designationName
-                                            designationExpanded = false
-                                        }
-                                    )
-                                }
-                                "Higher Secondary" -> listOf(
-                                    "Post Graduate Teacher (PGT)",
-                                    "Lecturer (प्रवक्ता)",
-                                    "Head Teacher (प्रधानाध्यापक)",
-                                    "Physical Education Teacher (PET)",
-                                    "Art / Music Teacher"
-                                ).forEach { designationName ->
-                                    DropdownMenuItem(
-                                        text = { Text(designationName) },
-                                        onClick = {
-                                            designation = designationName
-                                            designationExpanded = false
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                OutlinedTextField(
-                    value = subject,
-                    onValueChange = { subject = it },
-                    label = { Text(subjectLabel) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                OutlinedTextField(
-                    value = qualification,
-                    onValueChange = { qualification = it },
-                    label = { Text(qualificationLabel) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                OutlinedTextField(
-                    value = school,
-                    onValueChange = { school = it },
-                    label = { Text(currentSchoolNameLabel) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // District Dropdown
-                var districtExpanded by remember { mutableStateOf(false) }
-                ExposedDropdownMenuBox(
-                    expanded = districtExpanded,
-                    onExpandedChange = { districtExpanded = it },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    OutlinedTextField(
-                        value = district,
-                        onValueChange = { },
-                        readOnly = true,
-                        label = { Text(schoolDistrictLabel) },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = districtExpanded) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .menuAnchor()
-                    )
-                    ExposedDropdownMenu(
-                        expanded = districtExpanded,
-                        onDismissRequest = { districtExpanded = false }
-                    ) {
-                        listOf(
-                            "Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur",
-                            "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj",
-                            "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj",
-                            "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda",
-                            "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur",
-                            "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul",
-                            "Vaishali", "West Champaran"
-                        ).forEach { districtName ->
-                            DropdownMenuItem(
-                                text = { Text(districtName) },
-                                onClick = {
-                                    district = districtName
-                                    districtExpanded = false
-                                }
-                            )
-                        }
-                    }
-                }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // Block Dropdown (only if district is selected)
-                if (district.isNotEmpty()) {
-                    var blockExpanded by remember { mutableStateOf(false) }
-                    ExposedDropdownMenuBox(
-                        expanded = blockExpanded,
-                        onExpandedChange = { blockExpanded = it },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        OutlinedTextField(
-                            value = block,
-                            onValueChange = { },
-                            readOnly = true,
-                            label = { Text(schoolBlockLabel) },
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = blockExpanded) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor()
-                        )
-                        ExposedDropdownMenu(
-                            expanded = blockExpanded,
-                            onDismissRequest = { blockExpanded = false }
-                        ) {
-                            // Get blocks for selected district
-                            val blocks = Blocks.getBlocksForDistrict(district)
-                            blocks.forEach { blockName ->
-                                DropdownMenuItem(
-                                    text = { Text(blockName) },
-                                    onClick = {
-                                        block = blockName
-                                        blockExpanded = false
-                                    }
-                                )
-                            }
-                        }
-                    }
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // Contact Preference
-                Text(
-                    text = contactPreferenceLabel,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = contactPreference,
-                            onClick = { contactPreference = true }
-                        )
-                        Text(allowContact)
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = !contactPreference,
-                            onClick = { contactPreference = false }
-                        )
-                        Text(dontAllowContact)
-                    }
-                }
-                
-                Spacer(modifier = Modifier.height(24.dp))
-                
-                // Save and Cancel buttons
-                if (isFirstLogin) {
-                    // For first login, only show save button
-                    Button(
-                        onClick = {
-                            val updatedTeacher = Teacher(
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                if (isEditing) {
+                    // Edit Mode - Modern Form Design
+                    EditProfileForm(
+                        name = name,
+                        onNameChange = { name = it },
+                        mobileNumber = mobileNumber,
+                        postLevel = postLevel,
+                        onPostLevelChange = { postLevel = it },
+                        designation = designation,
+                        onDesignationChange = { designation = it },
+                        subject = subject,
+                        onSubjectChange = { subject = it },
+                        qualification = qualification,
+                        onQualificationChange = { qualification = it },
+                        school = school,
+                        onSchoolChange = { school = it },
+                        district = district,
+                        onDistrictChange = { district = it },
+                        block = block,
+                        onBlockChange = { block = it },
+                        contactPreference = contactPreference,
+                        onContactPreferenceChange = { contactPreference = it },
+                        onSave = {
+                            val teacher = Teacher(
                                 uid = currentUser?.uid ?: "",
                                 name = name,
                                 designation = designation,
@@ -468,172 +178,516 @@ fun TeacherProfileScreen(
                                 post = postLevel,
                                 qualification = qualification,
                                 contactPreference = contactPreference,
-                                contact = Contact(phone = mobileNumber)
+                                contact = Contact(phone = mobileNumber),
+                                preferredDistricts = emptyList(),
+                                preferredBlocks = emptyList()
                             )
-                            viewModel.saveTeacherProfile(updatedTeacher) {
-                                // Update the shared view model so changes are reflected immediately
-                                onProfileSaved(updatedTeacher)
-                                // Update local state with the saved data
-                                name = updatedTeacher.name
-                                designation = updatedTeacher.designation
-                                subject = updatedTeacher.subject
-                                school = updatedTeacher.schoolName
-                                district = updatedTeacher.district
-                                block = updatedTeacher.block
-                                postLevel = updatedTeacher.post
-                                qualification = updatedTeacher.qualification
-                                contactPreference = updatedTeacher.contactPreference
-                                mobileNumber = updatedTeacher.contact.phone
-                            }
-                            isEditing = false
-                            Toast.makeText(context, profileCompletedToast, Toast.LENGTH_SHORT).show()
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = !isLoading
-                    ) {
-                        if (isLoading) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(20.dp),
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                        }
-                        Text(completeProfileButton)
-                    }
-                } else {
-                    // For regular editing, show both save and cancel buttons
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Button(
-                            onClick = {
-                                val updatedTeacher = Teacher(
-                                    uid = currentUser?.uid ?: "",
-                                    name = name,
-                                    designation = designation,
-                                    subject = subject,
-                                    schoolName = school,
-                                    district = district,
-                                    block = block,
-                                    post = postLevel,
-                                    qualification = qualification,
-                                    contactPreference = contactPreference,
-                                    contact = Contact(phone = mobileNumber)
-                                )
-                                viewModel.saveTeacherProfile(updatedTeacher) {
-                                    // Update the shared view model so changes are reflected immediately
-                                    onProfileSaved(updatedTeacher)
-                                    // Update local state with the saved data
-                                    name = updatedTeacher.name
-                                    designation = updatedTeacher.designation
-                                    subject = updatedTeacher.subject
-                                    school = updatedTeacher.schoolName
-                                    district = updatedTeacher.district
-                                    block = updatedTeacher.block
-                                    postLevel = updatedTeacher.post
-                                    qualification = updatedTeacher.qualification
-                                    contactPreference = updatedTeacher.contactPreference
-                                    mobileNumber = updatedTeacher.contact.phone
-                                }
-                                isEditing = false
+                            viewModel.saveTeacherProfile(teacher) {
+                                onProfileSaved(teacher)
                                 Toast.makeText(context, profileUpdatedToast, Toast.LENGTH_SHORT).show()
-                            },
-                            modifier = Modifier.weight(1f),
-                            enabled = !isLoading
-                        ) {
-                            if (isLoading) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(20.dp),
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
+                                isEditing = false
                             }
-                            Text(saveChangesButton)
-                        }
-                        
-                        OutlinedButton(
-                            onClick = { isEditing = false },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(cancelButton)
-                        }
-                    }
-                }
-            } else {
-                
-                // Profile Card
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        ProfileInfoRow(fullNameLabel, name.ifBlank { notSet })
-                        ProfileInfoRow(mobileNumberLabel, mobileNumber.ifBlank { notSet })
-                        ProfileInfoRow(currentSchoolNameLabel, school.ifBlank { notSet })
-                        ProfileInfoRow(schoolDistrictLabel, district.ifBlank { notSet })
-                        ProfileInfoRow(schoolBlockLabel, block.ifBlank { notSet })
-                        ProfileInfoRow(postLevelLabel, postLevel.ifBlank { notSet })
-                        ProfileInfoRow(subjectLabel, subject.ifBlank { notSet })
-                        ProfileInfoRow(designationLabel, designation.ifBlank { notSet })
-                        ProfileInfoRow(qualificationLabel, qualification.ifBlank { notSet })
-                        ProfileInfoRow(contactPreferenceLabel, if (contactPreference) allowContact else dontAllowContact)
-                    }
-                }
-                
-                Spacer(modifier = Modifier.height(24.dp))
-                
-                // Action Buttons
-                if (isFirstLogin) {
-                    // For first login, automatically start editing
-                    LaunchedEffect(Unit) {
-                        isEditing = true
-                    }
+                        },
+                        onCancel = { isEditing = false },
+                        isFirstLogin = isFirstLogin,
+                        completeProfileButton = completeProfileButton,
+                        saveChangesButton = saveChangesButton,
+                        cancelButton = cancelButton
+                    )
                 } else {
-                    // For regular profile, show edit button
-                    Button(
-                        onClick = { isEditing = true },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(editProfileButton)
-                    }
+                    // View Mode - Modern Card Design
+                    ViewProfileCard(
+                        name = name,
+                        mobileNumber = mobileNumber,
+                        postLevel = postLevel,
+                        designation = designation,
+                        subject = subject,
+                        qualification = qualification,
+                        school = school,
+                        district = district,
+                        block = block,
+                        contactPreference = contactPreference,
+                        onEditClick = { isEditing = true }
+                    )
                 }
             }
         }
     }
+}
 
-    // Show error dialog if there's an error
-    if (viewModel.showErrorDialog.value && viewModel.errorMessage.value != null) {
-        ErrorAlertDialog(
-            showDialog = viewModel.showErrorDialog,
-            message = viewModel.errorMessage.value!!,
-            onDismiss = {
-                viewModel.clearError()
+@Composable
+private fun EditProfileForm(
+    name: String,
+    onNameChange: (String) -> Unit,
+    mobileNumber: String,
+    postLevel: String,
+    onPostLevelChange: (String) -> Unit,
+    designation: String,
+    onDesignationChange: (String) -> Unit,
+    subject: String,
+    onSubjectChange: (String) -> Unit,
+    qualification: String,
+    onQualificationChange: (String) -> Unit,
+    school: String,
+    onSchoolChange: (String) -> Unit,
+    district: String,
+    onDistrictChange: (String) -> Unit,
+    block: String,
+    onBlockChange: (String) -> Unit,
+    contactPreference: Boolean,
+    onContactPreferenceChange: (Boolean) -> Unit,
+    onSave: () -> Unit,
+    onCancel: () -> Unit,
+    isFirstLogin: Boolean,
+    completeProfileButton: String,
+    saveChangesButton: String,
+    cancelButton: String
+) {
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        // Personal Information Card
+        ModernCard(
+            title = "Personal Information",
+            icon = Icons.Default.Person
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                ModernTextField(
+                    value = name,
+                    onValueChange = onNameChange,
+                    label = "Full Name",
+                    icon = Icons.Default.Person
+                )
+                
+                ModernTextField(
+                    value = mobileNumber,
+                    onValueChange = { },
+                    label = "Mobile Number",
+                    icon = Icons.Default.Phone,
+                    readOnly = true,
+                    enabled = false
+                )
             }
-        )
+        }
+        
+        // Professional Information Card
+        ModernCard(
+            title = "Professional Information",
+            icon = Icons.Default.Work
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                ModernDropdown(
+                    value = postLevel,
+                    onValueChange = onPostLevelChange,
+                    label = "Post Level",
+                    icon = Icons.Default.School,
+                    options = listOf(
+                        "Primary",
+                        "Upper Primary", 
+                        "Secondary",
+                        "Higher Secondary"
+                    )
+                )
+                
+                if (postLevel.isNotEmpty()) {
+                    ModernDropdown(
+                        value = designation,
+                        onValueChange = onDesignationChange,
+                        label = "Designation",
+                        icon = Icons.Default.Badge,
+                        options = getValidDesignations(postLevel)
+                    )
+                }
+                
+                ModernTextField(
+                    value = subject,
+                    onValueChange = onSubjectChange,
+                    label = "Subject",
+                    icon = Icons.Default.Book
+                )
+                
+                ModernTextField(
+                    value = qualification,
+                    onValueChange = onQualificationChange,
+                    label = "Qualification",
+                    icon = Icons.Default.School
+                )
+            }
+        }
+        
+        // School Information Card
+        ModernCard(
+            title = "School Information",
+            icon = Icons.Default.LocationOn
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                ModernTextField(
+                    value = school,
+                    onValueChange = onSchoolChange,
+                    label = "Current School Name",
+                    icon = Icons.Default.School
+                )
+                
+                ModernDropdown(
+                    value = district,
+                    onValueChange = onDistrictChange,
+                    label = "District",
+                    icon = Icons.Default.LocationOn,
+                    options = getBiharDistricts()
+                )
+                
+                if (district.isNotEmpty()) {
+                    ModernDropdown(
+                        value = block,
+                        onValueChange = onBlockChange,
+                        label = "Block",
+                        icon = Icons.Default.LocationOn,
+                        options = getBlocksForDistrict(district)
+                    )
+                }
+            }
+        }
+        
+        // Contact Preference Card
+        ModernCard(
+            title = "Contact Preferences",
+            icon = Icons.Default.Contacts
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = contactPreference,
+                        onClick = { onContactPreferenceChange(true) }
+                    )
+                    Text(
+                        text = "Allow contact",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+                
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = !contactPreference,
+                        onClick = { onContactPreferenceChange(false) }
+                    )
+                    Text(
+                        text = "Don't allow contact",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
+        }
+        
+        // Action Buttons
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            OutlinedButton(
+                onClick = onCancel,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(cancelButton)
+            }
+            
+            Button(
+                onClick = onSave,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Icon(
+                    Icons.Default.Save,
+                    contentDescription = null,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+                Text(if (isFirstLogin) completeProfileButton else saveChangesButton)
+            }
+        }
     }
 }
 
 @Composable
-private fun ProfileInfoRow(label: String, value: String) {
+private fun ViewProfileCard(
+    name: String,
+    mobileNumber: String,
+    postLevel: String,
+    designation: String,
+    subject: String,
+    qualification: String,
+    school: String,
+    district: String,
+    block: String,
+    contactPreference: Boolean,
+    onEditClick: () -> Unit
+) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp)
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        // Profile Header Card
+        ModernCard(
+            title = "Profile Information",
+            icon = Icons.Default.Person
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                ProfileInfoRow("Name", name)
+                ProfileInfoRow("Mobile", mobileNumber)
+                ProfileInfoRow("Post Level", postLevel)
+                ProfileInfoRow("Designation", designation)
+                ProfileInfoRow("Subject", subject)
+                ProfileInfoRow("Qualification", qualification)
+            }
+        }
+        
+        // School Information Card
+        ModernCard(
+            title = "School Information",
+            icon = Icons.Default.LocationOn
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                ProfileInfoRow("School", school)
+                ProfileInfoRow("District", district)
+                ProfileInfoRow("Block", block)
+            }
+        }
+        
+        // Contact Preference Card
+        ModernCard(
+            title = "Contact Preferences",
+            icon = Icons.Default.Contacts
+        ) {
+            ProfileInfoRow(
+                "Contact Allowed",
+                if (contactPreference) "Yes" else "No"
+            )
+        }
+        
+        // Edit Button
+        Button(
+            onClick = onEditClick,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Icon(
+                Icons.Default.Edit,
+                contentDescription = null,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+            Text("Edit Profile")
+        }
+    }
+}
+
+@Composable
+private fun ModernCard(
+    title: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    content: @Composable () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+            // Card Header
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+            
+            // Card Content
+            content()
+        }
+    }
+}
+
+@Composable
+private fun ModernTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    readOnly: Boolean = false,
+    enabled: Boolean = true
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        leadingIcon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        },
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        readOnly = readOnly,
+        enabled = enabled,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ModernDropdown(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    options: List<String>
+) {
+    var expanded by remember { mutableStateOf(false) }
+    
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = { },
+            readOnly = true,
+            label = { Text(label) },
+            leadingIcon = {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(),
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline
+            )
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        onValueChange(option)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProfileInfoRow(
+    label: String,
+    value: String
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.Medium
         )
-        Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = value,
+            text = value.ifEmpty { "Not set" },
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.fillMaxWidth()
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Normal
         )
     }
+}
+
+private fun getValidDesignations(postLevel: String): List<String> {
+    return when (postLevel) {
+        "Primary" -> listOf(
+            "Assistant Teacher (सहायक शिक्षक)",
+            "Head Teacher (प्रधानाध्यापक)",
+            "Physical Education Teacher (PET)"
+        )
+        "Upper Primary" -> listOf(
+            "Assistant Teacher (सहायक शिक्षक)",
+            "Head Teacher (प्रधानाध्यापक)",
+            "Physical Education Teacher (PET)",
+            "Art / Music Teacher"
+        )
+        "Secondary" -> listOf(
+            "Trained Graduate Teacher (TGT)",
+            "Head Teacher (प्रधानाध्यापक)",
+            "Physical Education Teacher (PET)",
+            "Art / Music Teacher"
+        )
+        "Higher Secondary" -> listOf(
+            "Post Graduate Teacher (PGT)",
+            "Lecturer (प्रवक्ता)",
+            "Head Teacher (प्रधानाध्यापक)",
+            "Physical Education Teacher (PET)",
+            "Art / Music Teacher"
+        )
+        else -> emptyList()
+    }
+}
+
+private fun getBiharDistricts(): List<String> {
+    return listOf(
+        "Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur",
+        "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj",
+        "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj",
+        "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda",
+        "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur",
+        "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul",
+        "Vaishali", "West Champaran"
+    )
+}
+
+private fun getBlocksForDistrict(district: String): List<String> {
+    // This would typically come from a data source
+    // For now, returning a sample list
+    return listOf("Block 1", "Block 2", "Block 3", "Block 4", "Block 5")
 }

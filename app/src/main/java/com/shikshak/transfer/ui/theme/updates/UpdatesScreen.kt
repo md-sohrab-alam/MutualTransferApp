@@ -11,9 +11,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.OpenInNew
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,6 +35,8 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.shikshak.transfer.R
 import coil.compose.AsyncImage
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,8 +49,13 @@ fun UpdatesScreen(
 ) {
     val notifications by viewModel.notifications.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val isLoadingMore by viewModel.isLoadingMore.collectAsState()
+    val hasMoreData by viewModel.hasMoreData.collectAsState()
+    val error by viewModel.error.collectAsState()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     
     // Swipe refresh state
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
@@ -105,6 +114,28 @@ fun UpdatesScreen(
         }
     }
     
+    // Pagination effect
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo }
+            .collect { visibleItems ->
+                val lastVisibleItem = visibleItems.lastOrNull()
+                if (lastVisibleItem != null && 
+                    lastVisibleItem.index >= notifications.size - 3 && 
+                    hasMoreData && 
+                    !isLoadingMore) {
+                    viewModel.loadMoreNotifications()
+                }
+            }
+    }
+    
+    // Clear error when user interacts
+    LaunchedEffect(error) {
+        if (error != null) {
+            delay(5000) // Auto-clear error after 5 seconds
+            viewModel.clearError()
+        }
+    }
+    
     SwipeRefresh(
         state = swipeRefreshState,
         onRefresh = {
@@ -116,7 +147,7 @@ fun UpdatesScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // Header with refresh button
+            // Header with refresh button and menu
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -130,14 +161,62 @@ fun UpdatesScreen(
                     fontWeight = FontWeight.Bold
                 )
                 
-                IconButton(
-                    onClick = { viewModel.refreshNotifications() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = stringResource(R.string.refresh_notifications)
-                    )
+                Row {
+                    IconButton(
+                        onClick = { viewModel.refreshNotifications() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh notifications"
+                        )
+                    }
+                    
+                    var showMenu by remember { mutableStateOf(false) }
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                    }
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Mark all as read") },
+                            onClick = {
+                                viewModel.markAllAsRead()
+                                showMenu = false
+                            }
+                        )
+                    }
                 }
+            }
+            
+            // Error message
+            error?.let { errorMessage ->
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = errorMessage,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onErrorContainer,
+                            modifier = Modifier.weight(1f)
+                        )
+                        TextButton(
+                            onClick = { viewModel.clearError() }
+                        ) {
+                            Text("Dismiss")
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
             }
             
             // Notification Permission Warning
@@ -202,12 +281,25 @@ fun UpdatesScreen(
             }
             
             // Notifications List
-            if (isLoading) {
+            if (isLoading && notifications.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = "Loading notifications...",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             } else if (notifications.isEmpty()) {
                 Box(
@@ -215,23 +307,24 @@ fun UpdatesScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Text(
-                            text = stringResource(R.string.no_notifications),
+                            text = "No notifications yet",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = stringResource(R.string.no_notifications_description),
+                            text = "You'll see notifications here when they arrive",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 8.dp)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
             } else {
                 LazyColumn(
+                    state = listState,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(notifications) { notification ->
@@ -256,6 +349,51 @@ fun UpdatesScreen(
                                 }
                             }
                         )
+                    }
+                    
+                    // Loading more indicator
+                    if (isLoadingMore) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(20.dp),
+                                        strokeWidth = 2.dp
+                                    )
+                                    Text(
+                                        text = "Loading more...",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    
+                    // End of list indicator
+                    if (!hasMoreData && notifications.isNotEmpty()) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "No more notifications",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -367,7 +505,7 @@ private fun NotificationCard(
                         containerColor = MaterialTheme.colorScheme.primary
                     ) {
                         Text(
-                            text = stringResource(R.string.new_badge),
+                            text = "NEW",
                             style = MaterialTheme.typography.labelSmall
                         )
                     }

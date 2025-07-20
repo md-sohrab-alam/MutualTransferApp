@@ -120,9 +120,9 @@
     
     <!-- Bottom Navigation -->
     <string name="home">होम</string>
-    <string name="profile">प्रोफाइल</string>
-    <string name="request">अनुरोध</string>
-    <string name="updates">अपडेट</string>
+    <string name="profile">मेरा प्रोफाइल</string>
+    <string name="request">मेरा अनुरोध</string>
+    <string name="updates">सूचनाएं</string>
     <string name="more">अधिक</string>
     
     <!-- Request Screen -->
@@ -238,17 +238,23 @@
     <string name="not_set">सेट नहीं किया गया</string>
     
     <!-- Updates Screen -->
-    <string name="updates_title">अपडेट</string>
-    <string name="notification_permission_required">सूचना अनुमति आवश्यक</string>
-    <string name="notification_permission_description">नए मैच, ट्रांसफर अनुरोध और ऐप अपडेट के बारे में सूचनाएं प्राप्त करने के लिए आपको सूचनाएं अनुमति देनी होगी। इस अनुमति के बिना, आपको कोई सूचना नहीं मिलेगी।</string>
+    <string name="updates_title">सूचनाएं</string>
+    <string name="notification_permission_required">सूचना अनुमति आवश्यक है</string>
+    <string name="notification_permission_description">नए मैच, ट्रांसफर अनुरोध और ऐप अपडेट के बारे में सूचनाएं प्राप्त करने के लिए आपको सूचनाओं की अनुमति देनी होगी। इस अनुमति के बिना, आपको कोई सूचना नहीं मिलेगी।</string>
     <string name="allow_notifications">सूचनाएं अनुमति दें</string>
     <string name="open_settings">सेटिंग्स खोलें</string>
-    <string name="no_notifications">अभी तक कोई सूचना नहीं</string>
+    <string name="notification_settings">सूचना सेटिंग्स</string>
+    <string name="refresh_notifications">सूचनाएं रिफ्रेश करें</string>
+    <string name="mark_all_as_read">सभी को पढ़ा हुआ मार्क करें</string>
+    <string name="loading_notifications">सूचनाएं लोड हो रही हैं...</string>
+    <string name="loading_more">और लोड हो रहा है...</string>
+    <string name="no_more_notifications">और कोई सूचना नहीं</string>
+    <string name="no_notifications_yet">अभी तक कोई सूचना नहीं</string>
     <string name="no_notifications_description">जब सूचनाएं आएंगी तो आप उन्हें यहां देखेंगे</string>
-    <string name="new_badge">नया</string>
-    <string name="clear_all_notifications">सभी सूचनाएं साफ करें</string>
-    <string name="mark_as_read">पढ़ा हुआ मार्क करें</string>
-    <string name="refresh_notifications">रिफ्रेश</string>
+    <string name="read_more">और पढ़ें</string>
+    <string name="open_link">लिंक खोलें</string>
+    <string name="dismiss">खारिज करें</string>
+    <string name="new_badge">नई</string>
     
     <!-- Notification Types -->
     <string name="notification_type_match">नया मैच</string>
