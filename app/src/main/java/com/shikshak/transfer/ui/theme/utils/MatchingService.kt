@@ -35,29 +35,11 @@ object MatchingService {
         if (currentRequest.teacherId == otherRequest.teacherId) {
             return false // Same teacher
         }
-        
-        // Check if both teachers want to swap districts
-        if (!currentRequest.preferredDistricts.contains(otherRequest.currentDistrict) ||
-            !otherRequest.preferredDistricts.contains(currentRequest.currentDistrict)) {
-            return false
-        }
-        // TODO: Temporarily disabled post level and subject compatibility checks
-        /*
-        // Check post level compatibility
-        if (!isPostLevelCompatible(currentRequest.postLevel, otherRequest.postLevel)) {
-            return false
-        }
-        
-        // Check subject compatibility for secondary/higher secondary
-        if (currentRequest.postLevel in listOf("Secondary", "Higher Secondary") &&
-            otherRequest.postLevel in listOf("Secondary", "Higher Secondary")) {
-            if (currentRequest.subject != otherRequest.subject) {
-                return false // Subject must match for secondary levels
-            }
-        }
-        */
-        
-        return true
+        // Match if at least one common district and post level matches
+        val commonDistricts = currentRequest.preferredDistricts.intersect(listOf(otherRequest.currentDistrict)).isNotEmpty() &&
+            otherRequest.preferredDistricts.intersect(listOf(currentRequest.currentDistrict)).isNotEmpty()
+        val postLevelMatch = isPostLevelCompatible(currentRequest.postLevel, otherRequest.postLevel)
+        return commonDistricts && postLevelMatch
     }
     
     /**
@@ -156,37 +138,28 @@ object MatchingService {
         currentRequest: TransferRequest
     ): List<String> {
         val details = mutableListOf<String>()
-        
-        if (teacher.subject == currentRequest.subject) {
-            details.add("✓ Same Subject: ${teacher.subject}")
-        }
-        
-        if (teacher.post == currentRequest.postLevel) {
-            details.add("✓ Same Post Level: ${teacher.post}")
-        }
-        
-        if (teacher.designation == currentRequest.designation) {
-            details.add("✓ Same Designation: ${teacher.designation}")
-        }
-        
-        if (teacher.contactPreference == currentRequest.contactPreference) {
-            details.add("✓ Contact Preference Match")
-        }
-        
-        if (teacher.willingToMove) {
-            details.add("✓ Willing to Move")
-        }
-        
+        // Block match
         val commonBlocks = currentRequest.preferredBlocks.intersect(teacher.preferredBlocks.toSet())
         if (commonBlocks.isNotEmpty()) {
             details.add("✓ Common Block Preferences: ${commonBlocks.joinToString(", ")}")
         }
-        
-        val commonDistricts = currentRequest.preferredDistricts.intersect(teacher.preferredDistricts.toSet())
-        if (commonDistricts.isNotEmpty()) {
-            details.add("✓ Common District Preferences: ${commonDistricts.joinToString(", ")}")
+        // Qualification match
+        if (teacher.qualification == currentRequest.qualification && teacher.qualification.isNotEmpty()) {
+            details.add("✓ Same Qualification: ${teacher.qualification}")
         }
-        
+        // Subject match
+        if (teacher.subject == currentRequest.subject && teacher.subject.isNotEmpty()) {
+            details.add("✓ Same Subject: ${teacher.subject}")
+        }
+        // Designation match
+        if (teacher.designation == currentRequest.designation && teacher.designation.isNotEmpty()) {
+            details.add("✓ Same Designation: ${teacher.designation}")
+        }
+        // (Do not show contact preference)
+        // Willing to move (optional, can keep if desired)
+        if (teacher.willingToMove) {
+            details.add("✓ Willing to Move")
+        }
         return details
     }
     

@@ -462,9 +462,10 @@ fun HomeScreenWithRequest(
                 
                 if (matches.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    matches.forEach { match ->
+                    matches.forEach { (match, matchRequest) ->
                         MatchCard(
                             match = match,
+                            matchRequest = matchRequest,
                             onContact = {
                                 Timber.d("Contacting match: ${match.name}")
                                 val intent = Intent(Intent.ACTION_DIAL).apply {
@@ -513,6 +514,7 @@ fun HomeScreenWithRequest(
 @Composable
 fun MatchCard(
     match: Teacher,
+    matchRequest: TransferRequest?,
     onContact: () -> Unit,
     currentRequest: TransferRequest? = null,
     onProfileClick: () -> Unit = {}
@@ -552,7 +554,6 @@ fun MatchCard(
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
-                
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primary
@@ -566,9 +567,7 @@ fun MatchCard(
                     )
                 }
             }
-            
             Spacer(modifier = Modifier.height(12.dp))
-            
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top
@@ -584,12 +583,21 @@ fun MatchCard(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = "${stringResource(R.string.to_label_text)} ${match.preferredDistricts.joinToString(", ")}",
+                        text = "${stringResource(R.string.to_label_text)} " +
+                            (matchRequest?.preferredDistricts?.takeIf { it.isNotEmpty() }?.joinToString(", ")
+                                ?: match.preferredDistricts.joinToString(", ")),
                         style = MaterialTheme.typography.bodyMedium
                     )
+                    if ((matchRequest?.preferredBlocks?.isNotEmpty() == true) || match.preferredBlocks.isNotEmpty()) {
+                        Text(
+                            text = "${stringResource(R.string.preferred_blocks_label)} " +
+                                (matchRequest?.preferredBlocks?.takeIf { it.isNotEmpty() }?.joinToString(", ")
+                                    ?: match.preferredBlocks.joinToString(", ")),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             }
-            
             // Show compatibility details if available
             if (compatibilityDetails.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(12.dp))
@@ -606,9 +614,7 @@ fun MatchCard(
                     )
                 }
             }
-            
             Spacer(modifier = Modifier.height(16.dp))
-            
             // Contact Button
             Button(
                 onClick = onContact,
@@ -624,7 +630,6 @@ fun MatchCard(
                 )
                 Text("Contact Now")
             }
-            
             // Tap hint
             Spacer(modifier = Modifier.height(8.dp))
             Text(

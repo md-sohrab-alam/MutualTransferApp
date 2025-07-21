@@ -29,8 +29,8 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     private val _transferRequest = MutableStateFlow<TransferRequest?>(null)
     val transferRequest: StateFlow<TransferRequest?> = _transferRequest
     
-    private val _matches = MutableStateFlow<List<Teacher>>(emptyList())
-    val matches: StateFlow<List<Teacher>> = _matches
+    private val _matches = MutableStateFlow<List<Pair<Teacher, TransferRequest>>>(emptyList())
+    val matches: StateFlow<List<Pair<Teacher, TransferRequest>>> = _matches
     
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -108,7 +108,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                         .get()
                     
                     matchesQuery.addOnSuccessListener { documents ->
-                        val potentialMatches = mutableListOf<Teacher>()
+                        val potentialMatches = mutableListOf<Pair<Teacher, TransferRequest>>()
                         var processedCount = 0
                         
                         if (documents.isEmpty) {
@@ -128,41 +128,41 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                                             if (teacherDoc.exists()) {
                                                 val teacher = teacherDoc.toObject(Teacher::class.java)
                                                 if (teacher != null) {
-                                                                                        // Step 4: Apply additional matching criteria
+                                                    // Step 4: Apply additional matching criteria
                                     if (MatchingService.isCompatibleMatch(currentRequest, request, teacher)) {
-                                        potentialMatches.add(teacher)
+                                        potentialMatches.add(Pair(teacher, request))
                                     }
                                                 }
                                             }
                                             processedCount++
                                             if (processedCount == documents.size()) {
                                                 // Step 5: Sort matches by relevance score
-                                                val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches, currentRequest)
-                                                _matches.value = sortedMatches
-                                                Timber.d("Found ${sortedMatches.size} compatible matches")
+                                                val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches.map { it.first }, currentRequest)
+                                                _matches.value = potentialMatches
+                                                Timber.d("Found ${potentialMatches.size} compatible matches")
                                             }
                                         }
                                         .addOnFailureListener { exception ->
                                             Timber.e(exception, "Error loading teacher details")
                                             processedCount++
                                             if (processedCount == documents.size()) {
-                                                val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches, currentRequest)
-                                                _matches.value = sortedMatches
+                                                val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches.map { it.first }, currentRequest)
+                                                _matches.value = potentialMatches
                                             }
                                         }
                                 } else {
                                     processedCount++
                                     if (processedCount == documents.size()) {
-                                        val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches, currentRequest)
-                                        _matches.value = sortedMatches
-                                        Timber.d("Found ${sortedMatches.size} compatible matches")
+                                        val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches.map { it.first }, currentRequest)
+                                        _matches.value = potentialMatches
+                                        Timber.d("Found ${potentialMatches.size} compatible matches")
                                     }
                                 }
                             } else {
                                 processedCount++
                                 if (processedCount == documents.size()) {
-                                    val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches, currentRequest)
-                                    _matches.value = sortedMatches
+                                    val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches.map { it.first }, currentRequest)
+                                    _matches.value = potentialMatches
                                 }
                             }
                         }
@@ -204,7 +204,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     val allRequestsQuery = firestore.collection("transfer_requests").get()
                     
                     allRequestsQuery.addOnSuccessListener { documents ->
-                        val potentialMatches = mutableListOf<Teacher>()
+                        val potentialMatches = mutableListOf<Pair<Teacher, TransferRequest>>()
                         var processedCount = 0
                         
                         if (documents.isEmpty) {
@@ -228,44 +228,44 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                                                     if (teacher != null) {
                                                         // Apply additional matching criteria
                                                         if (MatchingService.isCompatibleMatch(currentRequest, request, teacher)) {
-                                                            potentialMatches.add(teacher)
+                                                            potentialMatches.add(Pair(teacher, request))
                                                         }
                                                     }
                                                 }
                                                 processedCount++
                                                 if (processedCount == documents.size()) {
-                                                    val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches, currentRequest)
-                                                    _matches.value = sortedMatches
-                                                    Timber.d("Found ${sortedMatches.size} compatible matches (fallback method)")
+                                                    val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches.map { it.first }, currentRequest)
+                                                    _matches.value = potentialMatches
+                                                    Timber.d("Found ${potentialMatches.size} compatible matches (fallback method)")
                                                 }
                                             }
                                             .addOnFailureListener { exception ->
                                                 Timber.e(exception, "Error loading teacher details")
                                                 processedCount++
                                                 if (processedCount == documents.size()) {
-                                                    val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches, currentRequest)
-                                                    _matches.value = sortedMatches
+                                                    val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches.map { it.first }, currentRequest)
+                                                    _matches.value = potentialMatches
                                                 }
                                             }
                                     } else {
                                         processedCount++
                                         if (processedCount == documents.size()) {
-                                            val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches, currentRequest)
-                                            _matches.value = sortedMatches
+                                            val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches.map { it.first }, currentRequest)
+                                            _matches.value = potentialMatches
                                         }
                                     }
                                 } else {
                                     processedCount++
                                     if (processedCount == documents.size()) {
-                                        val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches, currentRequest)
-                                        _matches.value = sortedMatches
+                                        val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches.map { it.first }, currentRequest)
+                                        _matches.value = potentialMatches
                                     }
                                 }
                             } else {
                                 processedCount++
                                 if (processedCount == documents.size()) {
-                                    val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches, currentRequest)
-                                    _matches.value = sortedMatches
+                                    val sortedMatches = MatchingService.sortMatchesByRelevance(potentialMatches.map { it.first }, currentRequest)
+                                    _matches.value = potentialMatches
                                 }
                             }
                         }

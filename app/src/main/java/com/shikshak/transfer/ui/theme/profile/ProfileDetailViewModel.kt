@@ -52,25 +52,22 @@ class ProfileDetailViewModel @Inject constructor() : ViewModel() {
         }
     }
     
-    fun loadCurrentRequest() {
+    fun loadTeacherRequest(teacherId: String) {
         viewModelScope.launch {
             try {
-                val currentUserId = auth.currentUser?.uid ?: return@launch
-                
-                val requestQuery = firestore.collection("transferRequests")
-                    .whereEqualTo("teacherId", currentUserId)
+                val requestQuery = firestore.collection("transfer_requests")
+                    .whereEqualTo("teacherId", teacherId)
                     .limit(1)
                     .get()
                     .await()
-                
                 if (!requestQuery.isEmpty) {
                     val requestDoc = requestQuery.documents.first()
                     val requestData = requestDoc.toObject(TransferRequest::class.java)
                     _currentRequest.value = requestData
-                    Timber.d("Loaded current request for user: $currentUserId")
+                    Timber.d("Loaded transfer request for teacher: $teacherId")
                 }
             } catch (e: Exception) {
-                Timber.e(e, "Error loading current request")
+                Timber.e(e, "Error loading teacher's transfer request")
             }
         }
     }

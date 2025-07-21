@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -235,7 +237,7 @@ fun TeacherProfileScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
+        Text(
                         text = stringResource(R.string.profile),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
@@ -280,7 +282,7 @@ fun TeacherProfileScreen(
                     .padding(paddingValues)
                     .verticalScroll(rememberScrollState())
             ) {
-                if (isEditing) {
+            if (isEditing) {
                     // Edit Mode - Modern Form Design
                     EditProfileForm(
                         name = name,
@@ -315,8 +317,8 @@ fun TeacherProfileScreen(
                                 qualification = qualification,
                                 contactPreference = contactPreference,
                                 contact = Contact(phone = mobileNumber),
-                                preferredDistricts = viewModel.getCurrentTeacher()?.preferredDistricts ?: emptyList(),
-                                preferredBlocks = viewModel.getCurrentTeacher()?.preferredBlocks ?: emptyList()
+                                preferredDistricts = emptyList(), // Remove preferredDistricts
+                                preferredBlocks = emptyList() // Remove preferredBlocks
                             )
                             viewModel.saveTeacherProfile(teacher) {
                                 onProfileSaved(teacher)
@@ -351,6 +353,7 @@ fun TeacherProfileScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EditProfileForm(
     name: String,
@@ -424,7 +427,7 @@ private fun EditProfileForm(
                 
                 if (postLevel.isNotEmpty()) {
                     ModernDropdown(
-                        value = designation,
+                            value = designation,
                         onValueChange = onDesignationChange,
                         label = stringResource(R.string.designation_label),
                         icon = Icons.Default.Badge,
@@ -463,7 +466,7 @@ private fun EditProfileForm(
                 )
                 
                 ModernDropdown(
-                    value = district,
+                        value = district,
                     onValueChange = onDistrictChange,
                     label = stringResource(R.string.district_label),
                     icon = Icons.Default.LocationOn,
@@ -472,7 +475,7 @@ private fun EditProfileForm(
                 
                 if (district.isNotEmpty()) {
                     ModernDropdown(
-                        value = block,
+                            value = block,
                         onValueChange = onBlockChange,
                         label = stringResource(R.string.block_label),
                         icon = Icons.Default.LocationOn,
@@ -487,16 +490,16 @@ private fun EditProfileForm(
             title = stringResource(R.string.contact_preference_label),
             icon = Icons.Default.Contacts
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Row(
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RadioButton(
-                        selected = contactPreference,
+                        RadioButton(
+                            selected = contactPreference,
                         onClick = { onContactPreferenceChange(true) }
                     )
                     Text(
@@ -524,8 +527,8 @@ private fun EditProfileForm(
         }
         
         // Action Buttons
-        Row(
-            modifier = Modifier.fillMaxWidth(),
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             OutlinedButton(
@@ -536,7 +539,7 @@ private fun EditProfileForm(
                 Text(cancelButton)
             }
             
-            Button(
+                        Button(
                 onClick = onSave,
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp)
@@ -552,6 +555,7 @@ private fun EditProfileForm(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ViewProfileCard(
     name: String,
@@ -624,21 +628,22 @@ private fun ViewProfileCard(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ModernCard(
     title: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     content: @Composable () -> Unit
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
-    ) {
-        Column(
+                ) {
+                    Column(
             modifier = Modifier.padding(20.dp)
         ) {
             // Card Header
@@ -667,6 +672,7 @@ private fun ModernCard(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ModernTextField(
     value: String,
@@ -712,8 +718,8 @@ private fun ModernDropdown(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
-        modifier = Modifier.fillMaxWidth()
-    ) {
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
         OutlinedTextField(
             value = value,
             onValueChange = { },

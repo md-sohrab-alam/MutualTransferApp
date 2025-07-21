@@ -39,7 +39,7 @@ fun ProfileDetailScreen(
     
     LaunchedEffect(teacherId) {
         viewModel.loadTeacherProfile(teacherId)
-        viewModel.loadCurrentRequest()
+        viewModel.loadTeacherRequest(teacherId)
     }
     
     Scaffold(
@@ -73,7 +73,7 @@ fun ProfileDetailScreen(
                 ) {
                     ProfileDetailContent(
                         teacher = teacherData,
-                        currentRequest = currentRequest,
+                        transferRequest = currentRequest,
                         onContact = {
                             val intent = Intent(Intent.ACTION_DIAL).apply {
                                 data = Uri.parse("tel:${teacherData.contact.phone}")
@@ -101,15 +101,15 @@ fun ProfileDetailScreen(
 @Composable
 private fun ProfileDetailContent(
     teacher: Teacher,
-    currentRequest: TransferRequest?,
+    transferRequest: TransferRequest?,
     onContact: () -> Unit,
     onShare: () -> Unit,
     onEmail: () -> Unit
 ) {
     val context = LocalContext.current
-    val matchScore = currentRequest?.let { MatchingService.calculateRelevanceScore(teacher, it) } ?: 0
-    val matchQuality = MatchingService.getMatchQualityDescription(matchScore, context)
-    val compatibilityDetails = currentRequest?.let { MatchingService.getMatchCompatibilityDetails(teacher, it) } ?: emptyList()
+    val matchScore = transferRequest?.let { MatchingService.calculateRelevanceScore(teacher, it) } ?: 0
+    val matchQuality = transferRequest?.let { MatchingService.getMatchQualityDescription(matchScore, context) } ?: ""
+    val compatibilityDetails = transferRequest?.let { MatchingService.getMatchCompatibilityDetails(teacher, it) } ?: emptyList()
     
     Column(
         modifier = Modifier.padding(16.dp),
@@ -139,16 +139,18 @@ private fun ProfileDetailContent(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 ProfileInfoRow(stringResource(R.string.current_location), "${teacher.district}, ${teacher.block}")
-                ProfileInfoRow(stringResource(R.string.preferred_districts), teacher.preferredDistricts.joinToString(", "))
-                if (teacher.preferredBlocks.isNotEmpty()) {
-                    ProfileInfoRow(stringResource(R.string.preferred_blocks), teacher.preferredBlocks.joinToString(", "))
+                if (transferRequest?.preferredDistricts?.isNotEmpty() == true) {
+                    ProfileInfoRow(stringResource(R.string.preferred_districts), transferRequest.preferredDistricts.joinToString(", "))
+                }
+                if (transferRequest?.preferredBlocks?.isNotEmpty() == true) {
+                    ProfileInfoRow(stringResource(R.string.preferred_blocks), transferRequest.preferredBlocks.joinToString(", "))
                 }
                 ProfileInfoRow(stringResource(R.string.willing_to_move), if (teacher.willingToMove) "Yes" else "No")
             }
         }
         
         // Compatibility Score Card
-        if (currentRequest != null) {
+        if (transferRequest != null) {
             ModernCard(
                 title = stringResource(R.string.match_compatibility),
                 icon = Icons.Default.Star
