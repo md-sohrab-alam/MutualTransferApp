@@ -128,6 +128,10 @@ object MatchingService {
         currentRequest: TransferRequest
     ): List<String> {
         val details = mutableListOf<String>()
+        // Post match
+        if (teacher.post == currentRequest.post && teacher.post.isNotEmpty()) {
+            details.add("✓ Same Post Level: ${teacher.post}")
+        }
         // Block match
         val commonBlocks = currentRequest.preferredBlocks.intersect(teacher.preferredBlocks.toSet())
         if (commonBlocks.isNotEmpty()) {
@@ -145,10 +149,13 @@ object MatchingService {
         if (teacher.designation == currentRequest.designation && teacher.designation.isNotEmpty()) {
             details.add("✓ Same Designation: ${teacher.designation}")
         }
-        // (Do not show contact preference)
-        // Willing to move (optional, can keep if desired)
+        // Willing to move
         if (teacher.willingToMove) {
             details.add("✓ Willing to Move")
+        }
+        // District match
+        if (teacher.district == currentRequest.currentDistrict || currentRequest.preferredDistricts.contains(teacher.district)) {
+            details.add("✓ District matches: ${teacher.district}")
         }
         return details
     }

@@ -502,7 +502,7 @@ private fun EditProfileForm(
                 )
                 
                 if (district.isNotEmpty()) {
-                    val availableBlocks = getBlocksForDistrict(district)
+                    val availableBlocks = Blocks.getBlocksForDistrict(district)
                     ModernDropdown(
                             value = block,
                         onValueChange = onBlockChange,
@@ -862,12 +862,6 @@ private fun getBiharDistricts(): List<String> {
         "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul",
         "Vaishali", "West Champaran"
     )
-}
-
-private fun getBlocksForDistrict(district: String): List<String> {
-    // This would typically come from a data source
-    // For now, returning a sample list
-    return listOf("Block 1", "Block 2", "Block 3", "Block 4", "Block 5")
 }
 
 private fun getValidSubjects(post: String, context: android.content.Context): List<String> {

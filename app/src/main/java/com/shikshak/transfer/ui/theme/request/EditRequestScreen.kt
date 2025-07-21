@@ -70,8 +70,8 @@ fun EditRequestScreen(
     )
     
     // State for form fields - pre-filled with existing data
-    var preferredDistricts by remember { mutableStateOf(realTransferRequest.preferredDistricts) }
-    var preferredBlocks by remember { mutableStateOf(realTransferRequest.preferredBlocks) }
+    var preferredDistricts by remember { mutableStateOf(transferRequest.preferredDistricts) }
+    var preferredBlocks by remember { mutableStateOf(transferRequest.preferredBlocks) }
     var contactPreference by remember { mutableStateOf(realTransferRequest.contactPreference) }
     var notes by remember { mutableStateOf(realTransferRequest.notes) }
     
