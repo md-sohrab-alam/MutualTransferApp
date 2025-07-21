@@ -122,6 +122,7 @@ private fun ProfileDetailContent(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 ProfileInfoRow("Name", teacher.name)
+                ProfileInfoRow("Post Level", teacher.post)
                 ProfileInfoRow("Designation", teacher.designation)
                 ProfileInfoRow("Subject", teacher.subject)
                 ProfileInfoRow("Qualification", teacher.qualification)

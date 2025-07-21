@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +21,7 @@ import com.shikshak.transfer.ui.theme.data.Blocks
 import com.shikshak.transfer.ui.theme.data.TransferRequest
 import com.shikshak.transfer.ui.theme.navigation.SharedViewModel
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
+import com.shikshak.transfer.ui.theme.profile.ModernDropdown
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,6 +99,10 @@ fun EditRequestScreen(
         "Vaishali", "West Champaran"
     )
 
+    fun getPostLevelsShort(): List<String> {
+        return listOf("Primary", "Upper Primary", "Secondary", "Senior Secondary")
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -132,6 +138,7 @@ fun EditRequestScreen(
                     Text("Name: ${teacher.name}")
                     Text("Designation: ${teacher.designation}")
                     Text("Subject: ${teacher.subject}")
+                    Text("Post Level: ${teacher.post}")
                     Text("School: ${teacher.schoolName}")
                     Text("District: ${teacher.district}")
                     Text("Block: ${teacher.block}")
@@ -383,6 +390,17 @@ fun EditRequestScreen(
             maxLines = 5
         )
         
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Post Level (Optional)
+        // ModernDropdown(
+        //     value = post,
+        //     onValueChange = { post = it },
+        //     label = stringResource(R.string.post_level_label),
+        //     icon = Icons.Default.School,
+        //     options = getPostLevelsShort()
+        // )
+        
         Spacer(modifier = Modifier.height(32.dp))
 
         // Update Button
@@ -390,10 +408,11 @@ fun EditRequestScreen(
             onClick = {
                 if (validateForm()) {
                     val updatedRequest = realTransferRequest.copy(
-                        preferredDistricts = preferredDistricts,
-                        preferredBlocks = preferredBlocks,
+                        preferredDistricts = preferredDistricts.map { it.trim() },
+                        preferredBlocks = preferredBlocks.map { it.trim() },
                         contactPreference = contactPreference,
-                        notes = notes
+                        notes = notes.trim(),
+                        post = currentTeacher?.post?.trim() ?: ""
                     )
                     viewModel.updateTransferRequest(updatedRequest)
                     onRequestUpdated(updatedRequest)

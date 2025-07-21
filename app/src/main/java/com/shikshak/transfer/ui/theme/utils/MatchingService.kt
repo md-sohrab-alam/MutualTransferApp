@@ -35,28 +35,18 @@ object MatchingService {
         if (currentRequest.teacherId == otherRequest.teacherId) {
             return false // Same teacher
         }
-        // Match if at least one common district and post level matches
+        // Match if at least one common district and post matches
         val commonDistricts = currentRequest.preferredDistricts.intersect(listOf(otherRequest.currentDistrict)).isNotEmpty() &&
             otherRequest.preferredDistricts.intersect(listOf(currentRequest.currentDistrict)).isNotEmpty()
-        val postLevelMatch = isPostLevelCompatible(currentRequest.postLevel, otherRequest.postLevel)
-        return commonDistricts && postLevelMatch
+        val postMatch = isPostCompatible(currentRequest.post, otherRequest.post)
+        return commonDistricts && postMatch
     }
     
     /**
      * Check if two post levels are compatible for transfer
      */
-    fun isPostLevelCompatible(level1: String, level2: String): Boolean {
-        val compatibleGroups = mapOf(
-            "Primary" to listOf("Primary"),
-            "Upper Primary" to listOf("Upper Primary"),
-            "Secondary" to listOf("Secondary"),
-            "Higher Secondary" to listOf("Higher Secondary")
-        )
-        
-        val group1 = compatibleGroups.entries.find { it.value.contains(level1) }?.key
-        val group2 = compatibleGroups.entries.find { it.value.contains(level2) }?.key
-        
-        return group1 == group2
+    fun isPostCompatible(level1: String, level2: String): Boolean {
+        return level1.trim() == level2.trim()
     }
     
     /**
@@ -71,7 +61,7 @@ object MatchingService {
         }
         
         // Post level match
-        if (teacher.post == currentRequest.postLevel) {
+        if (teacher.post == currentRequest.post) {
             score += MatchWeights.POST_LEVEL_MATCH
         }
         
@@ -173,7 +163,7 @@ object MatchingService {
             errors.add(context.getString(R.string.no_preferred_districts_selected))
         }
         
-        if (request.postLevel.isEmpty()) {
+        if (request.post.isEmpty()) {
             errors.add(context.getString(R.string.post_level_not_specified))
         }
         
@@ -182,7 +172,7 @@ object MatchingService {
         }
         
         // For secondary levels, subject is required
-        if (request.postLevel in listOf("Secondary", "Higher Secondary") && request.subject.isEmpty()) {
+        if (request.post in listOf("Secondary", "Senior Secondary") && request.subject.isEmpty()) {
             errors.add(context.getString(R.string.subject_required_for_secondary))
         }
         

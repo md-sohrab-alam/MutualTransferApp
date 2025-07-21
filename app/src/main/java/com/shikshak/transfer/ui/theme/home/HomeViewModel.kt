@@ -104,6 +104,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     // Note: This requires a composite index in Firestore
                     val matchesQuery = firestore.collection("transfer_requests")
                         .whereArrayContains("preferredDistricts", currentRequest.currentDistrict)
+                        .whereEqualTo("post", currentRequest.post)
                         .whereNotEqualTo("teacherId", userId)
                         .get()
                     

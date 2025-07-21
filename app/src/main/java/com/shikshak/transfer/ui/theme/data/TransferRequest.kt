@@ -7,9 +7,10 @@ data class TransferRequest(
     val currentSchool: String = "",
     val preferredDistricts: List<String> = emptyList(),
     val preferredBlocks: List<String> = emptyList(),
-    val postLevel: String = "",
+    val post: String = "",
     val designation: String = "",
     val subject: String = "",
+    val qualification: String = "", // Added qualification field
     val status: String = "PENDING", // PENDING, MATCHED, COMPLETED, CANCELLED
     val submittedDate: String = "",
     val contactPreference: Boolean = true,

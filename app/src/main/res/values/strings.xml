@@ -73,8 +73,10 @@
     <string name="validation_district_required">Current district is required</string>
     <string name="validation_post_level_required">Post level is required</string>
     <string name="validation_designation_required">Designation is required</string>
-    <string name="validation_subject_required">Subject is required for Secondary and Higher Secondary</string>
+    <string name="validation_subject_required">Subject is required for Secondary and Senior Secondary</string>
     <string name="validation_districts_required">Please select at least one preferred district</string>
+    <string name="validation_qualification_required">Qualification is required</string>
+    <string name="validation_block_required">Block is required</string>
     
     <!-- Common -->
     <string name="loading">Loading...</string>
@@ -89,7 +91,7 @@
     <string name="post_level_primary">Primary</string>
     <string name="post_level_upper_primary">Upper Primary</string>
     <string name="post_level_secondary">Secondary</string>
-    <string name="post_level_higher_secondary">Higher Secondary</string>
+    <string name="post_level_higher_secondary">Senior Secondary</string>
     
     <!-- Designations -->
     <string name="designation_assistant_teacher">Assistant Teacher (सहायक शिक्षक)</string>
@@ -318,6 +320,6 @@
     <string name="no_preferred_districts_selected">No preferred districts selected</string>
     <string name="post_level_not_specified">Post level not specified</string>
     <string name="designation_not_specified">Designation not specified</string>
-    <string name="subject_required_for_secondary">Subject is required for Secondary/Higher Secondary levels</string>
+    <string name="subject_required_for_secondary">Subject is required for Secondary/Senior Secondary levels</string>
     
 </resources>

@@ -50,7 +50,7 @@ data class Subject(
 // Bilingual data structure
 private val postLevelsData = listOf(
     PostLevel(
-        english = "Primary (Classes I–V)",
+        english = "Primary",
         hindi = "प्राथमिक (कक्षा 1 से 5)",
         designations = listOf(
             Designation("Primary Teacher (PRT)", "प्राथमिक शिक्षक (PRT)"),
@@ -75,7 +75,7 @@ private val postLevelsData = listOf(
         )
     ),
     PostLevel(
-        english = "Upper Primary (Classes VI–VIII)",
+        english = "Upper Primary",
         hindi = "उच्च प्राथमिक (कक्षा 6 से 8)",
         designations = listOf(
             Designation("Trained Graduate Teacher (TGT)", "प्रशिक्षित स्नातक शिक्षक (TGT)"),
@@ -99,7 +99,7 @@ private val postLevelsData = listOf(
         )
     ),
     PostLevel(
-        english = "Secondary (Classes IX–X)",
+        english = "Secondary",
         hindi = "माध्यमिक (कक्षा 9 से 10)",
         designations = listOf(
             Designation("Trained Graduate Teacher (TGT)", "प्रशिक्षित स्नातक शिक्षक (TGT)"),
@@ -128,7 +128,7 @@ private val postLevelsData = listOf(
         )
     ),
     PostLevel(
-        english = "Senior Secondary (+2, Classes XI–XII)",
+        english = "Senior Secondary",
         hindi = "उच्च माध्यमिक (+2, कक्षा 11 से 12)",
         designations = listOf(
             Designation("Post Graduate Teacher (PGT)", "स्नातकोत्तर शिक्षक (PGT)"),
@@ -205,7 +205,7 @@ fun TeacherProfileScreen(
     var school by remember { mutableStateOf("") }
     var district by remember { mutableStateOf("") }
     var block by remember { mutableStateOf("") }
-    var postLevel by remember { mutableStateOf("") }
+    var post by remember { mutableStateOf("") }
     var qualification by remember { mutableStateOf("") }
     var contactPreference by remember { mutableStateOf(true) }
     var mobileNumber by remember { mutableStateOf("") }
@@ -220,7 +220,7 @@ fun TeacherProfileScreen(
                 school = teacher.schoolName
                 district = teacher.district
                 block = teacher.block
-                postLevel = teacher.post
+                post = teacher.post
                 qualification = teacher.qualification
                 contactPreference = teacher.contactPreference
                 // Use phone number from Firebase Auth if teacher profile doesn't have it
@@ -288,8 +288,8 @@ fun TeacherProfileScreen(
                         name = name,
                         onNameChange = { name = it },
                         mobileNumber = mobileNumber,
-                        postLevel = postLevel,
-                        onPostLevelChange = { postLevel = it },
+                        post = post,
+                        onPostChange = { post = it },
                         designation = designation,
                         onDesignationChange = { designation = it },
                         subject = subject,
@@ -307,16 +307,16 @@ fun TeacherProfileScreen(
                         onSave = {
                             val teacher = Teacher(
                                 uid = currentUser?.uid ?: "",
-                                name = name,
-                                designation = designation,
-                                subject = subject,
-                                schoolName = school,
-                                district = district,
-                                block = block,
-                                post = postLevel,
-                                qualification = qualification,
+                                name = name.trim(),
+                                designation = designation.trim(),
+                                subject = subject.trim(),
+                                schoolName = school.trim(),
+                                district = district.trim(),
+                                block = block.trim(),
+                                post = post.trim(),
+                                qualification = qualification.trim(),
                                 contactPreference = contactPreference,
-                                contact = Contact(phone = mobileNumber),
+                                contact = Contact(phone = mobileNumber.trim()),
                                 preferredDistricts = emptyList(), // Remove preferredDistricts
                                 preferredBlocks = emptyList() // Remove preferredBlocks
                             )
@@ -337,7 +337,7 @@ fun TeacherProfileScreen(
                     ViewProfileCard(
                         name = name,
                         mobileNumber = mobileNumber,
-                        postLevel = postLevel,
+                        post = post,
                         designation = designation,
                         subject = subject,
                         qualification = qualification,
@@ -359,8 +359,8 @@ private fun EditProfileForm(
     name: String,
     onNameChange: (String) -> Unit,
     mobileNumber: String,
-    postLevel: String,
-    onPostLevelChange: (String) -> Unit,
+    post: String,
+    onPostChange: (String) -> Unit,
     designation: String,
     onDesignationChange: (String) -> Unit,
     subject: String,
@@ -383,6 +383,34 @@ private fun EditProfileForm(
     cancelButton: String
 ) {
     val context = LocalContext1.current
+    var showError by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
+    fun validateFields(): Boolean {
+        return name.isNotBlank() &&
+            post.isNotBlank() &&
+            designation.isNotBlank() &&
+            subject.isNotBlank() &&
+            qualification.isNotBlank() &&
+            school.isNotBlank() &&
+            district.isNotBlank() &&
+            block.isNotBlank()
+    }
+
+    fun getFirstError(): String {
+        return when {
+            name.isBlank() -> context.getString(R.string.validation_full_name_required)
+            post.isBlank() -> context.getString(R.string.validation_post_level_required)
+            designation.isBlank() -> context.getString(R.string.validation_designation_required)
+            subject.isBlank() -> context.getString(R.string.validation_subject_required)
+            qualification.isBlank() -> context.getString(R.string.validation_qualification_required)
+            school.isBlank() -> context.getString(R.string.validation_school_required)
+            district.isBlank() -> context.getString(R.string.validation_district_required)
+            block.isBlank() -> context.getString(R.string.validation_block_required)
+            else -> ""
+        }
+    }
+
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -418,20 +446,20 @@ private fun EditProfileForm(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 ModernDropdown(
-                    value = postLevel,
-                    onValueChange = onPostLevelChange,
+                    value = post,
+                    onValueChange = onPostChange,
                     label = stringResource(R.string.post_level_label),
                     icon = Icons.Default.School,
-                    options = getPostLevels(context)
+                    options = getPostLevelsShort()
                 )
                 
-                if (postLevel.isNotEmpty()) {
+                if (post.isNotEmpty()) {
                     ModernDropdown(
                             value = designation,
                         onValueChange = onDesignationChange,
                         label = stringResource(R.string.designation_label),
                         icon = Icons.Default.Badge,
-                        options = getValidDesignations(postLevel, context)
+                        options = getValidDesignations(post, context)
                     )
                 }
                 
@@ -440,7 +468,7 @@ private fun EditProfileForm(
                     onValueChange = onSubjectChange,
                     label = stringResource(R.string.subject_label),
                     icon = Icons.Default.Book,
-                    options = getValidSubjects(postLevel, context)
+                    options = getValidSubjects(post, context)
                 )
                 
                 ModernTextField(
@@ -470,16 +498,17 @@ private fun EditProfileForm(
                     onValueChange = onDistrictChange,
                     label = stringResource(R.string.district_label),
                     icon = Icons.Default.LocationOn,
-                    options = getBiharDistricts()
+                    options = Blocks.getAllDistricts()
                 )
                 
                 if (district.isNotEmpty()) {
+                    val availableBlocks = getBlocksForDistrict(district)
                     ModernDropdown(
                             value = block,
                         onValueChange = onBlockChange,
                         label = stringResource(R.string.block_label),
                         icon = Icons.Default.LocationOn,
-                        options = getBlocksForDistrict(district)
+                        options = availableBlocks
                     )
                 }
             }
@@ -527,8 +556,16 @@ private fun EditProfileForm(
         }
         
         // Action Buttons
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
+        if (showError && errorMessage.isNotBlank()) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             OutlinedButton(
@@ -540,9 +577,19 @@ private fun EditProfileForm(
             }
             
                         Button(
-                onClick = onSave,
+                onClick = {
+                    if (validateFields()) {
+                        showError = false
+                        errorMessage = ""
+                        onSave()
+                    } else {
+                        showError = true
+                        errorMessage = getFirstError()
+                    }
+                },
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                enabled = validateFields()
             ) {
                 Icon(
                     Icons.Default.Save,
@@ -560,7 +607,7 @@ private fun EditProfileForm(
 private fun ViewProfileCard(
     name: String,
     mobileNumber: String,
-    postLevel: String,
+    post: String,
     designation: String,
     subject: String,
     qualification: String,
@@ -582,7 +629,7 @@ private fun ViewProfileCard(
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 ProfileInfoRow(stringResource(R.string.name_label), name)
                 ProfileInfoRow(stringResource(R.string.mobile_label), mobileNumber)
-                ProfileInfoRow(stringResource(R.string.post_level_label), postLevel)
+                ProfileInfoRow(stringResource(R.string.post_level_label), post)
                 ProfileInfoRow(stringResource(R.string.designation_label), designation)
                 ProfileInfoRow(stringResource(R.string.subject_label), subject)
                 ProfileInfoRow(stringResource(R.string.qualification_label), qualification)
@@ -706,7 +753,7 @@ private fun ModernTextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ModernDropdown(
+fun ModernDropdown(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
@@ -783,10 +830,10 @@ private fun ProfileInfoRow(
     }
 }
 
-private fun getValidDesignations(postLevel: String, context: android.content.Context): List<String> {
+private fun getValidDesignations(post: String, context: android.content.Context): List<String> {
     val isHindi = LanguageUtils.isHindi(context)
     val postLevelData = postLevelsData.find { 
-        it.english == postLevel || it.hindi == postLevel 
+        it.english == post || it.hindi == post 
     }
     
     return postLevelData?.designations?.map { designation ->
@@ -799,6 +846,10 @@ private fun getPostLevels(context: android.content.Context): List<String> {
     return postLevelsData.map { postLevel ->
         if (isHindi) postLevel.hindi else postLevel.english
     }
+}
+
+private fun getPostLevelsShort(): List<String> {
+    return listOf("Primary", "Upper Primary", "Secondary", "Senior Secondary")
 }
 
 private fun getBiharDistricts(): List<String> {
@@ -819,10 +870,10 @@ private fun getBlocksForDistrict(district: String): List<String> {
     return listOf("Block 1", "Block 2", "Block 3", "Block 4", "Block 5")
 }
 
-private fun getValidSubjects(postLevel: String, context: android.content.Context): List<String> {
+private fun getValidSubjects(post: String, context: android.content.Context): List<String> {
     val isHindi = LanguageUtils.isHindi(context)
     val postLevelData = postLevelsData.find { 
-        it.english == postLevel || it.hindi == postLevel 
+        it.english == post || it.hindi == post 
     }
     
     return postLevelData?.subjects?.map { subject ->
