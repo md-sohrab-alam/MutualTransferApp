@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,6 +23,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
+import dagger.hilt.android.EntryPointAccessors
+import com.shikshak.transfer.di.AppEntryPoint
 import com.shikshak.transfer.ui.theme.home.HomeScreen
 import com.shikshak.transfer.ui.theme.login.OtpVerificationScreen
 import com.shikshak.transfer.ui.theme.login.PhoneAuthViewModel
@@ -38,6 +42,10 @@ import com.shikshak.transfer.ui.theme.more.MoreScreen
 import com.shikshak.transfer.ui.theme.updates.UpdatesScreen
 import com.shikshak.transfer.ui.theme.updates.NotificationDetailScreen
 import com.shikshak.transfer.ui.theme.updates.UpdatesViewModel
+import com.shikshak.transfer.ui.theme.about.AboutPrivacyScreen
+import com.shikshak.transfer.ui.theme.about.PrivacyPolicyScreen
+import com.shikshak.transfer.ui.theme.disclaimer.DisclaimerDialog
+import com.shikshak.transfer.data.Prefs
 import android.content.Context
 import timber.log.Timber
 
@@ -47,14 +55,44 @@ fun AppNavHost(
     initialNotificationType: String? = null,
     initialNotificationAction: String? = null
 ) {
+    val context = LocalContext.current
+    val prefs: Prefs = EntryPointAccessors.fromApplication(
+        context.applicationContext,
+        AppEntryPoint::class.java
+    ).prefs()
     val navController = rememberNavController()
     val activity = LocalActivity.current!!
-    val context = LocalContext.current
 
     // 👇 States to track loading teacher and decide destination
     var appReady by remember { mutableStateOf(false) }
     var startDestination by remember { mutableStateOf(Routes.Splash) }
     var showBottomNavigation by remember { mutableStateOf(false) }
+    
+    // Disclaimer state
+    var showDisclaimerDialog by remember { mutableStateOf(false) }
+    var disclaimerAccepted by remember { mutableStateOf(false) }
+    
+    // Check disclaimer acceptance
+    LaunchedEffect(Unit) {
+        disclaimerAccepted = prefs.isDisclaimerAccepted()
+        if (!disclaimerAccepted) {
+            showDisclaimerDialog = true
+        }
+    }
+    
+    // Handle disclaimer acceptance
+    val handleDisclaimerAccept = {
+        disclaimerAccepted = true
+        showDisclaimerDialog = false
+        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+            prefs.setDisclaimerAccepted(true)
+        }
+        Unit
+    }
+    
+    val handleDisclaimerExit = {
+        activity.finish()
+    }
     
     // Handle notification navigation
     LaunchedEffect(initialNotificationType, initialNotificationAction) {
@@ -190,28 +228,8 @@ fun AppNavHost(
                 
                 composable(Routes.Updates) {
                     UpdatesScreen(
-                        onNotificationTap = { notification ->
-                            // Handle specific notification types
-                            when (notification.type) {
-                                "match" -> {
-                                    // Navigate to match details or home to see matches
-                                    navController.navigate(Routes.Home)
-                                }
-                                "transfer_request" -> {
-                                    // Navigate to request screen
-                                    navController.navigate(Routes.Request)
-                                }
-                                else -> {
-                                    // For general notifications, stay on Updates tab
-                                    // User can navigate back to Home manually
-                                }
-                            }
-                        },
                         onNotificationDetailClick = { notification ->
-                            // Navigate to notification detail screen
-                            navController.navigate("${Routes.NotificationDetail}/${notification.id}") {
-                                launchSingleTop = true
-                            }
+                            navController.navigate("${Routes.NotificationDetail}/${notification.id}")
                         }
                     )
                 }
@@ -256,38 +274,71 @@ fun AppNavHost(
                             navController.navigate(Routes.Splash) {
                                 popUpTo(0) { inclusive = true }
                             }
+                        },
+                        onNavigateToAboutPrivacy = {
+                            navController.navigate(Routes.AboutPrivacy)
+                        }
+                    )
+                }
+                
+                composable(Routes.AboutPrivacy) {
+                    AboutPrivacyScreen(
+                        onBackClick = {
+                            navController.popBackStack()
+                        },
+                        onOpenPrivacyPolicy = {
+                            navController.navigate(Routes.PrivacyPolicy)
+                        }
+                    )
+                }
+                
+                composable(Routes.PrivacyPolicy) {
+                    PrivacyPolicyScreen(
+                        onBackClick = {
+                            navController.popBackStack()
                         }
                     )
                 }
                 
                 composable(Routes.CreateRequest) {
-                    // Create a TransferRequest with empty data - CreateRequestScreen will handle creation
-                    val transferRequest = TransferRequest(
-                        teacherId = "",
-                        teacherName = "",
-                        currentDistrict = "",
-                        currentSchool = "",
-                        preferredDistricts = emptyList(),
-                        preferredBlocks = emptyList(),
-                        post = "Secondary",
-                        designation = "",
-                        subject = "",
-                        status = "PENDING",
-                        submittedDate = java.time.LocalDate.now().toString(),
-                        contactPreference = true,
-                        notes = ""
-                    )
+                    val viewModel = hiltViewModel<RequestViewModel>()
+                    val currentTeacher = sharedViewModel.currentTeacher
                     
-                    EditRequestScreen(
-                        transferRequest = transferRequest,
-                        onRequestUpdated = { createdRequest ->
-                            // Navigate to Home screen after successful creation to see matches
-                            navController.navigate(Routes.Home) {
-                                // Clear the entire back stack and start fresh from Home
-                                popUpTo(0) { inclusive = true }
+                    if (currentTeacher != null) {
+                        val teacher = currentTeacher
+                        EditRequestScreen(
+                            transferRequest = TransferRequest(
+                                teacherId = teacher.uid,
+                                teacherName = teacher.name,
+                                currentDistrict = teacher.district,
+                                currentSchool = teacher.schoolName,
+                                preferredDistricts = emptyList(),
+                                preferredBlocks = emptyList(),
+                                post = teacher.post,
+                                designation = teacher.designation,
+                                subject = teacher.subject,
+                                status = "PENDING",
+                                submittedDate = java.time.LocalDate.now().toString(),
+                                contactPreference = teacher.contactPreference,
+                                notes = ""
+                            ),
+                            onRequestUpdated = { updatedRequest ->
+                                // Navigate to Home screen after successful update to see matches
+                                navController.navigate(Routes.Home) {
+                                    // Clear the entire back stack and start fresh from Home
+                                    popUpTo(0) { inclusive = true }
+                                }
                             }
+                        )
+                    } else {
+                        // Show loading state
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
                         }
-                    )
+                    }
                 }
                 
                 composable(Routes.EditRequest) {
@@ -353,7 +404,7 @@ fun AppNavHost(
                 
                 // Auth routes should not be in the main navigation with bottom bar
                 // They are handled in the else block below
-                
+
                 // Splash route for logout functionality
                 composable(Routes.Splash) {
                     SplashScreen(
@@ -468,5 +519,14 @@ fun AppNavHost(
                 HomeScreen(navController)
             }
         }
+    }
+    
+    // Show disclaimer dialog if needed
+    if (showDisclaimerDialog) {
+        DisclaimerDialog(
+            show = true,
+            onAccept = handleDisclaimerAccept,
+            onExit = handleDisclaimerExit
+        )
     }
 }

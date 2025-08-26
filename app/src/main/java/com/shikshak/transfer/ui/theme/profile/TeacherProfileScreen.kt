@@ -672,6 +672,15 @@ private fun ViewProfileCard(
             )
             Text(stringResource(R.string.edit_profile_button))
         }
+        
+        // Footer
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = stringResource(R.string.footer_unofficial),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
     }
 }
 

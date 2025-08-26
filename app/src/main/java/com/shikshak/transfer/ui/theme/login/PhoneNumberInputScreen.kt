@@ -197,7 +197,7 @@ fun PhoneNumberInputScreen(
             
             // Footer Text
             Text(
-                text = stringResource(R.string.only_bihar_govt_teachers),
+                text = stringResource(R.string.bihar_teachers_only),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color.Black,

@@ -1,84 +1,14 @@
 <resources>
+    <!-- App Information -->
     <string name="app_name">Mutual Transfer</string>
-    <string name="debug_test">English Test String</string>
-    <string name="teacher">Teacher</string>
-    <string name="tap_to_view_profile">Tap to view/edit your profile</string>
-    <string name="make_transfer_request">Make Your Transfer Request</string>
-    <string name="create_transfer_request_description">Create your transfer request and find matching teachers for mutual transfers</string>
-    <string name="create_transfer_request_button">Create Transfer Request</string>
-    <string name="how_it_works">How It Works</string>
-    <string name="step_1_title">Create Request</string>
-    <string name="step_1_description">Fill your transfer details and preferences</string>
-    <string name="step_2_title">Find Matches</string>
-    <string name="step_2_description">Discover teachers with matching transfer needs</string>
-    <string name="step_3_title">Connect &amp; Transfer</string>
-    <string name="step_3_description">Contact matched teachers and complete transfers</string>
-    <string name="your_transfer_request_title">Your Transfer Request</string>
-    <string name="from_label">From:</string>
-    <string name="to_label">To:</string>
-    <string name="tap_to_edit_request">Tap to edit/delete your transfer request</string>
-    <string name="matching_requests_title">Matching Requests</string>
-    <string name="no_matches_found">No matching requests found yet</string>
-
-    <string name="compatibility_label">Compatibility:</string>
-    
-    <!-- App Title and Navigation -->
     <string name="app_title">Mutual Transfer Bihar</string>
     <string name="app_subtitle">Connecting Teachers Across Districts</string>
     <string name="app_footer" translatable="false">© 2025 Powered by Mohammad Sohrab Alam</string>
     
-    <!-- Splash Screen -->
-    <string name="splash_title">Mutual Transfer Bihar</string>
-    <string name="splash_subtitle">Connecting Teachers Across Districts</string>
-
-    <!-- Login Screen -->
-    <string name="login_title">Welcome Back</string>
-    <string name="login_subtitle">Sign in to your account</string>
-    <string name="phone_number_label">Phone Number</string>
-    <string name="phone_number_hint">Enter your phone number</string>
-    <string name="send_otp_button">Send OTP</string>
-    <string name="phone_validation_error">Please enter a valid 10-digit phone number</string>
-    <string name="phone_format_error">Phone number must start with 6, 7, 8, or 9</string>
+    <!-- Debug -->
+    <string name="debug_test">English Test String</string>
     
-    <!-- OTP Screen -->
-    <string name="otp_title">Verify OTP</string>
-    <string name="otp_subtitle">Enter the 6-digit code sent to your phone</string>
-    <string name="otp_hint">Enter 6-digit OTP</string>
-    <string name="verify_otp_button">Verify OTP</string>
-    <string name="resend_otp_text">Didn\'t receive code? Resend in</string>
-    <string name="otp_validation_error">Please enter a valid 6-digit OTP</string>
-    <string name="otp_format_error">OTP must contain only digits</string>
-    
-    <!-- Teacher Input Screen -->
-    <string name="teacher_input_title">Mutual Transfer Form</string>
-    <string name="current_district_label">Current District</string>
-    <string name="current_block_label">Current Block</string>
-    <string name="preferred_districts_label">Preferred Districts (Max 3)</string>
-    <string name="preferred_blocks_label">Preferred Blocks (Optional)</string>
-    <string name="select_district_hint">Select District</string>
-    <string name="select_block_hint">Select Block</string>
-    <string name="selected_districts">Selected Districts:</string>
-    <string name="selected_blocks">Selected Blocks:</string>
-    <string name="select_districts_first">Please select preferred districts first to choose blocks</string>
-    
-    <!-- Teacher Profile Screen -->
-    <string name="edit_profile">Edit Profile</string>
-    <string name="save_profile">Save Profile</string>
-    <string name="edit_button">Edit</string>
-    <string name="save_button">Save</string>
-    
-    <!-- Validation Messages -->
-    <string name="validation_full_name_required">Full name is required</string>
-    <string name="validation_school_required">School name is required</string>
-    <string name="validation_district_required">Current district is required</string>
-    <string name="validation_post_level_required">Post level is required</string>
-    <string name="validation_designation_required">Designation is required</string>
-    <string name="validation_subject_required">Subject is required for Secondary and Senior Secondary</string>
-    <string name="validation_districts_required">Please select at least one preferred district</string>
-    <string name="validation_qualification_required">Qualification is required</string>
-    <string name="validation_block_required">Block is required</string>
-    
-    <!-- Common -->
+    <!-- Common Actions -->
     <string name="loading">Loading...</string>
     <string name="error">Error</string>
     <string name="retry">Retry</string>
@@ -86,6 +16,133 @@
     <string name="ok">OK</string>
     <string name="remove">Remove</string>
     <string name="close">Close</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="not_set">Not set</string>
+    
+    <!-- Navigation -->
+    <string name="home">Home</string>
+    <string name="profile">My Profile</string>
+    <string name="request">My Request</string>
+    <string name="updates">Notification</string>
+    <string name="more">More</string>
+    
+    <!-- Splash Screen -->
+    <string name="splash_title">Mutual Transfer Bihar</string>
+    <string name="splash_subtitle">Connecting Teachers Across Districts</string>
+    
+    <!-- Authentication -->
+    <string name="login_title">Welcome Back</string>
+    <string name="login_subtitle">Sign in to your account</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_title">Welcome</string>
+    <string name="teacher_transfer_title">Teacher Transfer</string>
+    
+    <!-- Phone Number -->
+    <string name="phone_number_label">Phone Number</string>
+    <string name="phone_number_hint">Enter your phone number</string>
+    <string name="enter_phone_number">Enter your phone number</string>
+    <string name="phone_validation_error">Please enter a valid 10-digit phone number</string>
+    <string name="phone_format_error">Phone number must start with 6, 7, 8, or 9</string>
+    
+    <!-- OTP -->
+    <string name="otp_title">Verify OTP</string>
+    <string name="otp_subtitle">Enter the 6-digit code sent to your phone</string>
+    <string name="otp_hint">Enter 6-digit OTP</string>
+    <string name="otp_verification_title">OTP Verification</string>
+    <string name="otp_verification_subtitle">Enter the 6-digit code sent to your phone</string>
+    <string name="enter_6_digit_code_sent_to_your_phone">Enter the 6-digit code sent to your phone</string>
+    <string name="enter_6_digit_otp">Enter 6-digit OTP</string>
+    <string name="verify_otp_button">Verify OTP</string>
+    <string name="verify_otp_button_text">Verify OTP</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="send_otp_button">Send OTP</string>
+    <string name="send_otp_button_text">Send OTP</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="sending_otp">Sending OTP...</string>
+    <string name="verifying_otp">Verifying OTP...</string>
+    <string name="otp_send_failed">OTP Send Failed</string>
+    <string name="verification_failed">Verification Failed</string>
+    <string name="resend_otp_text">Didn\'t receive code? Resend in</string>
+    <string name="didnt_receive_otp">Didn\'t receive OTP?</string>
+    <string name="otp_resend_message">You can request a new OTP after 30 seconds</string>
+    <string name="you_can_request_new_otp_after_30_seconds">You can request a new OTP after 30 seconds</string>
+    <string name="otp_validation_error">Please enter a valid 6-digit OTP</string>
+    <string name="otp_format_error">OTP must contain only digits</string>
+    <string name="otp_required">OTP is required</string>
+    <string name="otp_must_be_6_digits">OTP must be 6 digits</string>
+    <string name="otp_must_contain_only_digits">OTP must contain only digits</string>
+    
+    <!-- Language Selection -->
+    <string name="choose_language">Choose Language / भाषा चुनें</string>
+    <string name="continue_button">Continue / जारी रखें</string>
+    <string name="change_language">Change Language</string>
+    <string name="change_language_subtitle">Select your preferred language</string>
+    
+    <!-- Teacher Profile -->
+    <string name="teacher">Teacher</string>
+    <string name="teacher_profile">Teacher Profile</string>
+    <string name="teacher_profile_title">Teacher Profile</string>
+    <string name="teacher_profile_header">Teacher Profile</string>
+    <string name="complete_profile_title">Complete Your Profile</string>
+    <string name="complete_profile_header">Complete Your Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="edit_profile_header">Edit Profile</string>
+    <string name="edit_profile_button">Edit Profile</string>
+    <string name="save_profile">Save Profile</string>
+    <string name="save_changes_button">Save Changes</string>
+    <string name="complete_profile_button">Complete Profile</string>
+    <string name="profile_completed_success">Profile completed successfully!</string>
+    <string name="profile_updated_success">Profile updated successfully!</string>
+    <string name="profile_completed_toast">Profile completed successfully!</string>
+    <string name="profile_updated_toast">Profile updated successfully!</string>
+    <string name="tap_to_view_profile">Tap to view/edit your profile</string>
+    
+    <!-- Profile Fields -->
+    <string name="full_name_label">Full Name</string>
+    <string name="name_label">Name</string>
+    <string name="mobile_number_label">Mobile Number</string>
+    <string name="mobile_label">Mobile</string>
+    <string name="post_level_label">Post Level</string>
+    <string name="designation_label">Designation</string>
+    <string name="subject_label">Subject</string>
+    <string name="qualification_label">Qualification</string>
+    <string name="current_school_label">Current School Name</string>
+    <string name="current_school_name_label">Current School Name</string>
+    <string name="school_label">School</string>
+    <string name="school_district_label">Your School District</string>
+    <string name="school_block_label">Your School Block</string>
+    <string name="contact_preference_label">Contact Preference</string>
+    <string name="contact_allowed_label">Contact Allowed</string>
+    <string name="allow_contact">Allow contact</string>
+    <string name="dont_allow_contact">Don\'t allow contact</string>
+    <string name="willing_to_move">Willing to Move</string>
+    
+    <!-- Form Sections -->
+    <string name="personal_information">Personal Information</string>
+    <string name="professional_information">Professional Information</string>
+    <string name="school_information">School Information</string>
+    <string name="profile_information">Profile Information</string>
+    <string name="transfer_preferences">Transfer Preferences</string>
+    <string name="contact_information">Contact Information</string>
+    
+    <!-- Location Fields -->
+    <string name="current_district_label">Current District</string>
+    <string name="current_block_label">Current Block</string>
+    <string name="district_label">District</string>
+    <string name="block_label">Block</string>
+    <string name="preferred_districts_label">Preferred Districts (Max 3)</string>
+    <string name="preferred_blocks_label">Preferred Blocks (Optional)</string>
+    <string name="preferred_districts">Preferred Districts</string>
+    <string name="preferred_blocks">Preferred Blocks</string>
+    <string name="select_district_hint">Select District</string>
+    <string name="select_block_hint">Select Block</string>
+    <string name="selected_districts">Selected Districts:</string>
+    <string name="selected_blocks">Selected Blocks:</string>
+    <string name="select_districts_first">Please select preferred districts first to choose blocks</string>
     
     <!-- Post Levels -->
     <string name="post_level_primary">Primary</string>
@@ -102,6 +159,49 @@
     <string name="designation_pgt">Post Graduate Teacher (PGT)</string>
     <string name="designation_lecturer">Lecturer (प्रवक्ता)</string>
     
+    <!-- Transfer Request -->
+    <string name="make_transfer_request">Make Your Transfer Request</string>
+    <string name="create_transfer_request_description">Create your transfer request and find matching teachers for mutual transfers</string>
+    <string name="create_transfer_request_button">Create Transfer Request</string>
+    <string name="create_transfer_request_title">Create Transfer Request</string>
+    <string name="create_transfer_request_subtitle">Submit your transfer preferences to find a mutual transfer partner</string>
+    <string name="edit_transfer_request_title">Edit Transfer Request</string>
+    <string name="edit_or_cancel_request_subtitle">View, edit, or cancel your existing transfer request</string>
+    <string name="your_transfer_request_title">Your Transfer Request</string>
+    <string name="your_transfer_request">Your Transfer Request</string>
+    <string name="your_request">Your Request</string>
+    <string name="request_details">Request Details</string>
+    <string name="current_request_info">Current Request Info</string>
+    <string name="edit_request">Edit Request</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="update_request">Update Request</string>
+    <string name="tap_to_edit_request">Tap to edit/delete your transfer request</string>
+    <string name="tap_to_edit_request_text">Tap to edit/delete your transfer request</string>
+    <string name="notes_label">Notes (Optional)</string>
+    
+    <!-- Request Status -->
+    <string name="current_location">Current Location</string>
+    <string name="preferred_locations">Preferred Locations</string>
+    <string name="status">Status</string>
+    <string name="submitted_date">Submitted Date</string>
+    
+    <!-- Cancel Request Dialog -->
+    <string name="cancel_request_title">Cancel Request</string>
+    <string name="cancel_request_message">Are you sure you want to cancel your transfer request? This action cannot be undone.</string>
+    <string name="cancel_request_confirm">Yes, Cancel</string>
+    <string name="cancel_request_dismiss">No, Keep</string>
+    
+    <!-- How It Works -->
+    <string name="how_it_works">How It Works</string>
+    <string name="how_it_works_title">How Mutual Transfer Works</string>
+    <string name="how_it_works_description">• You submit your preferred district/school\n• The app matches you with a teacher who wants to swap with your location\n• You can then contact them and proceed through official process</string>
+    <string name="step_1_title">Create Request</string>
+    <string name="step_1_description">Fill your transfer details and preferences</string>
+    <string name="step_2_title">Find Matches</string>
+    <string name="step_2_description">Discover teachers with matching transfer needs</string>
+    <string name="step_3_title">Connect &amp; Transfer</string>
+    <string name="step_3_description">Contact matched teachers and complete transfers</string>
+    
     <!-- Home Screen -->
     <string name="welcome_message" translatable="false">Welcome</string>
     <string name="welcome_back_message">Welcome back</string>
@@ -109,141 +209,43 @@
     <string name="app_purpose_description">This app helps Bihar government teachers find a mutual transfer partner from another district. Submit your transfer request to get started.</string>
     <string name="ready_to_transfer">Ready to transfer?</string>
     <string name="submit_transfer_request">Submit Transfer Request</string>
-    <string name="how_it_works_title">How Mutual Transfer Works</string>
-    <string name="how_it_works_description">• You submit your preferred district/school\n• The app matches you with a teacher who wants to swap with your location\n• You can then contact them and proceed through official process</string>
     <string name="faq_title">Frequently Asked Questions</string>
     <string name="faq_content">• What if I change my mind?\n• Is my data safe?\n• Can I cancel a request?</string>
-    <string name="your_request">Your Request</string>
     <string name="potential_matches">Potential Matches</string>
-    <string name="no_matches_yet">We\'re still looking for a match. Hang tight — we\'ll notify you when one is available.</string>
-    <string name="contact_now">Contact Now</string>
-    <string name="your_transfer_request">Your Transfer Request</string>
+    <string name="matching_requests_title">Matching Requests</string>
     <string name="matching_requests">Matching Requests</string>
+    <string name="no_matches_found">No matching requests found yet</string>
+    <string name="no_matches_yet">We\'re still looking for a match. Hang tight — we\'ll notify you when one is available.</string>
     <string name="no_matching_request_found">No matching request found.</string>
     <string name="we_will_notify_you">We will notify you when we find a match.</string>
-    
-    <!-- Bottom Navigation -->
-    <string name="home">Home</string>
-    <string name="profile">My Profile</string>
-    <string name="request">My Request</string>
-    <string name="updates">Notification</string>
-    <string name="more">More</string>
-    
-    <!-- Request Screen -->
-    <string name="create_transfer_request_title">Create Transfer Request</string>
-    <string name="create_transfer_request_subtitle">Submit your transfer preferences to find a mutual transfer partner</string>
-    <string name="edit_transfer_request_title">Edit Transfer Request</string>
-    <string name="edit_or_cancel_request_subtitle">View, edit, or cancel your existing transfer request</string>
-    <string name="request_details">Request Details</string>
-    <string name="current_location">Current Location</string>
-    <string name="preferred_locations">Preferred Locations</string>
-    <string name="status">Status</string>
-    <string name="submitted_date">Submitted Date</string>
-    <string name="current_request_info">Current Request Info</string>
-    <string name="edit_request">Edit Request</string>
-    <string name="cancel_request">Cancel Request</string>
-    <string name="update_request">Update Request</string>
-    <string name="cancel_request_title">Cancel Request</string>
-    <string name="cancel_request_message">Are you sure you want to cancel your transfer request? This action cannot be undone.</string>
-    <string name="cancel_request_confirm">Yes, Cancel</string>
-    <string name="cancel_request_dismiss">No, Keep</string>
-    <string name="notes_label">Notes (Optional)</string>
-
-    <!-- More Screen -->
-    <string name="more_options_title">More Options</string>
-    <string name="change_language">Change Language</string>
-    <string name="change_language_subtitle">Select your preferred language</string>
-    <string name="about">About</string>
-    <string name="about_subtitle">Learn more about the app</string>
-    <string name="logout">Logout</string>
-    <string name="logout_subtitle">Sign out from your account</string>
-
-    <!-- About Dialog -->
-    <string name="about_dialog_title">About This App</string>
-    <string name="about_dialog_content">App Name: MutualTransfer – बिहार शिक्षक आपसी तबादला\nVersion: 1.0.0\nDeveloper: Sohrab Tech Solutions\nEmail: iamsohrabalam@gmail.com\n\n📢 Disclaimer:\nThis application is not affiliated with the Government of Bihar or any official education department. It is an independent platform created to help Bihar government school teachers connect with each other for mutual transfers more easily.\n\nAll information is user-submitted, and while we aim to maintain accuracy, we do not guarantee or take responsibility for the correctness of transfer-related data.\n\nAlways confirm with official channels or your district education office before proceeding with any transfer.\n\n📄 Privacy &amp; Data Policy:\nWe collect only necessary information (e.g., name, school, district) to facilitate mutual matching.\nYour data is not shared with any third party and remains secure on Firebase.</string>
-
-    <!-- Logout Dialog -->
-    <string name="confirm_logout_title">Confirm Logout</string>
-    <string name="confirm_logout_message">Are you sure you want to logout? You will need to sign in again to access the app.</string>
-    <string name="yes_logout">Yes, Logout</string>
-
-    <!-- Splash Screen -->
-    <string name="splash_app_title">MutualTransfer Bihar</string>
-    <string name="splash_app_subtitle">Connecting Teachers Across Districts</string>
-    <string name="splash_powered_by">@string/app_footer</string>
-    <string name="powered_by">@string/app_footer</string>
-
-    <!-- Login Screen -->
-    <string name="teacher_transfer_title">Teacher Transfer</string>
-    <string name="welcome_title">Welcome</string>
-    <string name="send_otp_button_text">Send OTP</string>
-    <string name="bihar_teachers_only">Disclaimer: This app is not affiliated with or endorsed by the Government of Bihar or any government entity. It is an independent platform created to assist teachers in finding mutual transfer opportunities.</string>
-    <string name="welcome">Welcome</string>
-    <string name="enter_phone_number">Enter your phone number</string>
-    <string name="send_otp">Send OTP</string>
-    <string name="only_bihar_govt_teachers">Only Bihar government teachers can access this app</string>
-    <string name="sending_otp">Sending OTP...</string>
-    <string name="otp_send_failed">OTP Send Failed</string>
-
-    <!-- OTP Screen -->
-    <string name="otp_verification_title">OTP Verification</string>
-    <string name="otp_verification_subtitle">Enter the 6-digit code sent to your phone</string>
-    <string name="verify_otp_button_text">Verify OTP</string>
-    <string name="didnt_receive_otp">Didn\'t receive OTP?</string>
-    <string name="otp_resend_message">You can request a new OTP after 30 seconds</string>
-    <string name="otp_verification">OTP Verification</string>
-    <string name="enter_6_digit_code_sent_to_your_phone">Enter the 6-digit code sent to your phone</string>
-    <string name="enter_6_digit_otp">Enter 6-digit OTP</string>
-    <string name="verify_otp">Verify OTP</string>
-    <string name="you_can_request_new_otp_after_30_seconds">You can request a new OTP after 30 seconds</string>
-    <string name="verifying_otp">Verifying OTP...</string>
-    <string name="verification_failed">Verification Failed</string>
-    <string name="otp_required">OTP is required</string>
-    <string name="otp_must_be_6_digits">OTP must be 6 digits</string>
-    <string name="otp_must_contain_only_digits">OTP must contain only digits</string>
-
-    <!-- Language Selector -->
-    <string name="choose_language">Choose Language / भाषा चुनें</string>
-    <string name="continue_button">Continue / जारी रखें</string>
-
-    <!-- Home Screen -->
-    <string name="from_label_text">From:</string>
-    <string name="to_label_text">To:</string>
-    <string name="tap_to_edit_request_text">Tap to edit/delete your transfer request</string>
     <string name="we_will_notify_text">We\'ll notify you when we find matching teachers</string>
+    <string name="contact_now">Contact Now</string>
+    <string name="from_label">From:</string>
+    <string name="from_label_text">From:</string>
+    <string name="to_label">To:</string>
+    <string name="to_label_text">To:</string>
     
-    <!-- Profile Screen -->
-    <string name="complete_profile_title">Complete Your Profile</string>
-    <string name="teacher_profile_title">Teacher Profile</string>
-    <string name="edit_profile_title">Edit Profile</string>
-    <string name="complete_profile_header">Complete Your Profile</string>
-    <string name="teacher_profile_header">Teacher Profile</string>
-    <string name="edit_profile_header">Edit Profile</string>
-    <string name="full_name_label">Full Name</string>
-    <string name="mobile_number_label">Mobile Number</string>
-    <string name="post_level_label">Post Level</string>
-    <string name="designation_label">Designation</string>
-    <string name="subject_label">Subject</string>
-    <string name="qualification_label">Qualification</string>
-    <string name="current_school_label">Current School Name</string>
-    <string name="current_school_name_label">Current School Name</string>
-    <string name="school_district_label">Your School District</string>
-    <string name="school_block_label">Your School Block</string>
-    <string name="contact_preference_label">Contact Preference</string>
-    <string name="allow_contact">Allow contact</string>
-    <string name="dont_allow_contact">Don\'t allow contact</string>
-    <string name="complete_profile_button">Complete Profile</string>
-    <string name="save_changes_button">Save Changes</string>
-    <string name="cancel_button_text">Cancel</string>
-    <string name="cancel_button">Cancel</string>
-    <string name="edit_profile_button">Edit Profile</string>
-    <string name="profile_completed_success">Profile completed successfully!</string>
-    <string name="profile_updated_success">Profile updated successfully!</string>
-    <string name="profile_completed_toast">Profile completed successfully!</string>
-    <string name="profile_updated_toast">Profile updated successfully!</string>
-    <string name="not_set">Not set</string>
+    <!-- Compatibility -->
+    <string name="compatibility_label">Compatibility:</string>
+    <string name="match_compatibility">Match Compatibility</string>
+    <string name="compatibility_score">Compatibility Score</string>
+    <string name="matching_factors">Matching Factors</string>
+    <string name="contact_preference">Contact Preference</string>
     
-    <!-- Updates Screen -->
+    <!-- Match Quality -->
+    <string name="perfect_match">Perfect Match</string>
+    <string name="excellent_match">Excellent Match</string>
+    <string name="good_match">Good Match</string>
+    <string name="compatible_match">Compatible Match</string>
+    <string name="basic_match">Basic Match</string>
+    
+    <!-- Profile Actions -->
+    <string name="call_teacher">Call Teacher</string>
+    <string name="send_email">Send Email</string>
+    <string name="share_profile">Share Profile</string>
+    <string name="tap_card_hint">Tap card to view full profile</string>
+    
+    <!-- Notifications -->
     <string name="updates_title">Notifications</string>
     <string name="notification_permission_required">Notification Permission Required</string>
     <string name="notification_permission_description">You need to allow notifications to receive updates about new matches, transfer requests, and app updates. Without this permission, you won\'t receive any notifications.</string>
@@ -268,58 +270,67 @@
     <string name="notification_type_general">General Update</string>
     <string name="notification_type_system">System Message</string>
     
-    <!-- Profile Detail Screen -->
-    <string name="teacher_profile">Teacher Profile</string>
-    <string name="transfer_preferences">Transfer Preferences</string>
-    <string name="match_compatibility">Match Compatibility</string>
-    <string name="contact_information">Contact Information</string>
-    <string name="call_teacher">Call Teacher</string>
-    <string name="send_email">Send Email</string>
-    <string name="share_profile">Share Profile</string>
-    <string name="tap_card_hint">Tap card to view full profile</string>
-    <string name="compatibility_score">Compatibility Score</string>
-    <string name="matching_factors">Matching Factors</string>
-    <string name="preferred_districts">Preferred Districts</string>
-    <string name="preferred_blocks">Preferred Blocks</string>
-    <string name="willing_to_move">Willing to Move</string>
-    <string name="contact_preference">Contact Preference</string>
-    
-    <!-- Rate App -->
+    <!-- More Screen -->
+    <string name="more_options_title">More Options</string>
+    <string name="about">About</string>
+    <string name="about_subtitle">Learn more about the app</string>
+    <string name="logout">Logout</string>
+    <string name="logout_subtitle">Sign out from your account</string>
     <string name="rate_app">Rate App</string>
     <string name="rate_app_subtitle">Rate us on Google Play Store</string>
     
-    <!-- Form Labels -->
-    <string name="personal_information">Personal Information</string>
-    <string name="professional_information">Professional Information</string>
-    <string name="school_information">School Information</string>
-    <string name="district_label">District</string>
-    <string name="block_label">Block</string>
+    <!-- Dialogs -->
+    <string name="about_dialog_title">About This App</string>
+    <string name="about_dialog_content">App Name: MutualTransfer – बिहार शिक्षक आपसी तबादला\nVersion: 1.0.0\nDeveloper: Sohrab Tech Solutions\nEmail: iamsohrabalam@gmail.com\n\n📢 Disclaimer:\nThis application is not affiliated with the Government of Bihar or any official education department. It is an independent platform created to help Bihar government school teachers connect with each other for mutual transfers more easily.\n\nAll information is user-submitted, and while we aim to maintain accuracy, we do not guarantee or take responsibility for the correctness of transfer-related data.\n\nAlways confirm with official channels or your district education office before proceeding with any transfer.\n\n📄 Privacy &amp; Data Policy:\nWe collect only necessary information (e.g., name, school, district) to facilitate mutual matching.\nYour data is not shared with any third party and remains secure on Firebase.</string>
+    <string name="confirm_logout_title">Confirm Logout</string>
+    <string name="confirm_logout_message">Are you sure you want to logout? You will need to sign in again to access the app.</string>
+    <string name="yes_logout">Yes, Logout</string>
     
-    <!-- Profile View Labels -->
-    <string name="profile_information">Profile Information</string>
-    <string name="name_label">Name</string>
-    <string name="mobile_label">Mobile</string>
-    <string name="school_label">School</string>
-    <string name="contact_allowed_label">Contact Allowed</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+    <!-- Disclaimer -->
+    <string name="bihar_teachers_only">Disclaimer: This app is not affiliated with or endorsed by the Government of Bihar or any government entity. It is an independent platform created to assist teachers in finding mutual transfer opportunities.</string>
     
-    <!-- Share Utils -->
+    <!-- Share -->
     <string name="shared_via_app">Shared via Mutual Transfer App</string>
     <string name="mutual_transfer_match">Mutual Transfer Match</string>
     <string name="share_via">Share via</string>
     
-    <!-- Match Quality -->
-    <string name="perfect_match">Perfect Match</string>
-    <string name="excellent_match">Excellent Match</string>
-    <string name="good_match">Good Match</string>
-    <string name="compatible_match">Compatible Match</string>
-    <string name="basic_match">Basic Match</string>
-    
     <!-- Validation Messages -->
+    <string name="validation_full_name_required">Full name is required</string>
+    <string name="validation_school_required">School name is required</string>
+    <string name="validation_district_required">Current district is required</string>
+    <string name="validation_post_level_required">Post level is required</string>
+    <string name="validation_designation_required">Designation is required</string>
+    <string name="validation_subject_required">Subject is required for Secondary and Senior Secondary</string>
+    <string name="validation_districts_required">Please select at least one preferred district</string>
+    <string name="validation_qualification_required">Qualification is required</string>
+    <string name="validation_block_required">Block is required</string>
     <string name="no_preferred_districts_selected">No preferred districts selected</string>
     <string name="post_level_not_specified">Post level not specified</string>
     <string name="designation_not_specified">Designation not specified</string>
     <string name="subject_required_for_secondary">Subject is required for Secondary/Senior Secondary levels</string>
+    
+    <!-- Disclaimer and Privacy -->
+    <string name="disclaimer_title">Disclaimer</string>
+    <string name="disclaimer_body">This app is not an official Bihar Government app. It is developed independently to help teachers connect for mutual transfer opportunities. All information shown here is submitted by users of the app; no official government transfer data is displayed. The app does not represent, endorse, or have any affiliation with the Bihar Government or its Education Department.</string>
+    <string name="disclaimer_accept">Agree &amp; Continue</string>
+    <string name="disclaimer_exit">Exit</string>
+    <string name="disclaimer_checkbox">I understand</string>
+    <string name="menu_about_privacy">About &amp; Privacy</string>
+    <string name="menu_view_disclaimer">View Disclaimer</string>
+    <string name="about_title">About this App</string>
+    <string name="about_body">Mutual Teacher Transfer is an independent tool to help teachers connect for mutual transfers. It is not an official government app, and it has no affiliation with the Bihar Government or its Education Department. All information is user-submitted.</string>
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="open_privacy_policy">Open Privacy Policy</string>
+    <string name="data_handling_title">Data Handling</string>
+    <string name="data_handling_bullet_1">• We collect only necessary information (name, post level, school, district) to facilitate mutual matching</string>
+    <string name="data_handling_bullet_2">• Your data is not shared with any third party and remains secure on Firebase</string>
+    <string name="data_handling_bullet_3">• You can update or delete your profile data from within the app</string>
+    <string name="data_handling_bullet_4">• We do not sell your data to any third parties</string>
+    <string name="footer_unofficial">Unofficial app • User-submitted data</string>
+    
+    <!-- Missing strings from error messages -->
+    <string name="otp_verification">OTP Verification</string>
+    <string name="powered_by">Powered by</string>
+    <string name="cancel_button">Cancel</string>
     
 </resources>

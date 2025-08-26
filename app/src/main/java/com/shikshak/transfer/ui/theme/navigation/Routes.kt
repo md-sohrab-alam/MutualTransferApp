@@ -28,4 +28,8 @@ object Routes {
     
     // Profile Detail Route
     const val ProfileDetail = "profile_detail"
+    
+    // About & Privacy Routes
+    const val AboutPrivacy = "about_privacy"
+    const val PrivacyPolicy = "privacy_policy"
 }

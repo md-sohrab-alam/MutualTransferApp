@@ -1,0 +1,16 @@
+The Mutual Teacher Transfer app is an independent tool to help Bihar government school teachers connect with each other for mutual transfer opportunities.
+
+📌 Disclaimer
+This app is not an official government app and has no affiliation with the Bihar Government or its Education Department. All information displayed in the app is submitted by users of the app; no official government transfer data is shown.
+
+🏫 Key Features
+• Create and manage your teacher transfer profile  
+• Select your current and preferred district, block, and school  
+• View and connect with other teachers who are seeking mutual transfers  
+• Filter by post level (Primary, Upper Primary, High School)  
+• Simple, secure, and easy-to-use interface
+
+🔒 Data Safety
+Your details are used only within the app for matching purposes and are not shared with third parties except for essential service providers necessary to run the app (see Privacy Policy).
+
+🇮🇳 Made in India to solve real problems for teachers.

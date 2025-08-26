@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.ui.platform.LocalContext
 import com.shikshak.transfer.ui.theme.utils.ErrorAlertDialog
+import com.shikshak.transfer.ui.theme.disclaimer.DisclaimerDialog
 import com.shikshak.transfer.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,13 +27,15 @@ import com.shikshak.transfer.R
 fun MoreScreen(
     viewModel: MoreViewModel = hiltViewModel(),
     onNavigateToLanguageSelector: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToAboutPrivacy: () -> Unit
 ) {
     val context = LocalContext.current
     val currentUser = FirebaseAuth.getInstance().currentUser
     
     // State for logout confirmation dialog
     var showLogoutDialog by remember { mutableStateOf(false) }
+    var showDisclaimerDialog by remember { mutableStateOf(false) }
     
     Column(
         modifier = Modifier
@@ -46,6 +49,22 @@ fun MoreScreen(
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 24.dp)
+        )
+        
+        // About & Privacy
+        MenuItem(
+            icon = "🔒",
+            title = stringResource(R.string.menu_about_privacy),
+            subtitle = "View app information and privacy policy",
+            onClick = { onNavigateToAboutPrivacy() }
+        )
+        
+        // View Disclaimer
+        MenuItem(
+            icon = "⚠️",
+            title = stringResource(R.string.menu_view_disclaimer),
+            subtitle = "Read the app disclaimer",
+            onClick = { showDisclaimerDialog = true }
         )
         
         // Change Language
@@ -89,6 +108,12 @@ fun MoreScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
+                text = stringResource(R.string.footer_unofficial),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
                 text = stringResource(R.string.powered_by),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -99,6 +124,16 @@ fun MoreScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+    }
+    
+    // Disclaimer Dialog (Read-only mode)
+    if (showDisclaimerDialog) {
+        DisclaimerDialog(
+            show = true,
+            onAccept = { showDisclaimerDialog = false },
+            onExit = { showDisclaimerDialog = false },
+            isReadOnly = true
+        )
     }
     
     // Logout Confirmation Dialog
