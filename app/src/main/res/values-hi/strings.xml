@@ -171,7 +171,7 @@
     <string name="teacher_transfer_title">शिक्षक ट्रांसफर</string>
     <string name="welcome_title">स्वागत है</string>
     <string name="send_otp_button_text">OTP भेजें</string>
-    <string name="bihar_teachers_only">केवल बिहार सरकार के शिक्षक ही इस ऐप का उपयोग कर सकते हैं</string>
+    <string name="bihar_teachers_only">यह ऐप किसी भी सरकारी संस्था से संबद्ध नहीं है और न ही बिहार सरकार द्वारा मान्यता प्राप्त है। यह एक स्वतंत्र ऐप है जिसे शिक्षकों को आपसी तबादले के लिए साथी शिक्षक खोजने में मदद करने के उद्देश्य से बनाया गया है।</string>
     <string name="welcome">स्वागत है</string>
     <string name="enter_phone_number">अपना फोन नंबर दर्ज करें</string>
     <string name="send_otp">OTP भेजें</string>

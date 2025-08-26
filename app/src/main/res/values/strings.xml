@@ -177,7 +177,7 @@
     <string name="teacher_transfer_title">Teacher Transfer</string>
     <string name="welcome_title">Welcome</string>
     <string name="send_otp_button_text">Send OTP</string>
-    <string name="bihar_teachers_only">Only Bihar government teachers can access this app</string>
+    <string name="bihar_teachers_only">Disclaimer: This app is not affiliated with or endorsed by the Government of Bihar or any government entity. It is an independent platform created to assist teachers in finding mutual transfer opportunities.</string>
     <string name="welcome">Welcome</string>
     <string name="enter_phone_number">Enter your phone number</string>
     <string name="send_otp">Send OTP</string>
