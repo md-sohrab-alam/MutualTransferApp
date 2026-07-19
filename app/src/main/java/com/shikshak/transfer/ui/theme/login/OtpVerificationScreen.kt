@@ -45,7 +45,8 @@ import androidx.compose.runtime.collectAsState
 @Composable
 fun OtpVerificationScreen(
     viewModel: PhoneAuthViewModel, 
-    navController: NavController
+    navController: NavController,
+    onLoginSuccess: () -> Unit
 ) {
     var otpCode by remember { mutableStateOf("") }
     var isOtpValid by remember { mutableStateOf(true) }
@@ -237,9 +238,7 @@ fun OtpVerificationScreen(
     // ✅ Navigation triggered when OTP is verified
     if (viewModel.isOtpVerified.value) {
         LaunchedEffect(Unit) {
-            navController.navigate(Routes.Profile) {
-                popUpTo("otp_screen") { inclusive = true }
-            }
+            onLoginSuccess()
         }
     }
 }

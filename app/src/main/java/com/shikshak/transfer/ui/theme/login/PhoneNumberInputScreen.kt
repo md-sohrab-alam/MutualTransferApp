@@ -46,7 +46,8 @@ import com.shikshak.transfer.R
 fun PhoneNumberInputScreen(
     viewModel: PhoneAuthViewModel,
     activity: Activity,
-    navController: NavController
+    navController: NavController,
+    onLoginSuccess: () -> Unit
 ) {
     var phoneNumber by remember { mutableStateOf("") }
     var isPhoneValid by remember { mutableStateOf(true) }
@@ -238,12 +239,10 @@ fun PhoneNumberInputScreen(
         }
     }
 
-    // ✅ Automatically navigate to profile/dashboard if auto-login success
+    // ✅ Automatically navigate after auto-verification / instant login
     if (viewModel.isOtpVerified.value) {
         LaunchedEffect(Unit) {
-            navController.navigate(Routes.Profile) {
-                popUpTo(Routes.PhoneInput) { inclusive = true }
-            }
+            onLoginSuccess()
         }
     }
 }
