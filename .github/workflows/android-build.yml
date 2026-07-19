@@ -7,14 +7,14 @@ on:
   workflow_dispatch:
     inputs:
       artifacts:
-        description: "Artifacts to build (AAB is required for Play Store)"
+        description: "Artifacts to build (AAB for Play Store, APK for direct install)"
         required: true
-        default: aab
+        default: both
         type: choice
         options:
+          - both
           - aab
           - apk
-          - both
       create_github_release:
         description: "Create a GitHub Release and attach the built artifact(s)"
         required: true
@@ -32,7 +32,7 @@ concurrency:
 
 jobs:
   build:
-    name: Generate Release (${{ github.event_name == 'workflow_dispatch' && inputs.artifacts || 'aab' }})
+    name: Generate Release (${{ github.event_name == 'workflow_dispatch' && inputs.artifacts || 'both' }})
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
@@ -62,8 +62,8 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             TYPE="${{ inputs.artifacts }}"
           else
-            # Auto builds on push: AAB for Play Store
-            TYPE="aab"
+            # Auto builds on push: both Play Store AAB and installable APK
+            TYPE="both"
           fi
 
           case "$TYPE" in
