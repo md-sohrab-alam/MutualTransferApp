@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        maven { url = uri("${rootDir}/.m2-local") }
         google()
         mavenCentral()
         gradlePluginPortal()
@@ -9,7 +8,6 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven { url = uri("${rootDir}/.m2-local") }
         google()
         mavenCentral()
     }
@@ -17,4 +15,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "MutualTransferApp"
 include(":app")
- 
