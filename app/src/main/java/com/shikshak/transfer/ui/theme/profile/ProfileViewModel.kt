@@ -16,13 +16,35 @@ class ProfileViewModel @Inject constructor() : BaseViewModel() {
 
     fun saveTeacherProfile(teacher: Teacher, onSuccess: () -> Unit = {}) {
         updateLoadingState(true)
-        db.collection("teachers").document(teacher.uid).set(teacher)
+        // Write as a plain map so R8 cannot break Firestore field names.
+        val payload = hashMapOf(
+            "uid" to teacher.uid,
+            "name" to teacher.name,
+            "gender" to teacher.gender,
+            "subject" to teacher.subject,
+            "post" to teacher.post,
+            "district" to teacher.district,
+            "block" to teacher.block,
+            "schoolName" to teacher.schoolName,
+            "contact" to hashMapOf(
+                "email" to teacher.contact.email,
+                "phone" to teacher.contact.phone
+            ),
+            "timestamp" to (teacher.timestamp ?: System.currentTimeMillis()),
+            "designation" to teacher.designation,
+            "contactPreference" to teacher.contactPreference,
+            "willingToMove" to teacher.willingToMove,
+            "preferredDistricts" to teacher.preferredDistricts,
+            "preferredBlocks" to teacher.preferredBlocks,
+            "qualification" to teacher.qualification
+        )
+        db.collection("teachers").document(teacher.uid).set(payload)
             .addOnSuccessListener {
                 // After saving the profile, update the transfer request if it exists
                 db.collection("transfer_requests").document(teacher.uid).get()
                     .addOnSuccessListener { doc ->
                         if (doc.exists()) {
-                            val request = doc.toObject(com.shikshak.transfer.ui.theme.data.TransferRequest::class.java)
+                            val request = com.shikshak.transfer.ui.theme.data.TransferRequest.fromDocument(doc)
                             if (request != null) {
                                 val updatedRequest = request.copy(
                                     teacherName = teacher.name,
@@ -34,7 +56,24 @@ class ProfileViewModel @Inject constructor() : BaseViewModel() {
                                     qualification = teacher.qualification,
                                     contactPreference = teacher.contactPreference
                                 )
-                                db.collection("transfer_requests").document(teacher.uid).set(updatedRequest)
+                                db.collection("transfer_requests").document(teacher.uid).set(
+                                    hashMapOf(
+                                        "teacherId" to updatedRequest.teacherId,
+                                        "teacherName" to updatedRequest.teacherName,
+                                        "currentDistrict" to updatedRequest.currentDistrict,
+                                        "currentSchool" to updatedRequest.currentSchool,
+                                        "preferredDistricts" to updatedRequest.preferredDistricts,
+                                        "preferredBlocks" to updatedRequest.preferredBlocks,
+                                        "post" to updatedRequest.post,
+                                        "designation" to updatedRequest.designation,
+                                        "subject" to updatedRequest.subject,
+                                        "qualification" to updatedRequest.qualification,
+                                        "status" to updatedRequest.status,
+                                        "submittedDate" to updatedRequest.submittedDate,
+                                        "contactPreference" to updatedRequest.contactPreference,
+                                        "notes" to updatedRequest.notes
+                                    )
+                                )
                             }
                         }
                         onSuccess()
@@ -57,7 +96,7 @@ class ProfileViewModel @Inject constructor() : BaseViewModel() {
             .addOnSuccessListener { document ->
                 updateLoadingState(false)
                 if (document.exists()) {
-                    val teacher = document.toObject(Teacher::class.java) ?: Teacher()
+                    val teacher = Teacher.fromDocument(document) ?: Teacher()
                     currentTeacher = teacher
                     onLoaded(teacher)
                 } else {

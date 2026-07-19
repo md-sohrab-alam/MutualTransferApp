@@ -23,7 +23,23 @@ class EditRequestViewModel @Inject constructor() : BaseViewModel() {
             try {
                 val userId = auth.currentUser?.uid
                 if (userId != null) {
-                    firestore.collection("transfer_requests").document(userId).set(transferRequest)
+                    val payload = hashMapOf(
+                        "teacherId" to transferRequest.teacherId,
+                        "teacherName" to transferRequest.teacherName,
+                        "currentDistrict" to transferRequest.currentDistrict,
+                        "currentSchool" to transferRequest.currentSchool,
+                        "preferredDistricts" to transferRequest.preferredDistricts,
+                        "preferredBlocks" to transferRequest.preferredBlocks,
+                        "post" to transferRequest.post,
+                        "designation" to transferRequest.designation,
+                        "subject" to transferRequest.subject,
+                        "qualification" to transferRequest.qualification,
+                        "status" to transferRequest.status,
+                        "submittedDate" to transferRequest.submittedDate,
+                        "contactPreference" to transferRequest.contactPreference,
+                        "notes" to transferRequest.notes
+                    )
+                    firestore.collection("transfer_requests").document(userId).set(payload)
                         .addOnSuccessListener {
                             Timber.d("Transfer request updated successfully")
                             updateLoadingState(false)

@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     val teacherDoc = firestore.collection("teachers").document(userId).get()
                     teacherDoc.addOnSuccessListener { document ->
                         if (document.exists()) {
-                            val teacher = document.toObject(Teacher::class.java)
+                            val teacher = Teacher.fromDocument(document)
                             _currentTeacher.value = teacher
                             Timber.d("Teacher data loaded: ${teacher?.name}")
                         } else {
@@ -69,7 +69,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     val requestDoc = firestore.collection("transfer_requests").document(userId).get()
                     requestDoc.addOnSuccessListener { document ->
                         if (document.exists()) {
-                            val request = document.toObject(TransferRequest::class.java)
+                            val request = TransferRequest.fromDocument(document)
                             _transferRequest.value = request
                             _hasTransferRequest.value = true
                             Timber.d("Transfer request found: ${request?.status}")
@@ -119,7 +119,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                         }
                         
                         for (document in documents) {
-                            val request = document.toObject(TransferRequest::class.java)
+                            val request = TransferRequest.fromDocument(document)
                             if (request != null) {
                                 // Step 2: Check if this teacher's current district is in our preferred districts
                                 if (currentRequest.preferredDistricts.contains(request.currentDistrict)) {
@@ -127,7 +127,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                                     firestore.collection("teachers").document(request.teacherId).get()
                                         .addOnSuccessListener { teacherDoc ->
                                             if (teacherDoc.exists()) {
-                                                val teacher = teacherDoc.toObject(Teacher::class.java)
+                                                val teacher = Teacher.fromDocument(teacherDoc)
                                                 if (teacher != null) {
                                                     // Step 4: Apply additional matching criteria
                                     if (MatchingService.isCompatibleMatch(currentRequest, request, teacher)) {
@@ -215,7 +215,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                         }
                         
                         for (document in documents) {
-                            val request = document.toObject(TransferRequest::class.java)
+                            val request = TransferRequest.fromDocument(document)
                             if (request != null && request.teacherId != userId) {
                                 // Check if this teacher wants to come to current teacher's district
                                 if (request.preferredDistricts.contains(currentRequest.currentDistrict)) {
@@ -225,7 +225,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                                         firestore.collection("teachers").document(request.teacherId).get()
                                             .addOnSuccessListener { teacherDoc ->
                                                 if (teacherDoc.exists()) {
-                                                    val teacher = teacherDoc.toObject(Teacher::class.java)
+                                                    val teacher = Teacher.fromDocument(teacherDoc)
                                                     if (teacher != null) {
                                                         // Apply additional matching criteria
                                                         if (MatchingService.isCompatibleMatch(currentRequest, request, teacher)) {

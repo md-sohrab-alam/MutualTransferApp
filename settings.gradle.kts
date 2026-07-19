@@ -1,12 +1,7 @@
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        maven { url = uri("${rootDir}/.m2-local") }
+        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -14,6 +9,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven { url = uri("${rootDir}/.m2-local") }
         google()
         mavenCentral()
     }

@@ -443,7 +443,7 @@ fun EditRequestScreen(
     if (viewModel.showErrorDialog.value && viewModel.errorMessage.value != null) {
         ErrorAlertDialog(
             showDialog = viewModel.showErrorDialog,
-            message = viewModel.errorMessage.value!!,
+            message = viewModel.errorMessage.value.orEmpty(),
             onDismiss = {
                 viewModel.clearError()
             }

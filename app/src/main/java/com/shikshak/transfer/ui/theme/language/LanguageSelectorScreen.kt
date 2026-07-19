@@ -13,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.shikshak.transfer.R
 import com.shikshak.transfer.ui.theme.utils.LanguageUtils
-import com.shikshak.transfer.MutualTransferApp
 import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check

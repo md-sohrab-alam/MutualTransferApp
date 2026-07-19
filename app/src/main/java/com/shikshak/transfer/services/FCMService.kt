@@ -33,6 +33,20 @@ class FCMService : FirebaseMessagingService() {
         private const val TOPIC_MATCHES = "matches"
         private const val TOPIC_TRANSFER_REQUESTS = "transfer_requests"
         private const val TOPIC_UPDATES = "updates"
+
+        /**
+         * Safe entry-point for saving notifications outside the Service lifecycle
+         * (e.g. from MainActivity when a notification Intent is opened).
+         * Do NOT construct FCMService() manually — Services need a real Android Context.
+         */
+        fun saveNotificationFromOutside(
+            title: String,
+            message: String,
+            type: String,
+            data: Map<String, String>
+        ) {
+            NotificationStore.save(title, message, type, data)
+        }
     }
     
     override fun onCreate() {
@@ -402,46 +416,9 @@ class FCMService : FirebaseMessagingService() {
         type: String,
         data: Map<String, String>
     ) {
-        // Try to get user ID from multiple sources
-        val userId = auth.currentUser?.uid 
-            ?: data["userId"] 
-            ?: data["user_id"]
-        
-        // Handle multicast notifications
-        val userIds = data["userIds"] ?: data["user_ids"]
-        
-        Timber.d("=== SAVING NOTIFICATION ===")
-        Timber.d("Title: $title")
-        Timber.d("Message: $message")
-        Timber.d("Type: $type")
-        Timber.d("Data: $data")
-        Timber.d("Auth current user: ${auth.currentUser}")
-        Timber.d("User ID from auth: ${auth.currentUser?.uid}")
-        Timber.d("User ID from data: ${data["userId"]}")
-        Timber.d("User IDs from data: $userIds")
-        Timber.d("Final user ID: $userId")
-        
-        if (userId != null && userId != "null") {
-            saveNotificationForUser(title, message, type, data, userId)
-        } else if (userIds != null) {
-            // Handle multicast - save to all users
-            val userIdList = userIds.split(",")
-            Timber.d("Saving multicast notification to ${userIdList.size} users")
-            userIdList.forEach { uid ->
-                if (uid.isNotEmpty() && uid != "null") {
-                    saveNotificationForUser(title, message, type, data, uid)
-                }
-            }
-        } else {
-            Timber.w("Cannot save notification - no valid user ID available")
-            Timber.w("Current user: ${auth.currentUser}")
-            Timber.w("Notification data: $data")
-            
-            // Try to save to general notifications collection
-            saveToGeneralNotifications(title, message, type, data, "unknown")
-        }
+        NotificationStore.save(title, message, type, data)
     }
-    
+
     private fun saveNotificationForUser(
         title: String,
         message: String,
@@ -517,21 +494,19 @@ class FCMService : FirebaseMessagingService() {
         linkUrl: String?,
         fullContent: String?
     ) {
-        val notification = NotificationItem(
-            id = "", // Will be set by Firestore
-            title = title,
-            message = message,
-            timestamp = timestamp,
-            isRead = false,
-            type = type,
-            data = data,
-            imageUri = imageUri,
-            linkUrl = linkUrl,
-            fullContent = fullContent
+        val notification = hashMapOf<String, Any?>(
+            "title" to title,
+            "message" to message,
+            "timestamp" to timestamp,
+            "isRead" to false,
+            "type" to type,
+            "data" to data,
+            "imageUri" to imageUri,
+            "linkUrl" to linkUrl,
+            "fullContent" to fullContent
         )
         
         Timber.d("Saving notification to Firestore for user: $userId")
-        Timber.d("Notification data: $notification")
         
         // First, ensure the user document exists
         val userData = hashMapOf(
@@ -554,7 +529,6 @@ class FCMService : FirebaseMessagingService() {
                     .addOnFailureListener { exception ->
                         Timber.e(exception, "Error saving notification to Firestore")
                         Timber.e("User ID: $userId")
-                        Timber.e("Notification data: $notification")
                         
                         // Try alternative approach - save to a general notifications collection
                         saveToGeneralNotifications(title, message, type, data, userId)

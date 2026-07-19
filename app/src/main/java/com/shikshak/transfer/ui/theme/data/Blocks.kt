@@ -204,7 +204,7 @@ object Blocks {
         // Normalize: trim and case-insensitive match
         val normalizedDistrict = district.trim().lowercase()
         val key = districtBlocks.keys.find { it.trim().lowercase() == normalizedDistrict }
-        return if (key != null) districtBlocks[key]!! else listOf(
+        return key?.let { districtBlocks[it] } ?: listOf(
             "Sadar", "Town Area", "Rural Area", "Municipal Area", "Cantonment Area",
             "Industrial Area", "Educational Zone", "Commercial Zone", "Residential Zone"
         )

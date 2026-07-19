@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,7 +19,6 @@ import com.shikshak.transfer.ui.theme.utils.AppUpdateUtils
 import com.shikshak.transfer.utils.TopicManager
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -50,14 +48,12 @@ class MainActivity : ComponentActivity() {
     }
     
     override fun attachBaseContext(newBase: Context) {
-        val locale = getLocaleFromPreferences(newBase)
-        val context = updateLocale(newBase, locale)
-        super.attachBaseContext(context)
+        super.attachBaseContext(MutualTransferApp.wrapWithLocale(newBase))
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("MainActivity created with locale: ${getLocaleFromPreferences(this).language}")
+        Timber.d("MainActivity created")
         
         // Register broadcast receiver for app updates
         registerReceiver(updateReceiver, IntentFilter("APP_UPDATE_AVAILABLE"), Context.RECEIVER_NOT_EXPORTED)
@@ -115,8 +111,12 @@ class MainActivity : ComponentActivity() {
     }
     
     override fun onDestroy() {
+        try {
+            unregisterReceiver(updateReceiver)
+        } catch (e: IllegalArgumentException) {
+            Timber.w(e, "Update receiver was not registered")
+        }
         super.onDestroy()
-        unregisterReceiver(updateReceiver)
     }
     
     override fun onNewIntent(intent: Intent) {
@@ -214,9 +214,17 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 
-                // Use FCMService method to save notification (includes duplicate checking)
-                val fcmService = FCMService()
-                fcmService.saveNotificationToFirestore(title, message, notificationType, data)
+                // Never construct a Service with `FCMService()` — use the static store helper.
+                runCatching {
+                    FCMService.saveNotificationFromOutside(
+                        title = title,
+                        message = message,
+                        type = notificationType,
+                        data = data
+                    )
+                }.onFailure { e ->
+                    Timber.e(e, "Failed to save background notification")
+                }
                 
             } else {
                 Timber.w("Cannot save background notification - no user ID available")
@@ -246,29 +254,6 @@ class MainActivity : ComponentActivity() {
             
             Timber.d("App update data saved to SharedPreferences")
         }
-    }
-
-    private fun getLocaleFromPreferences(context: Context): Locale {
-        val sharedPrefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-        val languageCode = sharedPrefs.getString("language_code", "en") ?: "en"
-        Timber.d("Loading locale from preferences in MainActivity: $languageCode")
-        
-        // Debug: Check if the preference actually exists
-        val allPrefs = sharedPrefs.all
-        Timber.d("MainActivity - All preferences: $allPrefs")
-        
-        return when (languageCode) {
-            "hi" -> Locale("hi", "IN")
-            "en" -> Locale("en", "US")
-            else -> Locale(languageCode)
-        }
-    }
-    
-    private fun updateLocale(context: Context, locale: Locale): Context {
-        Locale.setDefault(locale)
-        val config = Configuration(context.resources.configuration)
-        config.setLocale(locale)
-        return context.createConfigurationContext(config)
     }
 
     private fun initializeFCM() {

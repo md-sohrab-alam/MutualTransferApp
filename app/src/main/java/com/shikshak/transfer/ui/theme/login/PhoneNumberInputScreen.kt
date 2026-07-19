@@ -217,7 +217,7 @@ fun PhoneNumberInputScreen(
             CommonErrorDialog(
                 showDialog = showErrorDialog.value,
                 title = stringResource(R.string.otp_send_failed),
-                message = errorMessage.value!!,
+                message = errorMessage.value.orEmpty(),
                 onDismiss = {
                     showErrorDialog.value = false
                     errorMessage.value = null

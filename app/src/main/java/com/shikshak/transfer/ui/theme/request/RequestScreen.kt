@@ -65,11 +65,13 @@ fun RequestScreen(
         return
     }
     
-    if (hasTransferRequest && transferRequest != null) {
-        EditRequestScreen(
-            transferRequest = transferRequest!!,
-            viewModel = viewModel
-        )
+    if (hasTransferRequest) {
+        transferRequest?.let { request ->
+            EditRequestScreen(
+                transferRequest = request,
+                viewModel = viewModel
+            )
+        } ?: CreateRequestScreen(viewModel = viewModel)
     } else {
         CreateRequestScreen(viewModel = viewModel)
     }
@@ -78,7 +80,7 @@ fun RequestScreen(
     if (viewModel.showErrorDialog.value && viewModel.errorMessage.value != null) {
         ErrorAlertDialog(
             showDialog = viewModel.showErrorDialog,
-            message = viewModel.errorMessage.value!!,
+            message = viewModel.errorMessage.value.orEmpty(),
             onDismiss = {
                 viewModel.clearError()
             }

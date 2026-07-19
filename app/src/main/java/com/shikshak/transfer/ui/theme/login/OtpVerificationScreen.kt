@@ -220,7 +220,7 @@ fun OtpVerificationScreen(
             CommonErrorDialog(
                 showDialog = showErrorDialog.value,
                 title = stringResource(R.string.verification_failed),
-                message = errorMessage.value!!,
+                message = errorMessage.value.orEmpty(),
                 onDismiss = {
                     showErrorDialog.value = false
                     errorMessage.value = null

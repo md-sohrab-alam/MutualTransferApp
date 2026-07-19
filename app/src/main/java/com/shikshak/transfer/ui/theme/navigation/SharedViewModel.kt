@@ -1,7 +1,6 @@
 package com.shikshak.transfer.ui.theme.navigation
 
 import com.shikshak.transfer.ui.theme.data.Teacher
-import com.shikshak.transfer.ui.theme.data.Contact
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,8 +23,8 @@ class SharedViewModel @Inject constructor() : ViewModel() {
     fun loadCurrentTeacher(onLoaded: () -> Unit, onError: (String) -> Unit) {
         val uid = auth.currentUser?.uid ?: return onError("Not logged in")
         db.collection("teachers").document(uid).get()
-            .addOnSuccessListener {
-                currentTeacher = it.toObject(Teacher::class.java)
+            .addOnSuccessListener { snapshot ->
+                currentTeacher = Teacher.fromDocument(snapshot)
                 Timber.i("Loaded teacher: $currentTeacher")
                 onLoaded()
             }

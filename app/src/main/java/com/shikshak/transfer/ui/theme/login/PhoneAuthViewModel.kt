@@ -12,7 +12,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.shikshak.transfer.ui.theme.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import javax.inject.Inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 

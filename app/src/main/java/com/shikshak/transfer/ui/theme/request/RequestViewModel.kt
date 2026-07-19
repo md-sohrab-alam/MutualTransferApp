@@ -40,7 +40,7 @@ class RequestViewModel @Inject constructor() : BaseViewModel() {
                     val requestDoc = firestore.collection("transfer_requests").document(userId).get()
                     requestDoc.addOnSuccessListener { document ->
                         if (document.exists()) {
-                            val request = document.toObject(TransferRequest::class.java)
+                            val request = TransferRequest.fromDocument(document)
                             _transferRequest.value = request
                             _hasTransferRequest.value = true
                             Timber.d("Transfer request found: ${request?.status}")

@@ -38,7 +38,7 @@ class ProfileDetailViewModel @Inject constructor() : ViewModel() {
                 val teacherDoc = firestore.collection("teachers").document(teacherId).get().await()
                 
                 if (teacherDoc.exists()) {
-                    val teacherData = teacherDoc.toObject(Teacher::class.java)
+                    val teacherData = Teacher.fromDocument(teacherDoc)
                     _teacher.value = teacherData
                     Timber.d("Loaded teacher profile: ${teacherData?.name}")
                 } else {
@@ -62,7 +62,7 @@ class ProfileDetailViewModel @Inject constructor() : ViewModel() {
                     .await()
                 if (!requestQuery.isEmpty) {
                     val requestDoc = requestQuery.documents.first()
-                    val requestData = requestDoc.toObject(TransferRequest::class.java)
+                    val requestData = TransferRequest.fromDocument(requestDoc)
                     _currentRequest.value = requestData
                     Timber.d("Loaded transfer request for teacher: $teacherId")
                 }

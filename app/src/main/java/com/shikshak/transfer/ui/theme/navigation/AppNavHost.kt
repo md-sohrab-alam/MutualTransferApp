@@ -61,7 +61,7 @@ fun AppNavHost(
         AppEntryPoint::class.java
     ).prefs()
     val navController = rememberNavController()
-    val activity = LocalActivity.current!!
+    val activity = LocalActivity.current
 
     // 👇 States to track loading teacher and decide destination
     var appReady by remember { mutableStateOf(false) }
@@ -81,17 +81,16 @@ fun AppNavHost(
     }
     
     // Handle disclaimer acceptance
-    val handleDisclaimerAccept = {
+    val handleDisclaimerAccept: () -> Unit = {
         disclaimerAccepted = true
         showDisclaimerDialog = false
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
             prefs.setDisclaimerAccepted(true)
         }
-        Unit
     }
     
-    val handleDisclaimerExit = {
-        activity.finish()
+    val handleDisclaimerExit: () -> Unit = {
+        activity?.finish()
     }
     
     // Handle notification navigation
@@ -479,11 +478,21 @@ fun AppNavHost(
                         navController.getBackStackEntry("auth_flow")
                     }
                     val viewModel = hiltViewModel<PhoneAuthViewModel>(parentEntry)
-                    PhoneNumberInputScreen(
-                        viewModel = viewModel,
-                        activity = activity,
-                        navController = navController
-                    )
+                    val hostActivity = activity
+                    if (hostActivity != null) {
+                        PhoneNumberInputScreen(
+                            viewModel = viewModel,
+                            activity = hostActivity,
+                            navController = navController
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
                 }
 
                 composable(Routes.OtpVerification) {
