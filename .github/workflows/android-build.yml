@@ -6,8 +6,17 @@ on:
       - "**"
   workflow_dispatch:
     inputs:
+      artifacts:
+        description: "Artifacts to build (AAB is required for Play Store)"
+        required: true
+        default: aab
+        type: choice
+        options:
+          - aab
+          - apk
+          - both
       create_github_release:
-        description: "Create a GitHub Release and attach the signed APK"
+        description: "Create a GitHub Release and attach the built artifact(s)"
         required: true
         default: false
         type: boolean
@@ -22,8 +31,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  apk:
-    name: Generate Release APK
+  build:
+    name: Generate Release (${{ github.event_name == 'workflow_dispatch' && inputs.artifacts || 'aab' }})
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
@@ -46,8 +55,43 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Build release APK
-        run: bash ./gradlew assembleRelease --stacktrace
+      - name: Resolve build targets
+        id: targets
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TYPE="${{ inputs.artifacts }}"
+          else
+            # Auto builds on push: AAB for Play Store
+            TYPE="aab"
+          fi
+
+          case "$TYPE" in
+            apk)
+              echo "tasks=:app:assembleRelease" >> "$GITHUB_OUTPUT"
+              echo "want_apk=true" >> "$GITHUB_OUTPUT"
+              echo "want_aab=false" >> "$GITHUB_OUTPUT"
+              ;;
+            aab)
+              echo "tasks=:app:bundleRelease" >> "$GITHUB_OUTPUT"
+              echo "want_apk=false" >> "$GITHUB_OUTPUT"
+              echo "want_aab=true" >> "$GITHUB_OUTPUT"
+              ;;
+            both)
+              echo "tasks=:app:assembleRelease :app:bundleRelease" >> "$GITHUB_OUTPUT"
+              echo "want_apk=true" >> "$GITHUB_OUTPUT"
+              echo "want_aab=true" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "Unknown artifacts option: $TYPE"
+              exit 1
+              ;;
+          esac
+
+          echo "Selected artifacts: $TYPE"
+
+      - name: Build release artifact(s)
+        run: bash ./gradlew ${{ steps.targets.outputs.tasks }} --stacktrace
 
       - name: Read version name
         id: version
@@ -58,19 +102,54 @@ jobs:
           echo "code=${VERSION_CODE}" >> "$GITHUB_OUTPUT"
           echo "Version: ${VERSION_NAME} (${VERSION_CODE})"
 
-      - name: Prepare APK for upload
+      - name: Prepare artifacts for upload
+        id: files
+        shell: bash
         run: |
-          SRC=$(ls app/build/outputs/apk/release/*.apk | grep -v unsigned | grep -v aligned | head -n 1)
-          APK_NAME="mutual-transfer-release-v-${{ steps.version.outputs.name }}-${{ steps.version.outputs.code }}.apk"
-          cp "$SRC" "$APK_NAME"
-          echo "apk_name=$APK_NAME" >> "$GITHUB_ENV"
-          echo "Prepared: $APK_NAME from $SRC"
+          RELEASE_FILES=""
+
+          if [ "${{ steps.targets.outputs.want_apk }}" = "true" ]; then
+            SRC=$(ls app/build/outputs/apk/release/*.apk | grep -v unsigned | grep -v aligned | head -n 1)
+            APK_NAME="mutual-transfer-release-v-${{ steps.version.outputs.name }}-${{ steps.version.outputs.code }}.apk"
+            cp "$SRC" "$APK_NAME"
+            echo "apk_name=$APK_NAME" >> "$GITHUB_ENV"
+            RELEASE_FILES="$APK_NAME"
+            echo "Prepared APK: $APK_NAME"
+          fi
+
+          if [ "${{ steps.targets.outputs.want_aab }}" = "true" ]; then
+            SRC=$(ls app/build/outputs/bundle/release/*.aab | head -n 1)
+            AAB_NAME="mutual-transfer-release-v-${{ steps.version.outputs.name }}-${{ steps.version.outputs.code }}.aab"
+            cp "$SRC" "$AAB_NAME"
+            echo "aab_name=$AAB_NAME" >> "$GITHUB_ENV"
+            if [ -n "$RELEASE_FILES" ]; then
+              RELEASE_FILES="$RELEASE_FILES"$'\n'"$AAB_NAME"
+            else
+              RELEASE_FILES="$AAB_NAME"
+            fi
+            echo "Prepared AAB: $AAB_NAME"
+          fi
+
+          {
+            echo "release_files<<EOF"
+            echo "$RELEASE_FILES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Upload APK artifact
+        if: steps.targets.outputs.want_apk == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: mutual_transfer_release_v_${{ steps.version.outputs.name }}
+          name: mutual_transfer_apk_v_${{ steps.version.outputs.name }}
           path: ${{ env.apk_name }}
+          retention-days: 30
+
+      - name: Upload AAB artifact
+        if: steps.targets.outputs.want_aab == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutual_transfer_aab_v_${{ steps.version.outputs.name }}
+          path: ${{ env.aab_name }}
           retention-days: 30
 
       - name: Resolve release tag
@@ -96,7 +175,8 @@ jobs:
 
             - **versionName:** ${{ steps.version.outputs.name }}
             - **versionCode:** ${{ steps.version.outputs.code }}
-          files: ${{ env.apk_name }}
+            - **Play Store:** use the `.aab` file
+          files: ${{ steps.files.outputs.release_files }}
           draft: false
           prerelease: false
         env:
