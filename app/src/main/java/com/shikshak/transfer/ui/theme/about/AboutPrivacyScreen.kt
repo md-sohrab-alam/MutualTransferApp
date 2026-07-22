@@ -1,7 +1,5 @@
 package com.shikshak.transfer.ui.theme.about
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,11 +10,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.shikshak.transfer.R
+import com.shikshak.transfer.ui.theme.disclaimer.OfficialGovernmentSources
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,8 +22,6 @@ fun AboutPrivacyScreen(
     onBackClick: () -> Unit,
     onOpenPrivacyPolicy: () -> Unit
 ) {
-    val context = LocalContext.current
-    
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,7 +66,9 @@ fun AboutPrivacyScreen(
                     
                     // Disclaimer
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer
                         )
@@ -81,6 +79,8 @@ fun AboutPrivacyScreen(
                             modifier = Modifier.padding(12.dp)
                         )
                     }
+
+                    OfficialGovernmentSources()
                 }
             }
             

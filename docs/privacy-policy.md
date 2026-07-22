@@ -28,9 +28,18 @@ This app is intended for adult teaching professionals.
 ## Government Affiliation
 This app does not represent, endorse, or have any affiliation with the Bihar Government or its Education Department. All information in the app is user-submitted; no official government transfer data is displayed.
 
+## Official Government Sources
+For official education information, please refer to:
+- Bihar State Portal: https://state.bihar.gov.in/
+- Bihar Education Online Services: https://edu-online.bihar.gov.in/
+- Education Department (Bihar): https://education.bih.nic.in/
+- SCERT Bihar: https://scert.bihar.gov.in/
+
+Always confirm any transfer through your District Education Office or other official channels.
+
 ## Contact
 If you have questions about this policy, contact: **Sohrab Tech Solutions** — **iamsohrabalam@gmail.com**.
 
 ---
 
-*Mutual Teacher Transfer (Unofficial) • Version 1.2 • Made in India for Bihar Teachers*
+*Mutual Teacher Transfer (Unofficial) • Version 1.3.1 • Made in India for Bihar Teachers*

@@ -204,7 +204,7 @@
     
     <!-- Home Screen -->
     <string name="app_purpose_title">उद्देश्य सारांश</string>
-    <string name="app_purpose_description">यह ऐप बिहार सरकार के शिक्षकों को दूसरे जिले से म्यूचुअल ट्रांसफर साथी खोजने में मदद करता है। शुरू करने के लिए अपना ट्रांसफर अनुरोध जमा करें।</string>
+    <string name="app_purpose_description">यह अनाधिकारिक ऐप बिहार सरकार के शिक्षकों को दूसरे जिले से म्यूचुअल ट्रांसफर साथी खोजने में मदद करता है। यह किसी सरकारी संस्था से संबद्ध नहीं है। शुरू करने के लिए अपना ट्रांसफर अनुरोध जमा करें।</string>
     <string name="ready_to_transfer">ट्रांसफर के लिए तैयार हैं?</string>
     <string name="submit_transfer_request">ट्रांसफर अनुरोध जमा करें</string>
     <string name="faq_title">अक्सर पूछे जाने वाले प्रश्न</string>
@@ -279,13 +279,13 @@
     
     <!-- Dialogs -->
     <string name="about_dialog_title">इस ऐप के बारे में</string>
-    <string name="about_dialog_content">ऐप का नाम: MutualTransfer – बिहार शिक्षक आपसी तबादला\nसंस्करण: 1.0.0\nडेवलपर: सोहराब टेक सॉल्यूशंस\nईमेल: iamsohrabalam@gmail.com\n\n📢 अस्वीकरण:\nयह एप्लिकेशन बिहार सरकार या किसी आधिकारिक शिक्षा विभाग से संबद्ध नहीं है। यह एक स्वतंत्र प्लेटफॉर्म है जो बिहार सरकार के स्कूल शिक्षकों को आपसी तबादले के लिए एक-दूसरे से आसानी से जुड़ने में मदद करने के लिए बनाया गया है।\n\nसभी जानकारी उपयोगकर्ता द्वारा प्रस्तुत की गई है, और जबकि हम सटीकता बनाए रखने का प्रयास करते हैं, हम तबादले से संबंधित डेटा की स correctness की गारंटी नहीं देते या जिम्मेदारी नहीं लेते।\n\nकिसी भी तबादले के लिए आगे बढ़ने से पहले हमेशा आधिकारिक चैनलों या अपने जिला शिक्षा कार्यालय से पुष्टि करें।\n\n📄 गोपनीयता और डेटा नीति:\nहम केवल आवश्यक जानकारी (जैसे नाम, स्कूल, जिला) एकत्र करते हैं ताकि आपसी मिलान को सुविधाजनक बनाया जा सके।\nआपका डेटा किसी तृतीय पक्ष के साथ साझा नहीं किया जाता है और Firebase पर सुरक्षित रहता है।</string>
+    <string name="about_dialog_content">ऐप का नाम: MutualTransfer – बिहार शिक्षक आपसी तबादला\nडेवलपर: सोहराब टेक सॉल्यूशंस\nईमेल: iamsohrabalam@gmail.com\n\n📢 अस्वीकरण:\nयह एप्लिकेशन आधिकारिक सरकारी ऐप नहीं है और बिहार सरकार या किसी शिक्षा विभाग से संबद्ध नहीं है। यह शिक्षकों को आपसी तबादले के लिए जुड़ने में मदद करने वाला स्वतंत्र प्लेटफॉर्म है।\n\nसभी जानकारी उपयोगकर्ता द्वारा प्रस्तुत की गई है। कोई आधिकारिक सरकारी तबादला डेटा नहीं दिखाया जाता। आगे बढ़ने से पहले आधिकारिक चैनलों या जिला शिक्षा कार्यालय से पुष्टि करें।\n\n📌 आधिकारिक स्रोत:\nhttps://state.bihar.gov.in/\nhttps://edu-online.bihar.gov.in/\nhttps://education.bih.nic.in/\nhttps://scert.bihar.gov.in/\n\n📄 गोपनीयता और डेटा नीति:\nहम केवल आवश्यक जानकारी (जैसे नाम, स्कूल, जिला) एकत्र करते हैं ताकि आपसी मिलान को सुविधाजनक बनाया जा सके।\nआपका डेटा किसी तृतीय पक्ष के साथ साझा नहीं किया जाता है और Firebase पर सुरक्षित रहता है।</string>
     <string name="confirm_logout_title">लॉगआउट की पुष्टि करें</string>
     <string name="confirm_logout_message">क्या आप वाकई लॉगआउट करना चाहते हैं? ऐप का उपयोग करने के लिए आपको फिर से साइन इन करना होगा।</string>
     <string name="yes_logout">हाँ, लॉगआउट करें</string>
     
     <!-- Disclaimer -->
-    <string name="bihar_teachers_only">यह ऐप किसी भी सरकारी संस्था से संबद्ध नहीं है और न ही बिहार सरकार द्वारा मान्यता प्राप्त है। यह एक स्वतंत्र ऐप है जिसे शिक्षकों को आपसी तबादले के लिए साथी शिक्षक खोजने में मदद करने के उद्देश्य से बनाया गया है।</string>
+    <string name="bihar_teachers_only">अस्वीकरण: यह अनाधिकारिक ऐप है और बिहार सरकार या किसी सरकारी संस्था से संबद्ध नहीं है। आधिकारिक जानकारी: state.bihar.gov.in</string>
     
     <!-- Share -->
     <string name="shared_via_app">म्यूचुअल ट्रांसफर ऐप के माध्यम से साझा किया गया</string>
@@ -309,14 +309,24 @@
     
     <!-- Disclaimer and Privacy -->
     <string name="disclaimer_title">अस्वीकरण</string>
-    <string name="disclaimer_body">यह ऐप बिहार सरकार का आधिकारिक ऐप नहीं है। यह शिक्षकों को आपसी तबादले के अवसरों के लिए जुड़ने में मदद करने के लिए स्वतंत्र रूप से विकसित किया गया है। यहां दिखाई गई सभी जानकारी ऐप के उपयोगकर्ताओं द्वारा प्रस्तुत की गई है; कोई आधिकारिक सरकारी तबादला डेटा प्रदर्शित नहीं किया जाता है। यह ऐप बिहार सरकार या उसके शिक्षा विभाग का प्रतिनिधित्व, समर्थन या संबद्धता नहीं रखता है।</string>
+    <string name="disclaimer_body">यह ऐप बिहार सरकार का आधिकारिक ऐप नहीं है और किसी भी सरकारी संस्था का प्रतिनिधित्व नहीं करता। यह शिक्षकों को आपसी तबादले के लिए जुड़ने में मदद करने के लिए स्वतंत्र रूप से विकसित किया गया है। यहां दिखाई गई सभी जानकारी उपयोगकर्ताओं द्वारा प्रस्तुत है; कोई आधिकारिक सरकारी तबादला डेटा, आदेश या रिक्तियाँ नहीं दिखाई जातीं। कोई भी तबादला आगे बढ़ाने से पहले जिला शिक्षा कार्यालय या नीचे सूचीबद्ध आधिकारिक सरकारी वेबसाइटों से पुष्टि करें।</string>
     <string name="disclaimer_accept">सहमत हों और जारी रखें</string>
     <string name="disclaimer_exit">बाहर निकलें</string>
-    <string name="disclaimer_checkbox">मैं समझता हूं</string>
+    <string name="disclaimer_checkbox">मैं समझता/समझती हूं कि यह सरकारी ऐप नहीं है</string>
     <string name="menu_about_privacy">ऐप के बारे में और गोपनीयता</string>
     <string name="menu_view_disclaimer">अस्वीकरण देखें</string>
     <string name="about_title">इस ऐप के बारे में</string>
-    <string name="about_body">म्यूचुअल टीचर ट्रांसफर शिक्षकों को आपसी तबादले के लिए जुड़ने में मदद करने के लिए एक स्वतंत्र उपकरण है। यह कोई आधिकारिक सरकारी ऐप नहीं है, और इसका बिहार सरकार या उसके शिक्षा विभाग से कोई संबंध नहीं है। सभी जानकारी उपयोगकर्ता द्वारा प्रस्तुत की गई है।</string>
+    <string name="about_body">म्यूचुअल टीचर ट्रांसफर शिक्षकों को आपसी तबादले के लिए जुड़ने में मदद करने वाला एक स्वतंत्र, अनाधिकारिक उपकरण है। यह कोई आधिकारिक सरकारी ऐप नहीं है, और इसका बिहार सरकार या उसके शिक्षा विभाग से कोई संबंध नहीं है। सभी जानकारी उपयोगकर्ता द्वारा प्रस्तुत की गई है।</string>
+    <string name="official_sources_title">आधिकारिक सरकारी स्रोत</string>
+    <string name="official_sources_intro">आधिकारिक शिक्षा जानकारी के लिए इन सरकारी वेबसाइटों का उपयोग करें:</string>
+    <string name="official_source_state_portal">बिहार राज्य पोर्टल</string>
+    <string name="official_source_edu_online">बिहार शिक्षा ऑनलाइन सेवाएँ</string>
+    <string name="official_source_education_dept">शिक्षा विभाग (बिहार)</string>
+    <string name="official_source_scert">एससीईआरटी बिहार</string>
+    <string name="url_state_bihar">https://state.bihar.gov.in/</string>
+    <string name="url_edu_online">https://edu-online.bihar.gov.in/</string>
+    <string name="url_education_bih">https://education.bih.nic.in/</string>
+    <string name="url_scert_bihar">https://scert.bihar.gov.in/</string>
     <string name="privacy_policy_title">गोपनीयता नीति</string>
     <string name="open_privacy_policy">गोपनीयता नीति खोलें</string>
     <string name="data_handling_title">डेटा प्रबंधन</string>
@@ -324,6 +334,6 @@
     <string name="data_handling_bullet_2">• आपका डेटा किसी तृतीय पक्ष के साथ साझा नहीं किया जाता है और Firebase पर सुरक्षित रहता है</string>
     <string name="data_handling_bullet_3">• आप ऐप के भीतर से अपना प्रोफाइल डेटा अपडेट या हटा सकते हैं</string>
     <string name="data_handling_bullet_4">• हम आपका डेटा किसी तृतीय पक्ष को नहीं बेचते हैं</string>
-    <string name="footer_unofficial">अनाधिकारिक ऐप • उपयोगकर्ता द्वारा प्रस्तुत डेटा</string>
+    <string name="footer_unofficial">अनाधिकारिक ऐप • सरकारी संस्था नहीं • उपयोगकर्ता द्वारा प्रस्तुत डेटा</string>
     
 </resources> 

@@ -7,21 +7,22 @@
 - Source: `play-listing/title.txt`
 
 ### 2. Short Description
-- Use: `Unofficial tool to help Bihar government teachers find and connect for mutual transfer. Not affiliated with any government entity. Data is user-submitted.`
-- Source: `play-listing/short-description.txt`
+- Use content from `play-listing/short-description.txt` (max 80 characters)
+- Must state the app is unofficial / not government-affiliated
 
 ### 3. Full Description
-- Use: Content from `play-listing/full-description.txt`
-- Ensure the Disclaimer section remains visible
-- Include all emojis and formatting
+- Use content from `play-listing/full-description.txt`
+- Must include:
+  - Clear DISCLAIMER that the app is not a government entity
+  - Working official government source URLs (`.gov` / state portals)
+- Paste the same EN text into en-US; translate for hi-IN if you maintain Hindi listing
 
 ### 4. Screenshots
 - Upload screenshots showing:
-  - Welcome/Login screen with disclaimer
-  - About & Privacy screen
-  - Profile creation screen
-  - Home screen with matches
-  - Make sure disclaimer text is visible in screenshots
+  - First-run disclaimer dialog (with official source links)
+  - About & Privacy screen (disclaimer + official sources)
+  - Profile / Home screens
+  - Make sure disclaimer text is visible
 
 ### 5. Privacy Policy URL
 - Point to hosted `public/privacy-policy.html`
@@ -51,25 +52,23 @@
   - Vibrate
 - Remove any sensitive permissions not required
 
-## Review Notes (Optional but Recommended)
-
-Add this note to the review submission:
+## Review Notes (Recommended)
 
 ```
-App is an independent utility for teachers; includes prominent in-app disclaimer and About & Privacy screen. No official government data is displayed; all listings are user-submitted. Test account not required.
+App is an independent, unofficial utility for teachers. Store listing and in-app About/Disclaimer include a clear non-government disclaimer and clickable links to official Bihar government sources (state.bihar.gov.in, edu-online.bihar.gov.in, education.bih.nic.in, scert.bihar.gov.in). No official government transfer data or services are provided; all listings are user-submitted. Test account not required.
 ```
 
 ## Submit for Review
 
-1. Ensure all required fields are filled
-2. Upload screenshots showing disclaimer
+1. Update store listing text (en-US) from `play-listing/`
+2. Upload screenshots showing disclaimer + official sources
 3. Verify privacy policy URL is accessible
 4. Complete data safety form
-5. Submit for review
+5. Upload new AAB (bump versionCode if needed) and submit
 
-## Post-Submission
+## If Rejected Again for Misleading Claims
 
-1. Monitor review status
-2. Be prepared to respond to any policy questions
-3. If rejected, address specific concerns mentioned
-4. Resubmit with clarifications if needed
+1. Do not claim government affiliation
+2. Ensure every store locale description has disclaimer + official source URLs
+3. Confirm in-app Disclaimer and About screens show the same links
+4. Resubmit with the review note above

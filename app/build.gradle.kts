@@ -10,14 +10,14 @@ plugins {
 
 android {
     namespace = "com.shikshak.transfer"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.shikshak.transfer"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 5
-        versionName = "1.3"
+        targetSdk = 36
+        versionCode = 7
+        versionName = "1.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

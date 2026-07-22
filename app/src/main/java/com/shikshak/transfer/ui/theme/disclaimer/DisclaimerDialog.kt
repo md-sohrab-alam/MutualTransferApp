@@ -40,7 +40,11 @@ fun DisclaimerDialog(
                     Text(
                         text = stringResource(R.string.disclaimer_body),
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+
+                    OfficialGovernmentSources(
+                        modifier = Modifier.padding(bottom = 12.dp)
                     )
                     
                     if (!isReadOnly) {

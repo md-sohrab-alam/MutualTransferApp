@@ -206,7 +206,7 @@
     <string name="welcome_message" translatable="false">Welcome</string>
     <string name="welcome_back_message">Welcome back</string>
     <string name="app_purpose_title">Purpose Summary</string>
-    <string name="app_purpose_description">This app helps Bihar government teachers find a mutual transfer partner from another district. Submit your transfer request to get started.</string>
+    <string name="app_purpose_description">This unofficial app helps Bihar government teachers find a mutual transfer partner from another district. It is not affiliated with any government entity. Submit your transfer request to get started.</string>
     <string name="ready_to_transfer">Ready to transfer?</string>
     <string name="submit_transfer_request">Submit Transfer Request</string>
     <string name="faq_title">Frequently Asked Questions</string>
@@ -281,13 +281,13 @@
     
     <!-- Dialogs -->
     <string name="about_dialog_title">About This App</string>
-    <string name="about_dialog_content">App Name: MutualTransfer – बिहार शिक्षक आपसी तबादला\nVersion: 1.0.0\nDeveloper: Sohrab Tech Solutions\nEmail: iamsohrabalam@gmail.com\n\n📢 Disclaimer:\nThis application is not affiliated with the Government of Bihar or any official education department. It is an independent platform created to help Bihar government school teachers connect with each other for mutual transfers more easily.\n\nAll information is user-submitted, and while we aim to maintain accuracy, we do not guarantee or take responsibility for the correctness of transfer-related data.\n\nAlways confirm with official channels or your district education office before proceeding with any transfer.\n\n📄 Privacy &amp; Data Policy:\nWe collect only necessary information (e.g., name, school, district) to facilitate mutual matching.\nYour data is not shared with any third party and remains secure on Firebase.</string>
+    <string name="about_dialog_content">App Name: MutualTransfer – बिहार शिक्षक आपसी तबादला\nDeveloper: Sohrab Tech Solutions\nEmail: iamsohrabalam@gmail.com\n\n📢 Disclaimer:\nThis application is NOT an official government app and is not affiliated with the Government of Bihar or any education department. It is an independent platform to help teachers connect for mutual transfers.\n\nAll information is user-submitted. No official government transfer data is shown. Always confirm with official channels or your district education office before proceeding.\n\n📌 Official sources:\nhttps://state.bihar.gov.in/\nhttps://edu-online.bihar.gov.in/\nhttps://education.bih.nic.in/\nhttps://scert.bihar.gov.in/\n\n📄 Privacy &amp; Data Policy:\nWe collect only necessary information (e.g., name, school, district) to facilitate mutual matching.\nYour data is not shared with any third party and remains secure on Firebase.</string>
     <string name="confirm_logout_title">Confirm Logout</string>
     <string name="confirm_logout_message">Are you sure you want to logout? You will need to sign in again to access the app.</string>
     <string name="yes_logout">Yes, Logout</string>
     
     <!-- Disclaimer -->
-    <string name="bihar_teachers_only">Disclaimer: This app is not affiliated with or endorsed by the Government of Bihar or any government entity. It is an independent platform created to assist teachers in finding mutual transfer opportunities.</string>
+    <string name="bihar_teachers_only">Disclaimer: This is an unofficial app and is not affiliated with or endorsed by the Government of Bihar or any government entity. Official info: state.bihar.gov.in</string>
     
     <!-- Share -->
     <string name="shared_via_app">Shared via Mutual Transfer App</string>
@@ -311,14 +311,24 @@
     
     <!-- Disclaimer and Privacy -->
     <string name="disclaimer_title">Disclaimer</string>
-    <string name="disclaimer_body">This app is not an official Bihar Government app. It is developed independently to help teachers connect for mutual transfer opportunities. All information shown here is submitted by users of the app; no official government transfer data is displayed. The app does not represent, endorse, or have any affiliation with the Bihar Government or its Education Department.</string>
+    <string name="disclaimer_body">This app is NOT an official Bihar Government app and does not represent any government entity. It is developed independently to help teachers connect for mutual transfer opportunities. All information shown here is submitted by users; no official government transfer data, orders, or vacancies are displayed. Always confirm transfers through your District Education Office or official government websites listed below.</string>
     <string name="disclaimer_accept">Agree &amp; Continue</string>
     <string name="disclaimer_exit">Exit</string>
-    <string name="disclaimer_checkbox">I understand</string>
+    <string name="disclaimer_checkbox">I understand this is not a government app</string>
     <string name="menu_about_privacy">About &amp; Privacy</string>
     <string name="menu_view_disclaimer">View Disclaimer</string>
     <string name="about_title">About this App</string>
-    <string name="about_body">Mutual Teacher Transfer is an independent tool to help teachers connect for mutual transfers. It is not an official government app, and it has no affiliation with the Bihar Government or its Education Department. All information is user-submitted.</string>
+    <string name="about_body">Mutual Teacher Transfer is an independent, unofficial tool to help teachers connect for mutual transfers. It is not an official government app, and it has no affiliation with the Bihar Government or its Education Department. All information is user-submitted.</string>
+    <string name="official_sources_title">Official government sources</string>
+    <string name="official_sources_intro">For official education information, use these government websites:</string>
+    <string name="official_source_state_portal">Bihar State Portal</string>
+    <string name="official_source_edu_online">Bihar Education Online Services</string>
+    <string name="official_source_education_dept">Education Department (Bihar)</string>
+    <string name="official_source_scert">SCERT Bihar</string>
+    <string name="url_state_bihar">https://state.bihar.gov.in/</string>
+    <string name="url_edu_online">https://edu-online.bihar.gov.in/</string>
+    <string name="url_education_bih">https://education.bih.nic.in/</string>
+    <string name="url_scert_bihar">https://scert.bihar.gov.in/</string>
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="open_privacy_policy">Open Privacy Policy</string>
     <string name="data_handling_title">Data Handling</string>
@@ -326,7 +336,7 @@
     <string name="data_handling_bullet_2">• Your data is not shared with any third party and remains secure on Firebase</string>
     <string name="data_handling_bullet_3">• You can update or delete your profile data from within the app</string>
     <string name="data_handling_bullet_4">• We do not sell your data to any third parties</string>
-    <string name="footer_unofficial">Unofficial app • User-submitted data</string>
+    <string name="footer_unofficial">Unofficial app • Not a government entity • User-submitted data</string>
     
     <!-- Missing strings from error messages -->
     <string name="otp_verification">OTP Verification</string>

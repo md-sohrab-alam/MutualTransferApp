@@ -1,14 +1,22 @@
-The Mutual Teacher Transfer app is an independent tool to help Bihar government school teachers connect with each other for mutual transfer opportunities.
+The Mutual Teacher Transfer app is an independent, unofficial tool to help Bihar government school teachers connect with each other for mutual transfer opportunities.
 
-📌 Disclaimer
-This app is not an official government app and has no affiliation with the Bihar Government or its Education Department. All information displayed in the app is submitted by users of the app; no official government transfer data is shown.
+📌 DISCLAIMER
+This app is NOT an official government app and has NO affiliation with the Government of Bihar, the Education Department of Bihar, or any government entity. It does not provide official transfer orders, vacancies, or government services. All profiles and transfer preferences are submitted by users of the app.
 
-🏫 Key Features
-• Create and manage your teacher transfer profile  
-• Select your current and preferred district, block, and school  
-• View and connect with other teachers who are seeking mutual transfers  
-• Filter by post level (Primary, Upper Primary, High School)  
-• Simple, secure, and easy-to-use interface
+📌 OFFICIAL GOVERNMENT SOURCES
+For official education and transfer information, please use only government websites, for example:
+• Bihar State Portal: https://state.bihar.gov.in/
+• Bihar Education Online Services: https://edu-online.bihar.gov.in/
+• Education Department (Bihar): https://education.bih.nic.in/
+• SCERT Bihar: https://scert.bihar.gov.in/
+Always confirm any transfer through your District Education Office or other official channels.
+
+🏫 What this app does
+• Create and manage your teacher transfer profile
+• Select your current and preferred district, block, and school
+• Find other teachers seeking mutual transfers
+• Filter by post level (Primary, Upper Primary, High School)
+• Contact matched teachers for mutual agreement (if they allow contact)
 
 🔒 Data Safety
 Your details are used only within the app for matching purposes and are not shared with third parties except for essential service providers necessary to run the app (see Privacy Policy).
