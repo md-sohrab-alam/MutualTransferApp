@@ -12,15 +12,16 @@ An independent Android app that helps Bihar government school teachers find and 
 
 <!-- jsDelivr is used because some networks block raw.githubusercontent.com. Lowercase .png for GitHub's case-sensitive URLs. -->
 <p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/md-sohrab-alam/MutualTransferApp@master/screenshots/login.png" alt="Login — phone OTP" width="180" />
   <img src="https://cdn.jsdelivr.net/gh/md-sohrab-alam/MutualTransferApp@master/screenshots/capture.png" alt="Home — matching transfer requests" width="180" />
   <img src="https://cdn.jsdelivr.net/gh/md-sohrab-alam/MutualTransferApp@master/screenshots/edit_transfer_request.png" alt="Edit transfer request" width="180" />
   <img src="https://cdn.jsdelivr.net/gh/md-sohrab-alam/MutualTransferApp@master/screenshots/matching_profile.png" alt="Matched teacher profile" width="180" />
   <img src="https://cdn.jsdelivr.net/gh/md-sohrab-alam/MutualTransferApp@master/screenshots/notifications.png" alt="Notifications" width="180" />
 </p>
 
-| Home | Edit request | Match profile | Notifications |
-| --- | --- | --- | --- |
-| Reciprocal matches with a **Contact Now** action | Set preferred districts and blocks | View compatibility and transfer details | In-app notification inbox |
+| Login | Home | Edit request | Match profile | Notifications |
+| --- | --- | --- | --- | --- |
+| Phone number + OTP, with unofficial-app disclaimer | Reciprocal matches with a **Contact Now** action | Set preferred districts and blocks | View compatibility and transfer details | In-app notification inbox |
 
 Browse files: [`screenshots/`](./screenshots/)
 
