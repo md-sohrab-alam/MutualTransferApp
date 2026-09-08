@@ -8,6 +8,9 @@ plugins {
 //    id("kotlin-kapt")
 }
 
+import java.io.File
+import java.util.Properties
+
 android {
     namespace = "com.shikshak.transfer"
     compileSdk = 36
@@ -24,19 +27,46 @@ android {
 
     signingConfigs {
         create("release") {
-            val storeFilePath = (project.findProperty("RELEASE_STORE_FILE") as String?)
-                ?: "mutual-transfer-keystore.jks"
-            storeFile = rootProject.file(storeFilePath)
-            storePassword = project.findProperty("RELEASE_STORE_PASSWORD") as String?
-            keyAlias = project.findProperty("RELEASE_KEY_ALIAS") as String? ?: "mutual_transfer"
-            keyPassword = project.findProperty("RELEASE_KEY_PASSWORD") as String?
+            val secretPropsFile = rootProject.file("signing-secret/keystore.properties")
+            val rootPropsFile = rootProject.file("keystore.properties")
+            val keystorePropsFile = when {
+                secretPropsFile.exists() -> secretPropsFile
+                rootPropsFile.exists() -> rootPropsFile
+                else -> null
+            }
+            val envStoreFile = System.getenv("SIGNING_STORE_FILE")
+            when {
+                keystorePropsFile != null -> {
+                    val keystoreProps = Properties().apply {
+                        keystorePropsFile.inputStream().use { load(it) }
+                    }
+                    val storePath = keystoreProps["storeFile"] as String
+                    storeFile = if (File(storePath).isAbsolute) {
+                        file(storePath)
+                    } else {
+                        keystorePropsFile.parentFile.resolve(storePath)
+                    }
+                    storePassword = keystoreProps["storePassword"] as String
+                    keyAlias = keystoreProps["keyAlias"] as String
+                    keyPassword = keystoreProps["keyPassword"] as String
+                }
+                !envStoreFile.isNullOrBlank() -> {
+                    storeFile = file(envStoreFile)
+                    storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+                    keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+                    keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+                }
+            }
         }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
-            signingConfig = signingConfigs.getByName("release")
+            val releaseSigning = signingConfigs.getByName("release")
+            if (releaseSigning.storeFile != null) {
+                signingConfig = releaseSigning
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

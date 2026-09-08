@@ -1,229 +1,84 @@
-# Mutual Transfer App - Web Version
+# Mutual Transfer Bihar
 
-A web application for facilitating mutual teacher transfers, built with React, TypeScript, and Firebase.
+An independent Android app that helps Bihar government school teachers find and connect with mutual transfer partners — without paperwork or middlemen.
+
+[![Get it on Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.shikshak.transfer)
+
+**[Download on Google Play](https://play.google.com/store/apps/details?id=com.shikshak.transfer)**
+
+> **Disclaimer:** This is **not** an official government app and is **not** affiliated with the Government of Bihar or its Education Department. All profiles and transfer preferences are submitted by users. For official information, use [state.bihar.gov.in](https://state.bihar.gov.in/), [edu-online.bihar.gov.in](https://edu-online.bihar.gov.in/), [education.bih.nic.in](https://education.bih.nic.in/), or [scert.bihar.gov.in](https://scert.bihar.gov.in/).
+
+## Screenshots
+
+<p>
+  <img src="screenshots/Capture.PNG" alt="Home — matching transfer requests" width="220" />
+  <img src="screenshots/edit_transfer_request.PNG" alt="Edit transfer request" width="220" />
+  <img src="screenshots/matching_profile.PNG" alt="Matched teacher profile" width="220" />
+  <img src="screenshots/notifications.PNG" alt="Notifications" width="220" />
+</p>
+
+| Home | Edit request | Match profile | Notifications |
+| --- | --- | --- | --- |
+| Reciprocal matches with a **Contact Now** action | Set preferred districts and blocks | View compatibility and transfer details | In-app notification inbox |
 
 ## Features
 
-### 🔐 Authentication
-- Phone number-based authentication using Firebase Auth
-- OTP verification for secure login
-- Protected routes for authenticated users
+- Create and manage your teacher transfer profile
+- Select current and preferred district, block, and school
+- See matching requests based on district swap, post level, subject, and designation
+- Filter by post level (Primary, Upper Primary, High School)
+- Contact matched teachers when they allow it
+- Phone OTP login, bilingual UI (English / Hindi)
+- First-run disclaimer and About & Privacy with official government source links
 
-### 👤 Profile Management
-- Complete teacher profile creation and editing
-- Professional information (post level, designation, subject, qualification)
-- Current location details (district, block, school)
-- Contact preferences and willingness to move
+## Who can use it
 
-### 📋 Transfer Request System
-- Create and manage transfer requests
-- Specify preferred districts and blocks
-- Add notes and contact preferences
-- Real-time status tracking
+Bihar government school teachers looking for a mutual transfer (JBT / TGT / PGT and similar posts).
 
-### 🔍 Smart Matching Algorithm
-- District compatibility matching (bi-directional)
-- Post level exact matching
-- Subject and designation compatibility
-- Scoring system for match quality
-- Compatibility checklist display
+## Tech stack
 
-### 📱 Modern UI/UX
-- Material-UI components for consistent design
-- Responsive layout for desktop and mobile
-- Intuitive navigation with sidebar
-- Real-time loading states and error handling
+- Kotlin, Jetpack Compose, Material 3
+- Hilt
+- Firebase Auth, Firestore, Cloud Messaging
+- minSdk 26 · targetSdk 36 · package `com.shikshak.transfer`
 
-## Technology Stack
-
-- **Frontend**: React 18 with TypeScript
-- **UI Framework**: Material-UI (MUI)
-- **Routing**: React Router DOM
-- **Backend**: Firebase
-  - Authentication
-  - Firestore Database
-  - Cloud Messaging (for notifications)
-- **State Management**: React Context API
-- **Build Tool**: Create React App
-
-## Project Structure
-
-```
-src/
-├── components/
-│   └── Layout/
-│       └── AppLayout.tsx          # Main app layout with navigation
-├── contexts/
-│   └── AuthContext.tsx            # Authentication context
-├── firebase/
-│   └── config.ts                  # Firebase configuration
-├── pages/
-│   ├── Auth/
-│   │   └── LoginPage.tsx          # Phone authentication
-│   ├── Home/
-│   │   └── HomePage.tsx           # Matches display
-│   ├── Profile/
-│   │   └── ProfilePage.tsx        # Profile management
-│   └── Request/
-│       └── RequestPage.tsx        # Transfer request management
-├── types/
-│   └── index.ts                   # TypeScript interfaces
-├── utils/
-│   ├── data.ts                    # Static data (districts, blocks, etc.)
-│   └── matchingService.ts         # Core matching algorithm
-└── App.tsx                        # Main app component
-```
-
-## Getting Started
+## Getting started (developers)
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
-- npm or yarn
-- Firebase project setup
+- Android Studio (Meerkat / API 36 SDK or newer)
+- JDK 17
+- A Firebase project with Phone Auth, Firestore, and FCM
 
-### Installation
+### Build
 
-1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd mutual-transfer-app
+git clone https://github.com/md-sohrab-alam/MutualTransferApp.git
+cd MutualTransferApp
+./gradlew :app:assembleDebug
 ```
 
-2. Install dependencies:
+Release builds use gitignored `keystore.properties` (see `keystore.properties.example`). Do **not** put passwords in `gradle.properties`.
+
 ```bash
-npm install
+./gradlew :app:assembleDebug
+# Signed release (local):
+./gradlew :app:assembleRelease :app:bundleRelease
 ```
 
-3. Configure Firebase:
-   - Create a Firebase project
-   - Enable Authentication (Phone provider)
-   - Enable Firestore Database
-   - Update `src/firebase/config.ts` with your Firebase config
+- **minSdk** 26 · **targetSdk** 36
+- CI: [`.github/workflows/android-build.yml`](.github/workflows/android-build.yml) — signed APK + AAB on `main` / `master` (same flow as Bagh Bakri)
+- GitHub Actions secrets: `SIGNING_KEY`, `KEY_STORE_PASSWORD`, `ALIAS`, `KEY_PASSWORD`
 
-4. Start the development server:
-```bash
-npm start
-```
+See [`docs/SECURITY.md`](docs/SECURITY.md).
 
-The app will be available at `http://localhost:3000`
+## Play listing copy
 
-### Firebase Setup
+Store listing drafts (disclaimer + official source URLs) live in [`play-listing/`](play-listing/).
 
-1. **Authentication**:
-   - Enable Phone Number sign-in method
-   - Add your domain to authorized domains
+## Privacy
 
-2. **Firestore Database**:
-   - Create collections: `teachers`, `transfer_requests`
-   - Set up security rules for data access
-
-3. **Indexes** (for efficient queries):
-   ```javascript
-   // Composite index for transfer requests
-   Collection: transfer_requests
-   Fields: preferredDistricts (Array), post (String), teacherId (String)
-   ```
-
-## Core Features
-
-### Matching Algorithm
-
-The app uses a sophisticated matching algorithm that considers:
-
-1. **Primary Criteria**:
-   - District compatibility (both teachers want to move to each other's districts)
-   - Post level exact match (Primary, Secondary, Senior Secondary)
-
-2. **Secondary Criteria**:
-   - Subject compatibility
-   - Designation match
-   - Qualification match
-   - Block preferences
-   - Contact preferences
-
-3. **Scoring System**:
-   - Perfect subject match: 100 points
-   - Post level match: 50 points
-   - Designation match: 30 points
-   - Contact preference match: 20 points
-   - Willing to move: 10 points
-   - Block preference match: 15 points
-   - Same district preference: 25 points
-
-### Data Models
-
-#### Teacher Profile
-```typescript
-interface Teacher {
-  uid: string;
-  name: string;
-  gender: string;
-  subject: string;
-  post: string;
-  district: string;
-  block: string;
-  schoolName: string;
-  designation: string;
-  qualification: string;
-  contactPreference: boolean;
-  willingToMove: boolean;
-  preferredDistricts: string[];
-  preferredBlocks: string[];
-  contact: {
-    email: string;
-    phone: string;
-  };
-}
-```
-
-#### Transfer Request
-```typescript
-interface TransferRequest {
-  teacherId: string;
-  teacherName: string;
-  currentDistrict: string;
-  currentSchool: string;
-  preferredDistricts: string[];
-  preferredBlocks: string[];
-  post: string;
-  designation: string;
-  subject: string;
-  qualification: string;
-  status: 'PENDING' | 'MATCHED' | 'COMPLETED' | 'CANCELLED';
-  submittedDate: string;
-  contactPreference: boolean;
-  notes: string;
-}
-```
-
-## Available Scripts
-
-- `npm start` - Start development server
-- `npm build` - Build for production
-- `npm test` - Run tests
-- `npm eject` - Eject from Create React App
-
-## Deployment
-
-### Build for Production
-```bash
-npm run build
-```
-
-### Deploy to Firebase Hosting
-1. Install Firebase CLI: `npm install -g firebase-tools`
-2. Login: `firebase login`
-3. Initialize: `firebase init hosting`
-4. Deploy: `firebase deploy`
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+See [`docs/privacy-policy.md`](docs/privacy-policy.md) and the hosted policy at [`public/privacy-policy.html`](public/privacy-policy.html).
 
 ## License
 
@@ -231,4 +86,4 @@ This project is licensed under the MIT License.
 
 ## Support
 
-For support and questions, please contact the development team or create an issue in the repository. 
+Questions or issues: **iamsohrabalam@gmail.com**

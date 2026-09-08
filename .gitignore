@@ -14,3 +14,26 @@
 .cxx
 local.properties
 .m2-local/
+
+# Signing & credentials — never push (public repo)
+keystore.properties
+*.jks
+*.keystore
+*.p12
+signing-key-base64.txt
+SIGNING_KEY*
+/signing-secret/
+signing-secret.zip
+.env
+.env.*
+credentials.json
+**/secrets/**
+*.pem
+*.key
+
+# Local/release binaries
+*.apk
+*.aab
+*.idsig
+app/release/
+/dist/

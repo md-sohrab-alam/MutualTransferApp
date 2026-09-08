@@ -1,38 +1,43 @@
-name: Android CI
+name: Android Build
 
 on:
   push:
     branches:
-      - "**"
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
   workflow_dispatch:
     inputs:
       artifacts:
-        description: "Artifacts to build (AAB for Play Store, APK for direct install)"
+        description: "What to build (default: both — APK for testing + AAB for Play Store)"
         required: true
         default: both
         type: choice
         options:
           - both
-          - aab
           - apk
+          - aab
       create_github_release:
-        description: "Create a GitHub Release and attach the built artifact(s)"
+        description: "Also create a GitHub Release with APK + AAB attached for download"
         required: true
         default: false
         type: boolean
       release_tag:
-        description: "Release tag (e.g. v1.3). Leave empty to use versionName from build.gradle.kts"
+        description: "Release tag (e.g. v1.4). Leave empty to use versionName"
         required: false
         default: ""
         type: string
 
 concurrency:
-  group: android-ci-${{ github.workflow }}-${{ github.ref }}
+  group: android-build-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
-    name: Generate Release (${{ github.event_name == 'workflow_dispatch' && inputs.artifacts || 'both' }})
+    name: Build (${{ github.event_name }})
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
@@ -55,16 +60,71 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      - name: Decode signing key
+        id: signing
+        env:
+          # Matches repo secrets: SIGNING_KEY, KEY_STORE_PASSWORD, ALIAS, KEY_PASSWORD
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          ALIAS: ${{ secrets.ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          MISSING=0
+          [ -z "$SIGNING_KEY" ] && echo "Missing secret: SIGNING_KEY" && MISSING=1
+          [ -z "$KEY_STORE_PASSWORD" ] && echo "Missing secret: KEY_STORE_PASSWORD" && MISSING=1
+          [ -z "$ALIAS" ] && echo "Missing secret: ALIAS" && MISSING=1
+          [ -z "$KEY_PASSWORD" ] && echo "Missing secret: KEY_PASSWORD" && MISSING=1
+
+          if [ "$MISSING" -eq 1 ]; then
+            if [ "$EVENT_NAME" = "pull_request" ]; then
+              echo "PR build will use debug APK only (no AAB without signing secrets)."
+              echo "signed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "::error::Signing secrets are required on main/master to produce APK + AAB."
+            echo "Add these repository secrets: SIGNING_KEY, KEY_STORE_PASSWORD, ALIAS, KEY_PASSWORD"
+            exit 1
+          fi
+
+          echo "$SIGNING_KEY" | base64 --decode > "$GITHUB_WORKSPACE/release.keystore"
+          if [ ! -s "$GITHUB_WORKSPACE/release.keystore" ]; then
+            echo "::error::SIGNING_KEY base64 decoded to an empty/invalid keystore file."
+            exit 1
+          fi
+
+          cat > "$GITHUB_WORKSPACE/keystore.properties" <<EOF
+          storeFile=$GITHUB_WORKSPACE/release.keystore
+          storePassword=$KEY_STORE_PASSWORD
+          keyAlias=$ALIAS
+          keyPassword=$KEY_PASSWORD
+          EOF
+          sed -i 's/^[[:space:]]*//' "$GITHUB_WORKSPACE/keystore.properties"
+          echo "signed=true" >> "$GITHUB_OUTPUT"
+          echo "Signing key decoded successfully — will build signed APK + AAB."
+
       - name: Resolve build targets
         id: targets
         shell: bash
         run: |
+          SIGNED="${{ steps.signing.outputs.signed }}"
+
+          if [ "$SIGNED" != "true" ]; then
+            echo "tasks=:app:assembleDebug" >> "$GITHUB_OUTPUT"
+            echo "want_apk=true" >> "$GITHUB_OUTPUT"
+            echo "want_aab=false" >> "$GITHUB_OUTPUT"
+            echo "build_type=debug" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Auto builds (push/PR) always produce both. Manual run can pick.
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             TYPE="${{ inputs.artifacts }}"
           else
-            # Auto builds on push: both Play Store AAB and installable APK
             TYPE="both"
           fi
+
+          echo "build_type=release" >> "$GITHUB_OUTPUT"
 
           case "$TYPE" in
             apk)
@@ -88,9 +148,7 @@ jobs:
               ;;
           esac
 
-          echo "Selected artifacts: $TYPE"
-
-      - name: Build release artifact(s)
+      - name: Build
         run: bash ./gradlew ${{ steps.targets.outputs.tasks }} --stacktrace
 
       - name: Read version name
@@ -100,34 +158,45 @@ jobs:
           VERSION_CODE=$(grep -m1 'versionCode' app/build.gradle.kts | sed -E 's/.*versionCode[[:space:]]*=[[:space:]]*([0-9]+).*/\1/')
           echo "name=${VERSION_NAME}" >> "$GITHUB_OUTPUT"
           echo "code=${VERSION_CODE}" >> "$GITHUB_OUTPUT"
-          echo "Version: ${VERSION_NAME} (${VERSION_CODE})"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "suffix=pr-${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "suffix=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Prepare artifacts for upload
         id: files
         shell: bash
         run: |
           RELEASE_FILES=""
+          BUILD_TYPE="${{ steps.targets.outputs.build_type }}"
+          SUFFIX="${{ steps.version.outputs.suffix }}"
+          VER="${{ steps.version.outputs.name }}-${{ steps.version.outputs.code }}"
+          mkdir -p dist
 
           if [ "${{ steps.targets.outputs.want_apk }}" = "true" ]; then
-            SRC=$(ls app/build/outputs/apk/release/*.apk | grep -v unsigned | grep -v aligned | head -n 1)
-            APK_NAME="mutual-transfer-release-v-${{ steps.version.outputs.name }}-${{ steps.version.outputs.code }}.apk"
-            cp "$SRC" "$APK_NAME"
-            echo "apk_name=$APK_NAME" >> "$GITHUB_ENV"
-            RELEASE_FILES="$APK_NAME"
-            echo "Prepared APK: $APK_NAME"
+            if [ "$BUILD_TYPE" = "debug" ]; then
+              SRC=$(ls app/build/outputs/apk/debug/*.apk | head -n 1)
+              APK_NAME="mutual-transfer-FOR-TESTING-debug-v-${VER}-${SUFFIX}.apk"
+            else
+              SRC=$(ls app/build/outputs/apk/release/*.apk | grep -v unsigned | grep -v aligned | head -n 1)
+              APK_NAME="mutual-transfer-FOR-TESTING-v-${VER}-${SUFFIX}.apk"
+            fi
+            cp "$SRC" "dist/$APK_NAME"
+            echo "apk_name=dist/$APK_NAME" >> "$GITHUB_ENV"
+            RELEASE_FILES="dist/$APK_NAME"
           fi
 
           if [ "${{ steps.targets.outputs.want_aab }}" = "true" ]; then
             SRC=$(ls app/build/outputs/bundle/release/*.aab | head -n 1)
-            AAB_NAME="mutual-transfer-release-v-${{ steps.version.outputs.name }}-${{ steps.version.outputs.code }}.aab"
-            cp "$SRC" "$AAB_NAME"
-            echo "aab_name=$AAB_NAME" >> "$GITHUB_ENV"
+            AAB_NAME="mutual-transfer-FOR-PLAY-STORE-v-${VER}-${SUFFIX}.aab"
+            cp "$SRC" "dist/$AAB_NAME"
+            echo "aab_name=dist/$AAB_NAME" >> "$GITHUB_ENV"
             if [ -n "$RELEASE_FILES" ]; then
-              RELEASE_FILES="$RELEASE_FILES"$'\n'"$AAB_NAME"
+              RELEASE_FILES="$RELEASE_FILES"$'\n'"dist/$AAB_NAME"
             else
-              RELEASE_FILES="$AAB_NAME"
+              RELEASE_FILES="dist/$AAB_NAME"
             fi
-            echo "Prepared AAB: $AAB_NAME"
           fi
 
           {
@@ -136,21 +205,51 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Upload APK artifact
+          echo "Prepared files:"
+          ls -la dist
+
+      - name: Upload APK (testing — install on device)
         if: steps.targets.outputs.want_apk == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: mutual_transfer_apk_v_${{ steps.version.outputs.name }}
+          name: 1-APK-for-testing-v${{ steps.version.outputs.name }}-${{ steps.version.outputs.suffix }}
           path: ${{ env.apk_name }}
           retention-days: 30
+          if-no-files-found: error
 
-      - name: Upload AAB artifact
+      - name: Upload AAB (Play Store release)
         if: steps.targets.outputs.want_aab == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: mutual_transfer_aab_v_${{ steps.version.outputs.name }}
+          name: 2-AAB-for-play-store-v${{ steps.version.outputs.name }}-${{ steps.version.outputs.suffix }}
           path: ${{ env.aab_name }}
           retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload both (APK + AAB together)
+        if: steps.targets.outputs.want_apk == 'true' && steps.targets.outputs.want_aab == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: 0-BOTH-apk-and-aab-v${{ steps.version.outputs.name }}-${{ steps.version.outputs.suffix }}
+          path: dist/*
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Write download summary
+        run: |
+          {
+            echo "## Downloads"
+            echo ""
+            if [ "${{ steps.targets.outputs.want_apk }}" = "true" ] && [ "${{ steps.targets.outputs.want_aab }}" = "true" ]; then
+              echo "- **0-BOTH-apk-and-aab-...** — zip with both files"
+              echo "- **1-APK-for-testing-...** — install on a phone"
+              echo "- **2-AAB-for-play-store-...** — upload to Google Play Console"
+            elif [ "${{ steps.targets.outputs.want_apk }}" = "true" ]; then
+              echo "- **1-APK-for-testing-...** only (debug) — signing secrets missing on this PR"
+            fi
+            echo ""
+            echo "Open this run → **Artifacts** → download."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Resolve release tag
         if: github.event_name == 'workflow_dispatch' && inputs.create_github_release
@@ -162,20 +261,24 @@ jobs:
             TAG="v${{ steps.version.outputs.name }}"
           fi
           echo "name=$TAG" >> "$GITHUB_OUTPUT"
-          echo "Using tag: $TAG"
 
-      - name: Create GitHub Release
-        if: github.event_name == 'workflow_dispatch' && inputs.create_github_release
+      - name: Create GitHub Release (APK + AAB download links)
+        if: github.event_name == 'workflow_dispatch' && inputs.create_github_release && steps.signing.outputs.signed == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.name }}
-          name: Mutual Transfer ${{ steps.tag.outputs.name }}
+          name: Mutual Transfer Bihar ${{ steps.tag.outputs.name }}
           body: |
-            Automated release build from `${{ github.ref_name }}` (`${{ github.sha }}`).
+            Automated build from `${{ github.ref_name }}` (`${{ github.sha }}`).
+
+            | File | Use |
+            |------|-----|
+            | `.apk` | **Testing** — install directly on a device |
+            | `.aab` | **Release** — upload to Google Play Console |
 
             - **versionName:** ${{ steps.version.outputs.name }}
             - **versionCode:** ${{ steps.version.outputs.code }}
-            - **Play Store:** use the `.aab` file
+            - **Play Store:** https://play.google.com/store/apps/details?id=com.shikshak.transfer
           files: ${{ steps.files.outputs.release_files }}
           draft: false
           prerelease: false

@@ -1,10 +1,10 @@
 # MutualTransfer App - Release Checklist
 
 ## 🔐 Keystore Configuration
-- [x] Keystore file: `mutual-transfer-keystore.jks` (root level)
-- [x] Keystore properties in `gradle.properties`
-- [x] Signing configuration in `app/build.gradle.kts`
-- [ ] **IMPORTANT**: Update keystore passwords in `gradle.properties`
+- [x] Keystore file kept **off git** (`mutual-transfer-keystore.jks` is gitignored)
+- [x] Local signing via gitignored `keystore.properties` (copy from `keystore.properties.example`)
+- [x] CI signing via GitHub Actions secrets: `SIGNING_KEY`, `KEY_STORE_PASSWORD`, `ALIAS`, `KEY_PASSWORD`
+- [x] Signing configuration in `app/build.gradle.kts` (loads `keystore.properties` only)
 
 ## 📱 App Configuration
 - [x] Application ID: `com.shikshak.transfer`
@@ -30,12 +30,11 @@
 
 ## 📋 Required Steps Before Release
 
-### 1. Update Keystore Passwords
-Edit `gradle.properties` and replace placeholder passwords:
-```properties
-RELEASE_STORE_PASSWORD=your_actual_keystore_password
-RELEASE_KEY_PASSWORD=your_actual_key_password
-```
+### 1. Local signing (never commit)
+
+Copy `keystore.properties.example` to `keystore.properties` and fill in store/key passwords. Keep `*.jks` and this file off git.
+
+CI uses repository secrets only — see [`docs/SECURITY.md`](docs/SECURITY.md).
 
 ### 2. Test Release Build
 ```bash
@@ -126,8 +125,6 @@ Version 1.0.0
 5. **Set up crash reporting for production**
 
 ## 🎯 Next Steps
-1. Update keystore passwords
-2. Test release build thoroughly
-3. Create Google Play Console account
-4. Prepare app store assets
-5. Submit for review 
+1. Confirm GitHub Actions secrets are set (`SIGNING_KEY`, `KEY_STORE_PASSWORD`, `ALIAS`, `KEY_PASSWORD`)
+2. Merge to `master`/`main` so CI produces signed APK + AAB
+3. Test the Play Store AAB before publishing 
